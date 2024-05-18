@@ -8,8 +8,8 @@ public class Cart
 {
     [Column("id")]
     public int Id { get; set; }
-    
-    [Column("user_id")]
+
+    [Column("users_id")]
     public int UserId { get; set; }
 
     [Column("products_id")]

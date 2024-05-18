@@ -7,7 +7,7 @@ namespace Store.Endpoints;
 
 public static class ImageEndpoints
 {
-    public static void MapImageEndpoints (this IEndpointRouteBuilder endpoints)
+    public static void MapImageEndpoints(this IEndpointRouteBuilder endpoints)
     {
         endpoints.MapPost("api/image-upload", UploadImage)
             .DisableAntiforgery();
@@ -23,7 +23,7 @@ public static class ImageEndpoints
             .Where(image => image.Id == id)
             .Select(image => new ImageDto(image.Id, image.ImagePath))
             .FirstOrDefaultAsync();
-        return Results.File(imageResponse!.ImagePath, contentType:"image/*");
+        return Results.File(imageResponse!.ImagePath, contentType: "image/*");
     }
 
     private static async Task<IResult> UploadImage(IFormFile file, IConfiguration configuration, AppDbContext db)
@@ -39,9 +39,9 @@ public static class ImageEndpoints
         var filePath = Path.Combine(uploadImageFolderPath, $"{fileName}{extension}");
 
         await using var fileStream = File.Create(filePath);
-        
+
         await file.CopyToAsync(fileStream);
-        
+
         var image = new Image
         {
             Name = fileName,
@@ -61,5 +61,4 @@ public static class ImageEndpoints
         var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
         return allowedExtensions.Contains(Path.GetExtension(fileName).ToLower());
     }
-    
 }

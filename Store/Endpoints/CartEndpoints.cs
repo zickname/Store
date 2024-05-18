@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.EntityFrameworkCore;
 using Store.DTO.Carts;
 using Store.Models;
 using Store.Services.Data;
@@ -12,18 +12,44 @@ public static class CartEndpoints
         endpoints.MapPost("api/cart/change", Change);
     }
 
-    private static async Task<CartResponse> Change(CartRequest data, AppDbContext db, HttpContext httpContext)
+    private static async Task<IResult> Change(CartItemsRequestResponse data, AppDbContext db, HttpContext httpContext)
     {
         var userIdClaim = httpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
         var userId = int.Parse(userIdClaim!.Value);
-        var cart = await db.Carts.FirstOrDefault(item => item.ProductId == data.ProductId);
+        
+        var cartItem = await db.Carts.SingleOrDefaultAsync(
+            item => item.ProductId == data.ProductId && item.UserId == userId);
 
-        if (cart == null)
+        if (data.Quantity == 0)
         {
-            cart.ProductId = data.ProductId;
-            cart.Quantity = data.Quantity;
-            cart.
-            
+            if (cartItem != null)
+            {
+                db.Carts.Remove(cartItem);
+                await db.SaveChangesAsync();
+            }
         }
+
+        if (cartItem == null)
+        {
+            cartItem = new Cart
+            {
+                ProductId = data.ProductId,
+                Quantity = data.Quantity,
+                UserId = userId
+            };
+            db.Carts.Add(cartItem);
+        }
+
+        cartItem.Quantity = data.Quantity;
+
+        await db.SaveChangesAsync();
+
+        var cartItems = db.Carts
+            .Where(user => user.UserId == userId)
+            .Select(item => new CartItemsRequestResponse(
+               item.ProductId,
+               item.Quantity)).ToList();
+
+        return Results.Ok(cartItems);
     }
 }

@@ -9,27 +9,27 @@ namespace Store.Endpoints;
 public static class ProductEndpoints
 {
     public static void MapProductEndpoints(this IEndpointRouteBuilder endpoints)
-        {
-            endpoints.MapGet("api/products", GetAll)
-                .WithName("GetProducts")
-                .WithOpenApi();
+    {
+        endpoints.MapGet("api/products", GetAll)
+            .WithName("GetProducts")
+            .WithOpenApi();
 
-            endpoints.MapGet("api/product/{id:int}", GetById)
-                .WithName("GetProduct")
-                .WithOpenApi();
+        endpoints.MapGet("api/product/{id:int}", GetById)
+            .WithName("GetProduct")
+            .WithOpenApi();
 
-            endpoints.MapPost("api/products", Create)
-                .WithName("AddProduct")
-                .WithOpenApi();
-            
-            endpoints.MapPut("api/product/{id:int}", Update)
-                .WithName("UpdateProduct")
-                .WithOpenApi();
-            
-            endpoints.MapDelete("api/product/{id:int}", Delete)
-                .WithName("DeleteProduct")
-                .WithOpenApi();
-        }
+        endpoints.MapPost("api/products", Create)
+            .WithName("AddProduct")
+            .WithOpenApi();
+
+        endpoints.MapPut("api/product/{id:int}", Update)
+            .WithName("UpdateProduct")
+            .WithOpenApi();
+
+        endpoints.MapDelete("api/product/{id:int}", Delete)
+            .WithName("DeleteProduct")
+            .WithOpenApi();
+    }
 
     private static async Task<IResult> Update(int id, CreateRequestProduct data, AppDbContext db)
     {
@@ -41,28 +41,28 @@ public static class ProductEndpoints
         product.Name = data.Name;
         product.Price = data.Price;
         product.LastModifiedDate = DateTime.UtcNow;
-        
+
         if (data.ImagesId != null)
         {
             product.Images.Clear();
-            
+
             foreach (var imageId in data.ImagesId)
             {
                 var image = await db.Images.FindAsync(imageId);
-                
+
                 if (image != null)
                 {
                     product.Images.Add(image);
                 }
             }
         }
-        
+
         db.Products.Update(product);
-        
+
         await db.SaveChangesAsync();
 
         return Results.Ok(product.Id);
-        }
+    }
 
     private static async Task<IResult> Delete(int id, AppDbContext db)
     {
@@ -72,7 +72,7 @@ public static class ProductEndpoints
         {
             return Results.NotFound($"Запись с таким {id} не найдена");
         }
-        
+
         existingProduct.IsDeleted = true;
         existingProduct.DeletedDate = DateTime.UtcNow;
 
