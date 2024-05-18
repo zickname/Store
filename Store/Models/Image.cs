@@ -8,10 +8,12 @@ public class Image
 {
     [Column("id")]
     public int Id { get; set; }
-    
+
     [Column("name")]
-    public Guid Name { get; set; }
+    [MaxLength(200)]
+    public string Name { get; set; } = null!;
     
+    [ForeignKey(nameof(Product.Id))]
     [Column("product_id")]
     public int? ProductId { get; set; }
     

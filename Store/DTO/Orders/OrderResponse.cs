@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Store.DTO.Accounts;
-using Store.Models;
+﻿using Store.DTO.Accounts;
 
 namespace Store.DTO.Orders;
 

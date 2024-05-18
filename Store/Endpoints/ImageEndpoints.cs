@@ -21,7 +21,7 @@ public static class ImageEndpoints
     {
         var imageResponse = await db.Images
             .Where(image => image.Id == id)
-            .Select(image => new ImageResponse(image.Id, image.ImagePath))
+            .Select(image => new ImageDto(image.Id, image.ImagePath))
             .FirstOrDefaultAsync();
         return Results.File(imageResponse!.ImagePath, contentType:"image/*");
     }
@@ -34,9 +34,9 @@ public static class ImageEndpoints
         }
 
         var uploadImageFolderPath = configuration["UploadImageFolderPath"]!;
-        var guid = Guid.NewGuid();
-        var uniqueFileName = $"{guid.ToString()}{Path.GetExtension(file.FileName)}";
-        var filePath = Path.Combine(uploadImageFolderPath, uniqueFileName);
+        var extension = Path.GetExtension(file.FileName);
+        var fileName = Guid.NewGuid().ToString();
+        var filePath = Path.Combine(uploadImageFolderPath, $"{fileName}{extension}");
 
         await using var fileStream = File.Create(filePath);
         
@@ -44,7 +44,7 @@ public static class ImageEndpoints
         
         var image = new Image
         {
-            Name = guid,
+            Name = fileName,
             ProductId = null,
             ImagePath = filePath,
             CreatedDate = DateTime.UtcNow

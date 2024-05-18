@@ -17,17 +17,9 @@ public class Account
     [MaxLength(50)]
     public string LastName { get; set; } = null!;
 
-    [Column("middle_name")]
-    [MaxLength(50)]
-    public string MiddleName { get; set; } = null!;
-
     [Column("password")]
     [MaxLength(100)]
     public string Password { get; set; } = null!;
-
-    [Column("login")]
-    [MaxLength(20)]
-    public string Login { get; set; } = null!;
 
     [Column("phone_number")]
     [MaxLength(20)]

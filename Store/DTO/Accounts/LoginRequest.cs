@@ -1,3 +1,3 @@
 ﻿namespace Store.DTO.Accounts;
 
-public record LoginRequest(string Login, string Password);
+public abstract record LoginRequest(string PhoneNumber, string Password);

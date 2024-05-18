@@ -1,6 +1,4 @@
 ﻿using Store.DTO.Accounts;
-using Store.DTO.Products;
-using Store.Models;
 
 namespace Store.DTO.Orders;
 
