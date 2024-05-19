@@ -1,10 +1,8 @@
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Store.Endpoints;
+using Store.Interfaces;
 using Store.Services.Data;
-using Store.Utils;
+using Store.Services.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +13,7 @@ var connections = builder.Configuration.GetConnectionString("DefaultConnections"
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<ICurrentAccount, CurrentAccount>();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connections));
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
@@ -31,9 +30,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-
 app.MapProductEndpoints();
 app.MapImageEndpoints();
+app.MapAccountsEndpoints();
+app.MapCartsEndpoints();
+app.MapOrderEndpoints();
 
 //TODO Если есть header Autorization, то просто в консоль записать есть или нету.
 

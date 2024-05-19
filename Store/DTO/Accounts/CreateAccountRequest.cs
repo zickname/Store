@@ -1,6 +1,6 @@
 ﻿namespace Store.DTO.Accounts;
 
-public abstract record CreateAccountRequest(
+public record CreateAccountRequest(
     string PhoneNumber,
     string FirstName,
     string LastName,

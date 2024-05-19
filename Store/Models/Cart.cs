@@ -21,5 +21,5 @@ public class Cart
     public Account User { get; set; } = new();
     
     [Required]
-    public List<Product> Products { get; set; } = []!;
+    public List<Product> Products { get; } = []!;
 }

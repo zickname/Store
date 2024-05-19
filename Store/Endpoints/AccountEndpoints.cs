@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Store.DTO.Accounts;
@@ -17,59 +18,81 @@ public static class AccountEndpoints
     {
         endpoints.MapPost("api/account/create", Create)
             .WithOpenApi();
+
         endpoints.MapPost("api/account/authenticate", Authenticate)
             .WithOpenApi();
-        // app.MapPost("account/delete", Delete).WithOpenApi();
+
+        endpoints.MapPost("account/delete/{id:int}", Delete)
+            .WithOpenApi();
     }
 
-    private static async Task<IResult> Create(CreateAccountRequest data, AppDbContext db, IConfiguration config)
+    private static async Task<Results<Ok<string>, NotFound>> Delete(int id, AppDbContext db)
     {
-        var account = await db.Accounts.SingleOrDefaultAsync(
+        var account = await db.Accounts
+            .Include(a => a.Orders)
+            .Include(a => a.Carts)
+            .FirstOrDefaultAsync(a => a.Id == id);
+
+        if (account == null)
+        {
+            return TypedResults.NotFound();
+        }
+
+        db.Accounts.Remove(account);
+        await db.SaveChangesAsync();
+
+        return TypedResults.Ok("succes");
+    }
+
+    private static async Task<Results<Ok<int>, Ok<string>>> Create(CreateAccountRequest data, AppDbContext db,
+        IConfiguration config)
+    {
+        var account = await db.Accounts.FirstOrDefaultAsync(
             account => account.PhoneNumber == data.PhoneNumber);
 
         if (account != null)
         {
-            return Results.Ok("Пользователь уже зарегистрирован с данным номером");
+            return TypedResults.Ok("Пользователь уже зарегистрирован с данным номером");
         }
 
-        var hashedPassword = HashPassword(data.Password);
+        var hashPassword = HashPassword(data.Password);
 
         var newAccount = new Account()
         {
             FirstName = data.FirstName,
             LastName = data.LastName,
             PhoneNumber = data.PhoneNumber,
-            Password = hashedPassword
+            Password = hashPassword
         };
 
         await db.Accounts.AddAsync(newAccount);
         await db.SaveChangesAsync();
 
-        return Results.Ok(newAccount.Id);
+        return TypedResults.Ok(newAccount.Id);
     }
 
 
-    private static async Task<IResult> Authenticate(LoginRequest loginRequest, AppDbContext db, IConfiguration config)
+    private static async Task<Results<Ok<LoginResponse>, UnauthorizedHttpResult>> Authenticate(
+        LoginRequest loginRequest, AppDbContext db, IConfiguration config)
     {
-        var account = await db.Accounts.SingleOrDefaultAsync(
+        var account = await db.Accounts.FirstOrDefaultAsync(
             account => account.PhoneNumber == loginRequest.PhoneNumber);
-        
+
         if (account == null || !Verify(loginRequest.Password, account.Password))
         {
-            return Results.Unauthorized();
+            return TypedResults.Unauthorized();
         }
-        
+
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(config["Jwt:Key"]!);
+        var key = Encoding.UTF8.GetBytes(config["JWTSettings:Key"]!);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[]
             {
                 new Claim("id", account.Id.ToString()),
             }),
-            Expires = DateTime.UtcNow.AddMinutes(double.Parse(config["Jwt:ExpiresInMinutes"]!)),
-            Issuer = config["Jwt:Issuer"],
-            Audience = config["Jwt:Audience"],
+            Issuer = config["JWTSettings:Issuer"],
+            Audience = config["JWTSettings:Audience"],
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature)
@@ -78,13 +101,8 @@ public static class AccountEndpoints
         var token = tokenHandler.CreateToken(tokenDescriptor);
         var tokenString = tokenHandler.WriteToken(token);
 
-        var loginResponse = new LoginResponse(
-            account.Id,
-            account.FirstName,
-            account.LastName,
-            account.PhoneNumber);
+        var response = new LoginResponse(tokenString);
 
-        return Results.Ok(new { Token = tokenString, User = loginResponse });
-        
+        return TypedResults.Ok(response);
     }
 }

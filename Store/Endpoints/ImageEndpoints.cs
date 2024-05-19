@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Store.DTO.Images;
 using Store.Models;
 using Store.Services.Data;
@@ -23,6 +25,10 @@ public static class ImageEndpoints
             .Where(image => image.Id == id)
             .Select(image => new ImageDto(image.Id, image.ImagePath))
             .FirstOrDefaultAsync();
+        // if (imageResponse == null)
+        // {
+        //     TypedResults.NotFound();
+        // }
         return Results.File(imageResponse!.ImagePath, contentType: "image/*");
     }
 

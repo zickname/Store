@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using Store.DTO.Carts;
+using Store.Interfaces;
 using Store.Models;
 using Store.Services.Data;
 
@@ -9,24 +11,21 @@ public static class CartEndpoints
 {
     public static void MapCartsEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapPost("api/cart/change", Change);
+        endpoints.MapPost("api/cart/change", Change)
+            .RequireAuthorization();
     }
 
-    private static async Task<IResult> Change(CartItemsRequestResponse data, AppDbContext db, HttpContext httpContext)
+    private static async Task<Ok<List<CartItemsRequestResponse>>> Change(CartItemsRequestResponse data, AppDbContext db, CurrentAccount currentAccount)
     {
-        var userIdClaim = httpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
-        var userId = int.Parse(userIdClaim!.Value);
+        var userId = currentAccount.GetUserIdFromClaim();
         
-        var cartItem = await db.Carts.SingleOrDefaultAsync(
+        var cartItem = await db.Carts.FirstOrDefaultAsync(
             item => item.ProductId == data.ProductId && item.UserId == userId);
 
-        if (data.Quantity == 0)
+        if (data.Quantity == 0 && cartItem != null)
         {
-            if (cartItem != null)
-            {
-                db.Carts.Remove(cartItem);
-                await db.SaveChangesAsync();
-            }
+            db.Carts.Remove(cartItem);
+            await db.SaveChangesAsync();
         }
 
         if (cartItem == null)
@@ -44,12 +43,12 @@ public static class CartEndpoints
 
         await db.SaveChangesAsync();
 
-        var cartItems = db.Carts
+        var cartItems = await db.Carts
             .Where(user => user.UserId == userId)
             .Select(item => new CartItemsRequestResponse(
                item.ProductId,
-               item.Quantity)).ToList();
+               item.Quantity)).ToListAsync();
 
-        return Results.Ok(cartItems);
+        return TypedResults.Ok(cartItems);
     }
 }

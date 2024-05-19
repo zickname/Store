@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using Store.DTO.Images;
 using Store.DTO.Products;
 using Store.Models;
@@ -31,12 +32,12 @@ public static class ProductEndpoints
             .WithOpenApi();
     }
 
-    private static async Task<IResult> Update(int id, CreateRequestProduct data, AppDbContext db)
+    private static async Task<Results<Ok<int>, NotFound<string>>> Update(int id, CreateRequestProduct data, AppDbContext db)
     {
         var product = await db.Products.FindAsync(id);
 
         if (product == null)
-            return Results.NotFound($"Товар с данным {id} не существует");
+            return TypedResults.NotFound($"Товар с данным {id} не существует");
 
         product.Name = data.Name;
         product.Price = data.Price;
@@ -61,16 +62,16 @@ public static class ProductEndpoints
 
         await db.SaveChangesAsync();
 
-        return Results.Ok(product.Id);
+        return TypedResults.Ok(product.Id);
     }
 
-    private static async Task<IResult> Delete(int id, AppDbContext db)
+    private static async Task<Results<Ok, NotFound<string>>> Delete(int id, AppDbContext db)
     {
         var existingProduct = await db.Products.FindAsync(id);
 
         if (existingProduct == null)
         {
-            return Results.NotFound($"Запись с таким {id} не найдена");
+            return TypedResults.NotFound($"Запись с таким {id} не найдена");
         }
 
         existingProduct.IsDeleted = true;
@@ -80,10 +81,10 @@ public static class ProductEndpoints
 
         await db.SaveChangesAsync();
 
-        return Results.Ok();
+        return TypedResults.Ok();
     }
 
-    private static async Task<IResult> Create(CreateRequestProduct createData, AppDbContext db)
+    private static async Task<Ok<int>> Create(CreateRequestProduct createData, AppDbContext db)
     {
         var product = new Product
         {
@@ -109,7 +110,7 @@ public static class ProductEndpoints
 
         await db.SaveChangesAsync();
 
-        return Results.Ok(product.Id);
+        return TypedResults.Ok(product.Id);
     }
 
     private static async Task<List<ProductDto>> GetAll(AppDbContext db)

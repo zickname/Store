@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Store.Utils;
+namespace Store.Services.Jwt;
 
 public static class JwtService
 {

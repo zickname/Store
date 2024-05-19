@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Store.Models;
 
-[Table("accounts")]
+[Table("accounts", Schema = "store")]
 public class Account
 {
     [Column("id")]
@@ -24,4 +24,7 @@ public class Account
     [Column("phone_number")]
     [MaxLength(20)]
     public string PhoneNumber { get; set; } = null!;
+    
+    public List<Cart> Carts { get; set; } = [];
+    public List<Order> Orders { get; set; } = null!;
 }

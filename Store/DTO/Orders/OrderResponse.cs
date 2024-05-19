@@ -4,6 +4,9 @@ namespace Store.DTO.Orders;
 
 public record OrderResponse(
     int Id,
-    double TotalAmount,
+    int UserId,
     DateTime CreateDate,
-    LoginResponse User);
+    string Address,
+    List<OrderDetailsDto> Products,
+    decimal TotalAmount
+    );
