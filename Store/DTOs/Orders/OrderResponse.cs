@@ -1,6 +1,4 @@
-﻿using Store.DTO.Accounts;
-
-namespace Store.DTO.Orders;
+﻿namespace Store.DTOs.Orders;
 
 public record OrderResponse(
     int Id,

@@ -1,4 +1,4 @@
-﻿namespace Store.DTO.Accounts;
+﻿namespace Store.DTOs.Accounts;
 
 public record CreateAccountRequest(
     string PhoneNumber,

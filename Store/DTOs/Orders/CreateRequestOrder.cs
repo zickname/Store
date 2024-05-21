@@ -1,4 +1,4 @@
-﻿namespace Store.DTO.Orders;
+﻿namespace Store.DTOs.Orders;
 
 public record CreateRequestOrder(
     decimal TotalAmount,

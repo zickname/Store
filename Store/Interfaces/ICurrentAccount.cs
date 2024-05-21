@@ -2,5 +2,5 @@
 
 public interface ICurrentAccount
 {
-    int GetUserIdFromClaim();
+    int GetUserId();
 }

@@ -1,6 +1,6 @@
 ﻿using Store.DTO.Images;
 
-namespace Store.DTO.Products;
+namespace Store.DTOs.Products;
 
 public record ProductDto(
     int Id,

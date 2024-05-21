@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Store.Endpoints;
+using Store.Extensions.Jwt;
 using Store.Interfaces;
+using Store.Services;
 using Store.Services.Data;
-using Store.Services.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,12 +13,13 @@ var connections = builder.Configuration.GetConnectionString("DefaultConnections"
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentAccount, CurrentAccount>();
+
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connections));
 
-builder.Services.AddJwtAuthentication(builder.Configuration);
 
+builder.Services.AddJwtAuthentication(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

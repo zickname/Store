@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using Store.DTO.Carts;
+using Store.DTOs.Carts;
+using Store.Entity;
 using Store.Interfaces;
-using Store.Models;
 using Store.Services.Data;
 
 namespace Store.Endpoints;
@@ -15,10 +15,11 @@ public static class CartEndpoints
             .RequireAuthorization();
     }
 
-    private static async Task<Ok<List<CartItemsRequestResponse>>> Change(CartItemsRequestResponse data, AppDbContext db, CurrentAccount currentAccount)
+    private static async Task<Ok<List<CartItemsRequestResponse>>> Change(CartItemsRequestResponse data, AppDbContext db,
+        ICurrentAccount currentAccount)
     {
-        var userId = currentAccount.GetUserIdFromClaim();
-        
+        var userId = currentAccount.GetUserId();
+
         var cartItem = await db.Carts.FirstOrDefaultAsync(
             item => item.ProductId == data.ProductId && item.UserId == userId);
 
@@ -46,8 +47,8 @@ public static class CartEndpoints
         var cartItems = await db.Carts
             .Where(user => user.UserId == userId)
             .Select(item => new CartItemsRequestResponse(
-               item.ProductId,
-               item.Quantity)).ToListAsync();
+                item.ProductId,
+                item.Quantity)).ToListAsync();
 
         return TypedResults.Ok(cartItems);
     }

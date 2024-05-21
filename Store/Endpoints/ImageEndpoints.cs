@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Store.DTO.Images;
-using Store.Models;
+using Store.Entity;
 using Store.Services.Data;
 
 namespace Store.Endpoints;
@@ -19,24 +18,27 @@ public static class ImageEndpoints
             .WithOpenApi();
     }
 
-    private static async Task<IResult> GetById(int id, AppDbContext db)
+    private static async Task<Results<PhysicalFileHttpResult, NotFound>> GetById(int id, AppDbContext db)
     {
         var imageResponse = await db.Images
             .Where(image => image.Id == id)
             .Select(image => new ImageDto(image.Id, image.ImagePath))
             .FirstOrDefaultAsync();
-        // if (imageResponse == null)
-        // {
-        //     TypedResults.NotFound();
-        // }
-        return Results.File(imageResponse!.ImagePath, contentType: "image/*");
+
+        if (imageResponse == null)
+        {
+            TypedResults.NotFound();
+        }
+
+        return TypedResults.PhysicalFile(imageResponse!.ImagePath, contentType: "image/*");
     }
 
-    private static async Task<IResult> UploadImage(IFormFile file, IConfiguration configuration, AppDbContext db)
+    private static async Task<Results<Ok<int>, BadRequest<string>>> UploadImage(IFormFile file,
+        IConfiguration configuration, AppDbContext db)
     {
         if (!ValidateFileType(file.FileName))
         {
-            return Results.BadRequest("Неверный тип файла");
+            return TypedResults.BadRequest("Неверный тип файла");
         }
 
         var uploadImageFolderPath = configuration["UploadImageFolderPath"]!;
@@ -59,7 +61,7 @@ public static class ImageEndpoints
         await db.Images.AddAsync(image);
         await db.SaveChangesAsync();
 
-        return Results.Ok(image.Id);
+        return TypedResults.Ok(image.Id);
     }
 
     private static bool ValidateFileType(string fileName)

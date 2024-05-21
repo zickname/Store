@@ -1,4 +1,4 @@
-﻿namespace Store.DTO.Carts;
+﻿namespace Store.DTOs.Carts;
 
 public record CartItemsRequestResponse(
     int ProductId,

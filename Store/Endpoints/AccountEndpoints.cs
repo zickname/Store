@@ -4,8 +4,8 @@ using System.Text;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Store.DTO.Accounts;
-using Store.Models;
+using Store.DTOs.Accounts;
+using Store.Entity;
 using Store.Services.Data;
 using static BCrypt.Net.BCrypt;
 
