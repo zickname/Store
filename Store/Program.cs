@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Store.Endpoints;
 using Store.Extensions.Jwt;
 using Store.Interfaces;
@@ -12,14 +14,42 @@ var connections = builder.Configuration.GetConnectionString("DefaultConnections"
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization Bearer",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme
+                }
+            },
+            new List<string>()
+        }
+    });
+});
+    
+
+builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddAuthorization();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentAccount, CurrentAccount>();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connections));
 
 
-builder.Services.AddJwtAuthentication(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -40,8 +70,8 @@ app.MapOrderEndpoints();
 
 //TODO Если есть header Autorization, то просто в консоль записать есть или нету.
 
-// app.UseAuthentication();
-// app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 
 app.Run();

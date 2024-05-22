@@ -8,46 +8,40 @@ public class AccountConfigurations : IEntityTypeConfiguration<Account>
 {
     public void Configure(EntityTypeBuilder<Account> builder)
     {
-        builder.ToTable("accounts", schema:"store");
+        builder.ToTable("accounts", schema: "store");
 
-        builder.HasKey(a => a.Id);
+        builder.HasKey(account => account.Id);
 
-        builder.HasIndex(a => a.PhoneNumber)
+        builder.HasIndex(account => account.PhoneNumber)
             .IsUnique();
-        
-        builder.Property(a => a.Id)
-            .ValueGeneratedOnAdd()
-            .HasColumnName("id");
 
-        builder.Property(a => a.FirstName)
-            .HasColumnName("first_name")
+        builder.Property(account => account.Id)
+            .ValueGeneratedOnAdd();
+
+        builder.Property(account => account.FirstName)
             .HasMaxLength(50)
             .IsRequired();
-        
-        builder.Property(a => a.LastName)
-            .HasColumnName("last_name")
+
+        builder.Property(account => account.LastName)
             .HasMaxLength(50)
             .IsRequired();
-        
-        builder.Property(a => a.PhoneNumber)
-            .HasColumnName("phone_number")
+
+        builder.Property(account => account.PhoneNumber)
             .HasMaxLength(20)
             .IsRequired();
-        
-        builder.Property(a => a.Password)
-            .HasColumnName("password")
+
+        builder.Property(account => account.Password)
             .HasMaxLength(100)
             .IsRequired();
-        
-        // builder.HasMany(a => a.Carts)
-        //     .WithOne(c => c.User)
-        //     //.HasForeignKey(c => c.UserId)
-        //     ;//.OnDelete(DeleteBehavior.Cascade);
-        //
-        // builder.HasMany(a => a.Orders)
-        //     .WithOne(o => o.User)
-        //     //.HasForeignKey(o => o.UserId)
-        //     ;//.OnDelete(DeleteBehavior.Cascade);
 
+        builder.HasMany(account => account.Carts)
+            .WithOne(cart => cart.User)
+            .HasForeignKey(cart => cart.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(account => account.Orders)
+            .WithOne(order => order.User)
+            .HasForeignKey(order => order.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

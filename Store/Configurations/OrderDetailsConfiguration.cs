@@ -10,35 +10,28 @@ public class OrderDetailsConfiguration : IEntityTypeConfiguration<OrderDetails>
     {
         builder.ToTable("order_details", "store");
 
-        builder.HasKey(e => e.Id);
+        builder.HasKey(orderDetails => orderDetails.Id);
 
-        builder.Property(e => e.Id)
-            .HasColumnName("id");
+        builder.Property(orderDetails => orderDetails.Id);
         
-        builder.Property(e => e.OrderId)
-            .HasColumnName("orders_id")
+        builder.Property(orderDetails => orderDetails.OrderId)
             .IsRequired();
 
-        builder.Property(e => e.ProductId)
-            .HasColumnName("products_id")
+        builder.Property(orderDetails => orderDetails.ProductId)
             .IsRequired();
 
-        builder.Property(e => e.Price)
-            .HasColumnName("products_price")
+        builder.Property(orderDetails => orderDetails.Price)
             .IsRequired();
 
-        builder.Property(e => e.Quantity)
-            .HasColumnName("quantity")
+        builder.Property(orderDetails => orderDetails.Quantity)
             .IsRequired();
 
-        // builder.HasOne(e => e.Order)
-        //     .WithMany(o => o.Products)
-        //     .HasForeignKey(e => e.OrderId)
-        //     .OnDelete(DeleteBehavior.Cascade);
-        //
-        // builder.HasOne(e => e.Products)
-        //     .WithMany()
-        //     .HasForeignKey(e => e.ProductId)
-        //     .OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(orderDetails => orderDetails.Order)
+            .WithMany(order => order.DetailsList)
+            .HasForeignKey(orderDetails => orderDetails.OrderId);
+
+        builder.HasOne(orderDetails => orderDetails.Product)
+            .WithMany(product => product.OrderDetailsList)
+            .HasForeignKey(e => e.ProductId);
     }
 }

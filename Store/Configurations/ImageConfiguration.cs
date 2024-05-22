@@ -10,31 +10,26 @@ public class ImageConfiguration : IEntityTypeConfiguration<Image>
     {
         builder.ToTable("images", "store");
 
-        builder.HasKey(e => e.Id);
+        builder.HasKey(image => image.Id);
 
-        builder.Property(i => i.Id)
-            .HasColumnName("id")
+        builder.Property(image => image.Id)
             .ValueGeneratedOnAdd();
 
-        builder.Property(e => e.Name)
-            .HasColumnName("name")
+        builder.Property(image => image.Name)
             .HasMaxLength(200)
             .IsRequired();
 
-        builder.Property(e => e.ImagePath)
-            .HasColumnName("image_path")
+        builder.Property(image => image.ImagePath)
             .HasMaxLength(250)
             .IsRequired();
 
-        builder.Property(e => e.ProductId)
-            .HasColumnName("product_id");
+        builder.Property(image => image.ProductId);
 
-        builder.Property(e => e.CreatedDate)
-            .HasColumnName("created_date")
+        builder.Property(image => image.CreatedDate)
             .IsRequired();
 
-        // builder.HasOne<Product>()
-        //     .WithMany(p => p.Images)
-        //     .HasForeignKey(e => e.ProductId);
+        builder.HasOne(image => image.Product)
+            .WithMany(product => product.Images)
+            .HasForeignKey(e => e.ProductId);
     }
 }

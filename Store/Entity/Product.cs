@@ -14,4 +14,8 @@ public class Product
     
     public List<Image?> Images { get; } = [];
 
+    public List<OrderDetails?> OrderDetailsList { get; set; } = [];
+
+    public List<Cart?> Carts { get; set; } = [];
+
 }

@@ -1,4 +1,4 @@
-﻿using Store.Entity;
+﻿namespace Store.Entity;
 
 public class Cart
 {
@@ -10,7 +10,7 @@ public class Cart
 
     public int Quantity { get; set; }
 
-    public Account User { get; set; }
+    public Account? User { get; set; }
 
-    public Product Product { get; set; }
+    public Product? Product { get; set; }
 }

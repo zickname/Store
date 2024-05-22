@@ -4,15 +4,15 @@ public class Order
 {
     public int Id { get; set; }
     
-    public int UserId { get; set; }
+    public required int UserId { get; set; }
     
-    public decimal TotalAmount { get; set; }
+    public required decimal Amount { get; set; }
     
-    public string Address { get; set; } = null!;
+    public required string Address { get; set; }
     
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     
-    public List<OrderDetails> Products { get; set; } = [];
+    public List<OrderDetails> DetailsList { get; set; } = [];
 
-    public Account User { get; set; } = new ();
+    public Account? User { get; set; }
 }

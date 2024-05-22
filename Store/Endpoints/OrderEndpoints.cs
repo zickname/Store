@@ -23,20 +23,20 @@ public static class OrderEndpoints
     {
         var orders = await db.Orders
             .Where(order => order.Id == id)
-            .Include(order => order.Products)
+            .Include(order => order.DetailsList)
             .Include(order => order.User)
             .Select(order => new OrderResponse(
                 order.Id,
                 order.UserId,
                 order.CreatedDate,
                 order.Address,
-                order.Products
+                order.DetailsList
                     .Select(p => new OrderDetailsDto(
                         p.ProductId,
                         p.Price,
                         p.Quantity))
                     .ToList(),
-                order.TotalAmount))
+                order.Amount))
             .FirstOrDefaultAsync();
 
         return TypedResults.Ok(orders);
@@ -48,20 +48,20 @@ public static class OrderEndpoints
 
         var orders = await db.Orders
             .Where(order => order.UserId == userId && order.Id == id)
-            .Include(order => order.Products)
+            .Include(order => order.DetailsList)
             .Include(order => order.User)
             .Select(order => new OrderResponse(
                 order.Id,
                 order.UserId,
                 order.CreatedDate,
                 order.Address,
-                order.Products
+                order.DetailsList
                     .Select(p => new OrderDetailsDto(
                         p.ProductId,
                         p.Price,
                         p.Quantity))
                     .ToList(),
-                order.TotalAmount))
+                order.Amount))
             .FirstOrDefaultAsync();
 
         return TypedResults.Ok(orders);
@@ -73,20 +73,20 @@ public static class OrderEndpoints
 
         var orders = await db.Orders
             .Where(order => order.UserId == userId)
-            .Include(order => order.Products)
+            .Include(order => order.DetailsList)
             .Include(order => order.User)
             .Select(order => new OrderResponse(
                 order.Id,
                 order.UserId,
                 order.CreatedDate,
                 order.Address,
-                order.Products
+                order.DetailsList
                     .Select(p => new OrderDetailsDto(
                         p.ProductId,
                         p.Price,
                         p.Quantity))
                     .ToList(),
-                order.TotalAmount))
+                order.Amount))
             .ToListAsync();
 
         return TypedResults.Ok(orders);
@@ -99,9 +99,9 @@ public static class OrderEndpoints
 
         var order = new Order
         {
-            TotalAmount = orderDto.TotalAmount,
+            Amount = orderDto.TotalAmount,
             Address = orderDto.Address,
-            Products = orderDto.Products
+            DetailsList = orderDto.Products
                 .Select(p => new OrderDetails{
                     ProductId = p.ProductId,
                     Price = p.Price,
@@ -119,12 +119,12 @@ public static class OrderEndpoints
             order.UserId,
             order.CreatedDate,
             order.Address,
-            order.Products
+            order.DetailsList
                 .Select(item => new OrderDetailsDto(
                     item.ProductId,
                     item.Price,
                     item.Quantity)).ToList(),
-            order.TotalAmount
+            order.Amount
         );
 
         return TypedResults.Ok(orderResponse);
@@ -133,20 +133,20 @@ public static class OrderEndpoints
     private static async Task<Ok<List<OrderResponse>>> GetAll(AppDbContext db)
     {
         var orders = await db.Orders
-            .Include(o => o.Products)
+            .Include(o => o.DetailsList)
             .Include(o => o.User)
             .Select(o => new OrderResponse(
                 o.Id,
                 o.UserId,
                 o.CreatedDate,
                 o.Address,
-                o.Products
+                o.DetailsList
                     .Select(p => new OrderDetailsDto(
                         p.ProductId,
                         p.Price,
                         p.Quantity))
                     .ToList(),
-                o.TotalAmount))
+                o.Amount))
             .ToListAsync();
 
         return TypedResults.Ok(orders);
@@ -155,7 +155,7 @@ public static class OrderEndpoints
     private static async Task<Results<Ok, NotFound>> DeleteOrder(int id, AppDbContext db)
     {
         var order = await db.Orders
-            .Include(order => order.Products)
+            .Include(order => order.DetailsList)
             .FirstOrDefaultAsync(order => order.Id == id);
 
         if (order == null)

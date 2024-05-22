@@ -11,6 +11,6 @@ public class Image
     public string ImagePath { get; set; } = null!;
 
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-    
-    public Product Product { get; set; }
+
+    public Product Product { get; set; } = new();
 }

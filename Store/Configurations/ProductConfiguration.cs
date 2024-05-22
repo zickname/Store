@@ -10,33 +10,26 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         builder.ToTable("products", "store");
 
-        builder.HasKey(p => p.Id);
+        builder.HasKey(product => product.Id);
 
-        builder.Property(p => p.Id)
-            .HasColumnName("id");
+        builder.Property(product => product.Id);
         
-        builder.Property(p => p.Name)
-            .HasColumnName("name")
+        builder.Property(product => product.Name)
             .HasMaxLength(200)
             .IsRequired();
 
-        builder.Property(p => p.Price)
-            .HasColumnName("price")
+        builder.Property(product => product.Price)
             .IsRequired();
 
-        builder.Property(p => p.CreatedDate)
-            .HasColumnName("create_date")
+        builder.Property(product => product.CreatedDate)
             .IsRequired();
 
-        builder.Property(p => p.LastModifiedDate)
-            .HasColumnName("last_modified_date");
+        builder.Property(product => product.LastModifiedDate);
 
-        // builder.HasMany(p => p.Images)
-        //     .WithOne()
-        //     ;//.HasForeignKey(p => p.ProductId);
-        //
-        // //builder.HasOne(p => p.Carts)
-        // //    .WithMany()
-        //     ; //.HasForeignKey(p => p.Id);
+        builder.HasMany(product => product.Images)
+            .WithOne(image => image.Product)
+            .HasForeignKey(image => image.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
     }
 }

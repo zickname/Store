@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Store.DTOs.Carts;
 using Store.Entity;
@@ -12,22 +13,16 @@ public static class CartEndpoints
     public static void MapCartsEndpoints(this IEndpointRouteBuilder endpoints)
     {
         endpoints.MapPost("api/cart/change", Change)
-            .RequireAuthorization();
+            ; //.RequireAuthorization();
     }
 
-    private static async Task<Ok<List<CartItemsRequestResponse>>> Change(CartItemsRequestResponse data, AppDbContext db,
-        ICurrentAccount currentAccount)
+    [Authorize]
+    private static async Task<Ok<List<CartItemsRequestResponse>>> Change(CartItemsRequestResponse data, AppDbContext db, ICurrentAccount currentAccount)
     {
         var userId = currentAccount.GetUserId();
 
         var cartItem = await db.Carts.FirstOrDefaultAsync(
             item => item.ProductId == data.ProductId && item.UserId == userId);
-
-        if (data.Quantity == 0 && cartItem != null)
-        {
-            db.Carts.Remove(cartItem);
-            await db.SaveChangesAsync();
-        }
 
         if (cartItem == null)
         {
@@ -37,10 +32,17 @@ public static class CartEndpoints
                 Quantity = data.Quantity,
                 UserId = userId
             };
+            
             db.Carts.Add(cartItem);
         }
-
-        cartItem.Quantity = data.Quantity;
+        else if (data.Quantity == 0)
+        {
+            db.Carts.Remove(cartItem);
+        }
+        else
+        {
+            cartItem.Quantity = data.Quantity;
+        }
 
         await db.SaveChangesAsync();
 
