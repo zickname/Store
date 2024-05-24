@@ -1,6 +1,6 @@
 ﻿namespace Store.DTOs.Products;
 
-public record CreateRequestProduct(
+public record CreateProductRequest(
     string Name,
     double Price,
     List<int>? ImagesId = null);

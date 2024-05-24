@@ -1,6 +1,6 @@
 ﻿namespace Store.DTOs.Orders;
 
-public record CreateRequestOrder(
+public record CreateOrderRequest(
     decimal TotalAmount,
     string Address,
     List<OrderDetailsDto> Products);

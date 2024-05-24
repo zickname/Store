@@ -1,5 +1,5 @@
 ﻿namespace Store.DTOs.Carts;
 
-public record CartItemsRequestResponse(
+public record CartItemsDto(
     int ProductId,
     int Quantity);

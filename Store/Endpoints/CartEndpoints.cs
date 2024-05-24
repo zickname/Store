@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Store.DTOs.Carts;
-using Store.Entity;
+using Store.Entities;
 using Store.Interfaces;
 using Store.Services.Data;
 
@@ -12,14 +12,19 @@ public static class CartEndpoints
 {
     public static void MapCartsEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapPost("api/cart/change", Change)
-            ; //.RequireAuthorization();
+        endpoints.MapPost("api/cart/change", Change);
     }
 
     [Authorize]
-    private static async Task<Ok<List<CartItemsRequestResponse>>> Change(CartItemsRequestResponse data, AppDbContext db, ICurrentAccount currentAccount)
+    private static async Task<Results<Ok<List<CartItemsDto>>, UnauthorizedHttpResult>> Change(
+        CartItemsDto data,
+        AppDbContext db,
+        ICurrentAccount currentAccount)
     {
         var userId = currentAccount.GetUserId();
+
+        if (userId == null)
+            return TypedResults.Unauthorized();
 
         var cartItem = await db.Carts.FirstOrDefaultAsync(
             item => item.ProductId == data.ProductId && item.UserId == userId);
@@ -30,9 +35,9 @@ public static class CartEndpoints
             {
                 ProductId = data.ProductId,
                 Quantity = data.Quantity,
-                UserId = userId
+                UserId = (int)userId
             };
-            
+
             db.Carts.Add(cartItem);
         }
         else if (data.Quantity == 0)
@@ -48,7 +53,7 @@ public static class CartEndpoints
 
         var cartItems = await db.Carts
             .Where(user => user.UserId == userId)
-            .Select(item => new CartItemsRequestResponse(
+            .Select(item => new CartItemsDto(
                 item.ProductId,
                 item.Quantity)).ToListAsync();
 

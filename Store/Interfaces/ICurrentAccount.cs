@@ -2,5 +2,5 @@
 
 public interface ICurrentAccount
 {
-    int GetUserId();
+    int? GetUserId();
 }

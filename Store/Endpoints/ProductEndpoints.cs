@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Store.DTO.Images;
 using Store.DTOs.Products;
-using Store.Entity;
+using Store.Entities;
 using Store.Services.Data;
 
 namespace Store.Endpoints;
@@ -32,7 +33,8 @@ public static class ProductEndpoints
             .WithOpenApi();
     }
 
-    private static async Task<Results<Ok<int>, NotFound<string>>> Update(int id, CreateRequestProduct data,
+    [Authorize]
+    private static async Task<Results<Ok<int>, NotFound<string>>> Update(int id, CreateProductRequest data,
         AppDbContext db)
     {
         var product = await db.Products.FindAsync(id);
@@ -66,6 +68,7 @@ public static class ProductEndpoints
         return TypedResults.Ok(product.Id);
     }
 
+    [Authorize]
     private static async Task<Results<Ok, NotFound<string>>> Delete(int id, AppDbContext db)
     {
         var existingProduct = await db.Products.FindAsync(id);
@@ -82,7 +85,8 @@ public static class ProductEndpoints
         return TypedResults.Ok();
     }
 
-    private static async Task<Ok<int>> Create(CreateRequestProduct data, AppDbContext db)
+    [Authorize]
+    private static async Task<Ok<int>> Create(CreateProductRequest data, AppDbContext db)
     {
         var product = new Product
         {
@@ -111,6 +115,7 @@ public static class ProductEndpoints
         return TypedResults.Ok(product.Id);
     }
 
+    [Authorize]
     private static async Task<List<ProductDto>> GetAll(AppDbContext db)
     {
         return await db.Products
@@ -126,6 +131,7 @@ public static class ProductEndpoints
             .ToListAsync();
     }
 
+    [Authorize]
     private static async Task<ProductDto?> GetById(int id, AppDbContext db)
     {
         return await db.Products

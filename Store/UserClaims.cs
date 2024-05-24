@@ -1,4 +1,4 @@
-﻿namespace Store.Entity;
+﻿namespace Store;
 
 public class UserClaims
 {

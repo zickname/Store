@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Store.DTO.Images;
-using Store.Entity;
+using Store.Entities;
 using Store.Services.Data;
 
 namespace Store.Endpoints;
@@ -18,6 +19,7 @@ public static class ImageEndpoints
             .WithOpenApi();
     }
 
+    [Authorize]
     private static async Task<Results<PhysicalFileHttpResult, NotFound>> GetById(int id, AppDbContext db)
     {
         var imageResponse = await db.Images
@@ -33,8 +35,11 @@ public static class ImageEndpoints
         return TypedResults.PhysicalFile(imageResponse!.ImagePath, contentType: "image/*");
     }
 
-    private static async Task<Results<Ok<int>, BadRequest<string>>> UploadImage(IFormFile file,
-        IConfiguration configuration, AppDbContext db)
+    [Authorize]
+    private static async Task<Results<Ok<int>, BadRequest<string>>> UploadImage(
+        IFormFile file,
+        IConfiguration configuration,
+        AppDbContext db)
     {
         if (!ValidateFileType(file.FileName))
         {

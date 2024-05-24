@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Store.DTOs.Orders;
-using Store.Entity;
+using Store.Entities;
 using Store.Interfaces;
 using Store.Services.Data;
 
@@ -19,6 +20,7 @@ public static class OrderEndpoints
         endpoints.MapDelete("api/orders{id:int}", DeleteOrder);
     }
 
+    [Authorize]
     private static async Task<Ok<OrderResponse>> GetById(int id, AppDbContext db)
     {
         var orders = await db.Orders
@@ -42,9 +44,16 @@ public static class OrderEndpoints
         return TypedResults.Ok(orders);
     }
 
-    private static async Task<Ok<OrderResponse>> GetByIdForUser(int id, AppDbContext db, ICurrentAccount account)
+    [Authorize]
+    private static async Task<Results<Ok<OrderResponse>, UnauthorizedHttpResult>> GetByIdForUser(
+        int id,
+        AppDbContext db,
+        ICurrentAccount account)
     {
         var userId = account.GetUserId();
+
+        if (userId == null)
+            return TypedResults.Unauthorized();
 
         var orders = await db.Orders
             .Where(order => order.UserId == userId && order.Id == id)
@@ -67,9 +76,15 @@ public static class OrderEndpoints
         return TypedResults.Ok(orders);
     }
 
-    private static async Task<Ok<List<OrderResponse>>> GetAllByUser(AppDbContext db, ICurrentAccount account)
+    [Authorize]
+    private static async Task<Results<Ok<List<OrderResponse>>, UnauthorizedHttpResult>> GetAllByUser(
+        AppDbContext db,
+        ICurrentAccount account)
     {
         var userId = account.GetUserId();
+
+        if (userId == null)
+            return TypedResults.Unauthorized();
 
         var orders = await db.Orders
             .Where(order => order.UserId == userId)
@@ -92,23 +107,30 @@ public static class OrderEndpoints
         return TypedResults.Ok(orders);
     }
 
-    private static async Task<Ok<OrderResponse>> CreateOrder(CreateRequestOrder orderDto, AppDbContext db,
+    [Authorize]
+    private static async Task<Results<Ok<OrderResponse>, UnauthorizedHttpResult>> CreateOrder(
+        CreateOrderRequest dto,
+        AppDbContext db,
         ICurrentAccount account)
     {
         var userId = account.GetUserId();
 
+        if (userId == null)
+            return TypedResults.Unauthorized();
+
         var order = new Order
         {
-            Amount = orderDto.TotalAmount,
-            Address = orderDto.Address,
-            DetailsList = orderDto.Products
-                .Select(p => new OrderDetails{
+            Amount = dto.TotalAmount,
+            Address = dto.Address,
+            DetailsList = dto.Products
+                .Select(p => new OrderDetails
+                {
                     ProductId = p.ProductId,
                     Price = p.Price,
-                   Quantity = p.Quantity
+                    Quantity = p.Quantity
                 }).ToList(),
             CreatedDate = DateTime.UtcNow,
-            UserId = userId
+            UserId = (int)userId
         };
 
         db.Orders.Add(order);
@@ -130,6 +152,7 @@ public static class OrderEndpoints
         return TypedResults.Ok(orderResponse);
     }
 
+    [Authorize]
     private static async Task<Ok<List<OrderResponse>>> GetAll(AppDbContext db)
     {
         var orders = await db.Orders
@@ -152,6 +175,7 @@ public static class OrderEndpoints
         return TypedResults.Ok(orders);
     }
 
+    [Authorize]
     private static async Task<Results<Ok, NotFound>> DeleteOrder(int id, AppDbContext db)
     {
         var order = await db.Orders
@@ -164,7 +188,7 @@ public static class OrderEndpoints
         }
 
         db.Remove(order);
-        
+
         await db.SaveChangesAsync();
 
         return TypedResults.Ok();

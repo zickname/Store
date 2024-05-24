@@ -1,11 +1,12 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Store.DTOs.Accounts;
-using Store.Entity;
+using Store.Entities;
 using Store.Services.Data;
 using static BCrypt.Net.BCrypt;
 
@@ -26,7 +27,7 @@ public static class AccountEndpoints
             .WithOpenApi();
     }
 
-    private static async Task<Results<Ok<string>, NotFound>> Delete(int id, AppDbContext db)
+    private static async Task<Results<Ok, NotFound>> Delete(int id, AppDbContext db)
     {
         var account = await db.Accounts
             .Include(a => a.Orders)
@@ -41,18 +42,27 @@ public static class AccountEndpoints
         db.Accounts.Remove(account);
         await db.SaveChangesAsync();
 
-        return TypedResults.Ok("succes");
+        return TypedResults.Ok();
     }
 
-    private static async Task<Results<Ok<int>, Ok<string>>> Create(CreateAccountRequest data, AppDbContext db,
+    private static async Task<Results<Ok<int>, BadRequest<string>, BadRequest<List<ValidationResult>>>> Create(
+        CreateAccountRequest data,
+        AppDbContext db,
         IConfiguration config)
     {
+        var validationResults = data.Validate().ToList();
+
+        if (validationResults.Count != 0)
+        {
+            return TypedResults.BadRequest(validationResults);
+        }
+
         var account = await db.Accounts.FirstOrDefaultAsync(
             account => account.PhoneNumber == data.PhoneNumber);
 
         if (account != null)
         {
-            return TypedResults.Ok("Пользователь уже зарегистрирован с данным номером");
+            return TypedResults.BadRequest("Пользователь уже зарегистрирован с данным номером");
         }
 
         var hashPassword = HashPassword(data.Password);
@@ -72,15 +82,17 @@ public static class AccountEndpoints
     }
 
 
-    private static async Task<Results<Ok<LoginResponse>, UnauthorizedHttpResult>> Authenticate(
-        LoginRequest loginRequest, AppDbContext db, IConfiguration config)
+    private static async Task<Results<Ok<LoginResponse>, BadRequest<string>>> Authenticate(
+        LoginRequest loginRequest,
+        AppDbContext db,
+        IConfiguration config)
     {
         var account = await db.Accounts.FirstOrDefaultAsync(
             account => account.PhoneNumber == loginRequest.PhoneNumber);
 
         if (account == null || !Verify(loginRequest.Password, account.Password))
         {
-            return TypedResults.Unauthorized();
+            return TypedResults.BadRequest("Не верный логин или пароль");
         }
 
         var tokenHandler = new JwtSecurityTokenHandler();
