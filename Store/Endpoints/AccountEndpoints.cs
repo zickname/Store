@@ -23,7 +23,7 @@ public static class AccountEndpoints
         endpoints.MapPost("api/account/authenticate", Authenticate)
             .WithOpenApi();
 
-        endpoints.MapPost("account/delete/{id:int}", Delete)
+        endpoints.MapDelete("account/delete/{id:int}", Delete)
             .WithOpenApi();
     }
 

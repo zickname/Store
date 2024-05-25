@@ -30,6 +30,6 @@ public class ImageConfiguration : IEntityTypeConfiguration<Image>
 
         builder.HasOne(image => image.Product)
             .WithMany(product => product.Images)
-            .HasForeignKey(e => e.ProductId);
+            .HasForeignKey(image => image.ProductId);
     }
 }

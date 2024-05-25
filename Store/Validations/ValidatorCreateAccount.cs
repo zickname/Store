@@ -18,7 +18,7 @@ public class CreateAccountValidate
         if (!IsValidName(request.FirstName))
         {
             yield return new ValidationResult(
-                "Имя должно содержать от 2 до 20 символов и состоять только из букв английского и русского",
+                "Имя должно содержать от 2 до 20 символов и состоять только из букв английского или русского алфавита",
                 new[] { nameof(request.FirstName) });
         }
 
@@ -28,6 +28,19 @@ public class CreateAccountValidate
                 "Фамилия должна содержать от 2 до 20 символов и состоять только из букв английского и русского",
                 new[] { nameof(request.LastName) });
         }
+        
+        if (!IsValidPassword(request.Password))
+        {
+            yield return new ValidationResult(
+                "Длина пароля от 8 до 16 символов (строчные, заглавные, цифры)",
+                new[] { nameof(request.Password) });
+        }
+    }
+
+    private bool IsValidPassword(string password)
+    {
+        const string pattern = @"^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*()_+[\]{};':""\\|,.<>\/?-]{8,16}$";
+        return Regex.IsMatch(password, pattern);
     }
 
     private bool IsValidPhoneNumber(string phoneNumber)
