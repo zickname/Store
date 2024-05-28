@@ -14,14 +14,14 @@ public static class OrderEndpoints
     {
         endpoints.MapGet("api/admin/orders", GetAll);
         endpoints.MapGet("api/account/orders", GetAllByUser);
-        endpoints.MapGet("api/account/order/{id:int}", GetById);
-        endpoints.MapGet("api/admin/order/{id:int}", GetByIdForUser);
+        endpoints.MapGet("api/account/orders/{id:int}", GetById);
+        endpoints.MapGet("api/admin/orders/{id:int}", GetByIdForUser);
         endpoints.MapPost("api/orders/create", CreateOrder);
         endpoints.MapDelete("api/orders{id:int}", DeleteOrder);
     }
 
     [Authorize]
-    private static async Task<Ok<OrderResponse>> GetById(int id, AppDbContext db)
+    private static async Task<Results<Ok<OrderResponse>, BadRequest<string>>> GetById(int id, AppDbContext db)
     {
         var orders = await db.Orders
             .Where(order => order.Id == id)
@@ -41,11 +41,13 @@ public static class OrderEndpoints
                 order.Amount))
             .FirstOrDefaultAsync();
 
-        return TypedResults.Ok(orders);
+        return orders != null
+            ? TypedResults.Ok(orders)
+            : TypedResults.BadRequest("Произошла ошибка");
     }
 
     [Authorize]
-    private static async Task<Results<Ok<OrderResponse>, UnauthorizedHttpResult>> GetByIdForUser(
+    private static async Task<Results<Ok<OrderResponse>, BadRequest<string>, UnauthorizedHttpResult>> GetByIdForUser(
         int id,
         AppDbContext db,
         ICurrentAccount account)
@@ -73,7 +75,9 @@ public static class OrderEndpoints
                 order.Amount))
             .FirstOrDefaultAsync();
 
-        return TypedResults.Ok(orders);
+        return orders != null
+            ? TypedResults.Ok(orders)
+            : TypedResults.BadRequest("Произошла ошибка");
     }
 
     [Authorize]
@@ -108,7 +112,7 @@ public static class OrderEndpoints
     }
 
     [Authorize]
-    private static async Task<Results<Ok<OrderResponse>, UnauthorizedHttpResult>> CreateOrder(
+    private static async Task<Results<Ok<OrderResponse>, BadRequest<string>, UnauthorizedHttpResult>> CreateOrder(
         CreateOrderRequest dto,
         AppDbContext db,
         ICurrentAccount account)
@@ -118,17 +122,35 @@ public static class OrderEndpoints
         if (userId == null)
             return TypedResults.Unauthorized();
 
+        var productIds = dto.Products.Select(p => p.ProductId).ToList();
+
+        var productsFromDb = await db.Products
+            .Where(product => productIds.Contains(product.Id))
+            .Select(product => new { product.Id, product.Price })
+            .ToDictionaryAsync(product => product.Id);
+
+        if (productsFromDb.Count != productIds.Count)
+        {
+            return TypedResults.BadRequest("One or more products are invalid.");
+        }
+
+        var orderDetailsList = dto.Products
+            .Select(dtoProduct =>
+            {
+                var dbProduct = productsFromDb[dtoProduct.ProductId];
+                return new OrderDetails
+                {
+                    ProductId = dbProduct.Id,
+                    Price = dbProduct.Price,
+                    Quantity = dtoProduct.Quantity
+                };
+            }).ToList();
+
         var order = new Order
         {
-            Amount = dto.TotalAmount,
+            Amount = orderDetailsList.Sum(od => od.Price * od.Quantity),
             Address = dto.Address,
-            DetailsList = dto.Products
-                .Select(p => new OrderDetails
-                {
-                    ProductId = p.ProductId,
-                    Price = p.Price,
-                    Quantity = p.Quantity
-                }).ToList(),
+            DetailsList = orderDetailsList,
             CreatedDate = DateTime.UtcNow,
             UserId = (int)userId
         };
@@ -176,7 +198,7 @@ public static class OrderEndpoints
     }
 
     [Authorize]
-    private static async Task<Results<Ok, NotFound>> DeleteOrder(int id, AppDbContext db)
+    private static async Task<Results<Ok, NotFound<string>>> DeleteOrder(int id, AppDbContext db)
     {
         var order = await db.Orders
             .Include(order => order.DetailsList)
@@ -184,7 +206,7 @@ public static class OrderEndpoints
 
         if (order == null)
         {
-            return TypedResults.NotFound();
+            return TypedResults.NotFound("Произошла ошибка");
         }
 
         db.Remove(order);

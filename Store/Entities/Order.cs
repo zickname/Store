@@ -6,9 +6,9 @@ public class Order
 
     public int UserId { get; set; }
 
-    public decimal Amount { get; set; }
+    public double Amount { get; set; }
 
-    public string Address { get; set; }
+    public required string Address { get; set; }
 
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 

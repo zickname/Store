@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using Store.DTO.Images;
+using Store.DTOs.Images;
 using Store.DTOs.Products;
 using Store.Entities;
 using Store.Services.Data;
@@ -16,7 +16,7 @@ public static class ProductEndpoints
             .WithName("GetProducts")
             .WithOpenApi();
 
-        endpoints.MapGet("api/product/{id:int}", GetById)
+        endpoints.MapGet("api/products/{id:int}", GetById)
             .WithName("GetProduct")
             .WithOpenApi();
 
@@ -24,11 +24,11 @@ public static class ProductEndpoints
             .WithName("AddProduct")
             .WithOpenApi();
 
-        endpoints.MapPut("api/product/{id:int}", Update)
+        endpoints.MapPut("api/products/{id:int}", Update)
             .WithName("UpdateProduct")
             .WithOpenApi();
 
-        endpoints.MapDelete("api/product/{id:int}", Delete)
+        endpoints.MapDelete("api/products/{id:int}", Delete)
             .WithName("DeleteProduct")
             .WithOpenApi();
     }
@@ -40,7 +40,7 @@ public static class ProductEndpoints
         var product = await db.Products.FindAsync(id);
 
         if (product == null)
-            return TypedResults.NotFound($"Товар с данным {id} не существует");
+            return TypedResults.NotFound("Произошла ошибка");
 
         product.Name = data.Name;
         product.Price = data.Price;
@@ -75,7 +75,7 @@ public static class ProductEndpoints
 
         if (existingProduct == null)
         {
-            return TypedResults.NotFound($"Запись с таким {id} не найдена");
+            return TypedResults.NotFound("Произошла ошибка");
         }
 
         db.Products.Update(existingProduct);
@@ -132,20 +132,28 @@ public static class ProductEndpoints
     }
 
     [Authorize]
-    private static async Task<ProductDto?> GetById(int id, AppDbContext db)
+    private static async Task<Results<Ok<ProductDto>, BadRequest<string>>> GetById(int id, AppDbContext db)
     {
-        return await db.Products
-            .Where(product => product.Id == id)
-            .Select(product => new ProductDto(
-                product.Id,
-                product.Name,
-                product.Price,
-                product.Images
-                    .Select(image => new ImageDto(
-                        image!.Id,
-                        image.ImagePath))
-                    .ToList()
-            ))
-            .FirstOrDefaultAsync();
+        var product = await db.Products
+            .Include(p => p.Images)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        if (product == null)
+        {
+            return TypedResults.BadRequest("Произошла ошибка");
+        }
+        
+        var productDto = new ProductDto(
+            product.Id,
+            product.Name,
+            product.Price,
+            product.Images
+                .Select(image => new ImageDto(
+                    image!.Id,
+                    image.ImagePath))
+                .ToList()
+        );
+
+        return TypedResults.Ok(productDto);
     }
 }

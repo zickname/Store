@@ -16,7 +16,7 @@ public static class CartEndpoints
     }
 
     [Authorize]
-    private static async Task<Results<Ok<List<CartItemsDto>>, UnauthorizedHttpResult>> Change(
+    private static async Task<Results<Ok<List<CartItemsDto>>, BadRequest<string>, UnauthorizedHttpResult>> Change(
         CartItemsDto data,
         AppDbContext db,
         ICurrentAccount currentAccount)
@@ -26,6 +26,10 @@ public static class CartEndpoints
         if (userId == null)
             return TypedResults.Unauthorized();
 
+        var productExists = await db.Products.AnyAsync(product => product.Id == data.ProductId);
+        if (!productExists)
+            return TypedResults.BadRequest("Произошла ошибка при выполнении");
+        
         var cartItem = await db.Carts.FirstOrDefaultAsync(
             item => item.ProductId == data.ProductId && item.UserId == userId);
 

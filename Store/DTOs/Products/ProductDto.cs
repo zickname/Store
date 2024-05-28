@@ -1,4 +1,4 @@
-﻿using Store.DTO.Images;
+﻿using Store.DTOs.Images;
 
 namespace Store.DTOs.Products;
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using Store.DTO.Images;
+using Store.DTOs.Images;
 using Store.Entities;
 using Store.Services.Data;
 

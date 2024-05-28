@@ -6,5 +6,5 @@ public record OrderResponse(
     DateTime CreateDate,
     string Address,
     List<OrderDetailsDto> Products,
-    decimal TotalAmount
+    double TotalAmount
     );

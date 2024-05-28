@@ -1,4 +1,4 @@
-﻿namespace Store.DTO.Images;
+﻿namespace Store.DTOs.Images;
 
 public record ImageDto(
     int ImageId,

@@ -1,6 +1,8 @@
-﻿namespace Store.DTOs.Orders;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Store.DTOs.Orders;
 
 public record CreateOrderRequest(
-    decimal TotalAmount,
+    [Required]
     string Address,
     List<OrderDetailsDto> Products);
