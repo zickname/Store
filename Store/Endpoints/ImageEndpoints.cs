@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-using Store.DTOs.Images;
 using Store.Entities;
 using Store.Services.Data;
 
@@ -13,32 +11,13 @@ public static class ImageEndpoints
     {
         endpoints.MapPost("api/image-upload", UploadImage)
             .DisableAntiforgery();
-
-        endpoints.MapGet("api/image/{id:int}", GetById)
-            .DisableAntiforgery()
-            .WithOpenApi();
-    }
-
-    [Authorize]
-    private static async Task<Results<PhysicalFileHttpResult, NotFound>> GetById(int id, AppDbContext db)
-    {
-        var imageResponse = await db.Images
-            .Where(image => image.Id == id)
-            .Select(image => new ImageDto(image.Id, image.ImagePath))
-            .FirstOrDefaultAsync();
-
-        if (imageResponse == null)
-        {
-            TypedResults.NotFound();
-        }
-
-        return TypedResults.PhysicalFile(imageResponse!.ImagePath, contentType: "image/*");
     }
 
     [Authorize]
     private static async Task<Results<Ok<int>, BadRequest<string>>> UploadImage(
         IFormFile file,
         IConfiguration configuration,
+        IWebHostEnvironment environment,
         AppDbContext db)
     {
         if (!ValidateFileType(file.FileName))
@@ -46,15 +25,14 @@ public static class ImageEndpoints
             return TypedResults.BadRequest("Неверный тип файла");
         }
 
-        var uploadImageFolderPath = configuration["UploadImageFolderPath"]!;
         var extension = Path.GetExtension(file.FileName);
-        var fileName = Guid.NewGuid().ToString();
-        var filePath = Path.Combine(uploadImageFolderPath, $"{fileName}{extension}");
+        var fileName = Guid.NewGuid() + extension;
+        var filePath = GetOrCreateFilePath(fileName, environment, configuration);
+       // var filePath = Path.Combine(staticFolderPath, $"{fileName}{extension}");
 
-        await using var fileStream = File.Create(filePath);
-
+        await using var fileStream = new FileStream(filePath, FileMode.Create);
         await file.CopyToAsync(fileStream);
-
+        
         var image = new Image
         {
             Name = fileName,
@@ -73,5 +51,17 @@ public static class ImageEndpoints
     {
         var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
         return allowedExtensions.Contains(Path.GetExtension(fileName).ToLower());
+    }
+
+    private static string GetOrCreateFilePath(string fileName, IHostEnvironment environment, IConfiguration configuration)
+    {
+        var directoryPath = Path.Combine(environment.ContentRootPath, configuration["FolderUploadImages"]!);
+
+        if (!Directory.Exists(directoryPath))
+        {
+            Directory.CreateDirectory(directoryPath);
+        }
+
+        return Path.Combine(environment.ContentRootPath, directoryPath, fileName);
     }
 }

@@ -12,7 +12,7 @@ public record CreateAccountRequest(
 {
     public IEnumerable<ValidationResult> Validate()
     {
-        var validator = new CreateAccountValidate();
+        var validator = new ValidatorCreateAccount();
         return validator.Validate(this);
     }
 }

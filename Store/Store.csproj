@@ -22,7 +22,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Extensions\" />
+      <_ContentIncludedByDefault Remove="Persistens\CountryOperatorCodes.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="static\" />
     </ItemGroup>
 
 </Project>

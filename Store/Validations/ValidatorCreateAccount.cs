@@ -4,7 +4,7 @@ using Store.DTOs.Accounts;
 
 namespace Store.Validations;
 
-public class CreateAccountValidate
+public class ValidatorCreateAccount
 {
     public IEnumerable<ValidationResult> Validate(CreateAccountRequest request)
     {
@@ -45,8 +45,20 @@ public class CreateAccountValidate
 
     private bool IsValidPhoneNumber(string phoneNumber)
     {
-        const string pattern = @"^(700|701|702|705|707|708|747|771|775|776|777|778)\d{7}$";
-        return Regex.IsMatch(phoneNumber, pattern);
+        const string pattern = @"^(\d{1,3})(\d{3})(\d{7})$";
+        
+        var match = Regex.Match(phoneNumber, pattern);
+        
+        if (!match.Success)
+        {
+            return false;
+        }
+
+        var countryCode = int.Parse(match.Groups[1].Value);
+        var operatorCode = int.Parse(match.Groups[2].Value);
+
+        return CountryOperatorCodes.CountryCodes.Contains(countryCode)
+               && CountryOperatorCodes.OperatorCodes.Contains(operatorCode);
     }
 
     private bool IsValidName(string name)
@@ -55,9 +67,6 @@ public class CreateAccountValidate
         if (string.IsNullOrWhiteSpace(name))
             return false;
 
-        if (name.Length < 2 || name.Length > 20)
-            return false;
-
-        return Regex.IsMatch(name, pattern);
+        return name.Length is >= 1 and <= 20 && Regex.IsMatch(name, pattern);
     }
 }
