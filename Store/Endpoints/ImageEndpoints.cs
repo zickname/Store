@@ -28,16 +28,16 @@ public static class ImageEndpoints
         var extension = Path.GetExtension(file.FileName);
         var fileName = Guid.NewGuid() + extension;
         var filePath = GetOrCreateFilePath(fileName, environment, configuration);
-       // var filePath = Path.Combine(staticFolderPath, $"{fileName}{extension}");
+        var filePathRelative = Path.GetRelativePath(environment.ContentRootPath, filePath);
 
         await using var fileStream = new FileStream(filePath, FileMode.Create);
         await file.CopyToAsync(fileStream);
-        
+
         var image = new Image
         {
             Name = fileName,
             ProductId = null,
-            ImagePath = filePath,
+            ImagePath = filePathRelative,
             CreatedDate = DateTime.UtcNow
         };
 
@@ -53,7 +53,8 @@ public static class ImageEndpoints
         return allowedExtensions.Contains(Path.GetExtension(fileName).ToLower());
     }
 
-    private static string GetOrCreateFilePath(string fileName, IHostEnvironment environment, IConfiguration configuration)
+    private static string GetOrCreateFilePath(string fileName, IHostEnvironment environment,
+        IConfiguration configuration)
     {
         var directoryPath = Path.Combine(environment.ContentRootPath, configuration["FolderUploadImages"]!);
 
@@ -62,6 +63,6 @@ public static class ImageEndpoints
             Directory.CreateDirectory(directoryPath);
         }
 
-        return Path.Combine(environment.ContentRootPath, directoryPath, fileName);
+        return Path.Combine(directoryPath, fileName);
     }
 }
