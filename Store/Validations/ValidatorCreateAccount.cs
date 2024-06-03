@@ -39,7 +39,7 @@ public class ValidatorCreateAccount
 
     private bool IsValidPassword(string password)
     {
-        const string pattern = @"^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*()_+[\]{};':""\\|,.<>\/?-]{8,16}$";
+        const string pattern = @"^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*()_+[\]{};':\\|,.<>\/?-]{8,}$";
         return Regex.IsMatch(password, pattern);
     }
 
