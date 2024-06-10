@@ -8,13 +8,15 @@ public class Product
 
     public required double Price { get; set; }
 
+    public string? Description { get; set; }
+
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
     public DateTime? LastModifiedDate { get; set; }
 
-    public List<Image?> Images { get; } = [];
+    public List<Image> Images { get; } = [];
 
-    public List<OrderDetails?> OrderDetailsList { get; set; } = [];
+    public List<OrderDetails> OrderDetailsList { get; set; } = [];
 
-    public List<Cart?> Carts { get; set; } = [];
+    public List<Cart> Carts { get; set; } = [];
 }

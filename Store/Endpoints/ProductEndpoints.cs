@@ -44,6 +44,7 @@ public static class ProductEndpoints
 
         product.Name = data.Name;
         product.Price = data.Price;
+        product.Description = data.Description;
         product.LastModifiedDate = DateTime.UtcNow;
 
         if (data.ImagesId != null)
@@ -91,6 +92,7 @@ public static class ProductEndpoints
         var product = new Product
         {
             Name = data.Name,
+            Description = data.Description,
             Price = data.Price,
         };
 
@@ -123,9 +125,10 @@ public static class ProductEndpoints
                 product.Id,
                 product.Name,
                 product.Price,
+                product.Description,
                 product.Images
                     .Select(image => new ImageDto(
-                        image!.Id,
+                        image.Id,
                         image.ImagePath))
                     .ToList()))
             .ToListAsync();
@@ -147,9 +150,10 @@ public static class ProductEndpoints
             product.Id,
             product.Name,
             product.Price,
+            product.Description,
             product.Images
                 .Select(image => new ImageDto(
-                    image!.Id,
+                    image.Id,
                     image.ImagePath))
                 .ToList()
         );

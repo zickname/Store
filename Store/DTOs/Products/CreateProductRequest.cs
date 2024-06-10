@@ -9,4 +9,6 @@ public record CreateProductRequest(
     [Required]
     double Price,
     
+    string? Description,
+    
     List<int>? ImagesId = null);

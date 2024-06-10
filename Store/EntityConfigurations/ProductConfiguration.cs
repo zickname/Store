@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Store.Entities;
 
-namespace Store.Configurations;
+namespace Store.EntityConfigurations;
 
 public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
@@ -20,6 +20,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.Property(product => product.Price)
             .IsRequired();
+
+        builder.Property(product => product.Description)
+            .HasMaxLength(1500);
 
         builder.Property(product => product.CreatedDate)
             .IsRequired();

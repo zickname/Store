@@ -6,4 +6,5 @@ public record ProductDto(
     int Id,
     string Name,
     double Price,
+    string? Description,
     List<ImageDto>? Images);

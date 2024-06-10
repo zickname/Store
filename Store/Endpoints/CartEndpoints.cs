@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Store.DTOs.Carts;
+using Store.DTOs.Images;
 using Store.Entities;
 using Store.Interfaces;
 using Store.Services.Data;
@@ -13,6 +14,31 @@ public static class CartEndpoints
     public static void MapCartsEndpoints(this IEndpointRouteBuilder endpoints)
     {
         endpoints.MapPost("api/cart/change", Change);
+        endpoints.MapGet("api/cart", GetCart);
+    }
+
+    private static async Task<Results<Ok<List<CartDto>>, BadRequest<string>, UnauthorizedHttpResult>> GetCart(
+        AppDbContext db,
+        ICurrentAccount currentAccount)
+    {
+        var userId = currentAccount.GetUserId();
+        if (userId == null)
+            return TypedResults.Unauthorized();
+
+        var cartItems = await db.Carts
+            .Where(cart => cart.UserId == userId)
+            .Select(cart => new CartDto(
+                cart.ProductId,
+                cart.Quantity,
+                cart.Product.Name,
+                cart.Product.Price,
+                cart.Product.Images
+                    .Select(image => new ImageDto(
+                        image.Id,
+                        image.ImagePath))
+                    .ToList()))
+            .ToListAsync();
+        return TypedResults.Ok(cartItems);
     }
 
     [Authorize]
