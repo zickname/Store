@@ -1,0 +1,100 @@
+{"products":[
+    {
+      "id": 1,
+      "name": "Смартфон Galaxy S21",
+      "price": 200000,
+      "description": "Смартфон с 6.2-дюймовым дисплеем, процессором Exynos 2100 и 8 ГБ оперативной памяти.",
+      "images": [
+        {
+          "imageId": 7,
+          "imagePath": "static\\images\\5c1d0172-0477-4f3c-8cad-f534a60a923b.jpg"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Ноутбук MacBook Pro 13",
+      "price": 1300000,
+      "description": "Мощный ноутбук с процессором M1, 8 ГБ оперативной памяти и 256 ГБ SSD.",
+      "images": [
+        {
+          "imageId": 8,
+          "imagePath": "static\\images\\de8fff44-9cb2-4044-9ef4-d03486ad39aa.jpg"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Беспроводные наушники AirPods Pro",
+      "price": 50000,
+      "description": "Активное шумоподавление, адаптивный эквалайзер и длительное время автономной работы.",
+      "images": [
+        {
+          "imageId": 9,
+          "imagePath": "static\\images\\e89ca271-580d-4fb6-a368-27bd32cbeaa0.jpg"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Игровая консоль PlayStation 5",
+      "price": 500000,
+      "description": "Новейшая игровая консоль от Sony с поддержкой 4K-гейминга и эксклюзивными играми.",
+      "images": [
+        {
+          "imageId": 6,
+          "imagePath": "static\\images\\7644b76d-e0a2-4f16-b40d-e441c7ffc7bf.jpg"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Электросамокат Xiaomi Mi Scooter",
+      "price": 360000,
+      "description": "Легкий и удобный электросамокат с дальностью поездки до 30 км.",
+      "images": [
+        {
+          "imageId": 5,
+          "imagePath": "static\\images\\24f17b3e-aa44-43d8-ade5-9d093b18c845.jpg"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Фотоаппарат Canon EOS R6",
+      "price": 1500000,
+      "description": "Полнокадровая беззеркальная камера с матрицей 20 МП и видеосъемкой 4K.",
+      "images": [
+        {
+          "imageId": 3,
+          "imagePath": "static\\images\\6ae585b5-8b78-4225-ab12-1dbc30a3988a.jpg"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Увлажнитель воздуха Levoit",
+      "price": 120000,
+      "description": "Увлажнитель воздуха с функцией ароматерапии и ультразвуковой технологией.",
+      "images": [
+        {
+          "imageId": 2,
+          "imagePath": "static\\images\\24b9aca7-182d-44a9-80d2-e45ccde77eb6.jpeg"
+        }
+      ]
+    }
+  ],
+"cartItem":[
+  {
+    "productId": 1,
+    "quantity": 10,
+    "name": "Смартфон Galaxy S21",
+    "price": 200000,
+    "images": [
+      {
+        "imageId": 7,
+        "imagePath": "static\\images\\5c1d0172-0477-4f3c-8cad-f534a60a923b.jpg"
+      }
+    ]
+  }
+]}

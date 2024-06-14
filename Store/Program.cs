@@ -39,7 +39,13 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-    
+
+
+builder.Services.AddCors(optons =>
+    optons.AddPolicy("AllowSpecificOrigin", policyBuilder => policyBuilder
+        .WithOrigins("http://localhost:4200")
+        .AllowAnyOrigin()
+        .AllowAnyHeader()));
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAuthorization();
@@ -59,6 +65,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowSpecificOrigin");
+
 app.UseHttpsRedirection();
 app.UseStaticFiles(new StaticFileOptions
 {
@@ -72,6 +80,7 @@ app.MapImageEndpoints();
 app.MapAccountsEndpoints();
 app.MapCartsEndpoints();
 app.MapOrderEndpoints();
+
 
 //TODO Если есть header Autorization, то просто в консоль записать есть или нету.
 

@@ -105,6 +105,7 @@ public static class AccountEndpoints
             }),
             Issuer = config["JWTSettings:Issuer"],
             Audience = config["JWTSettings:Audience"],
+            Expires = DateTime.UtcNow.Add(TimeSpan.FromDays(2)),
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature)

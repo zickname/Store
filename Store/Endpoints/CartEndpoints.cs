@@ -17,6 +17,7 @@ public static class CartEndpoints
         endpoints.MapGet("api/cart", GetCart);
     }
 
+    [Authorize]
     private static async Task<Results<Ok<List<CartDto>>, BadRequest<string>, UnauthorizedHttpResult>> GetCart(
         AppDbContext db,
         ICurrentAccount currentAccount)
@@ -70,7 +71,7 @@ public static class CartEndpoints
 
             db.Carts.Add(cartItem);
         }
-        else if (data.Quantity == 0)
+        else if (data.Quantity <= 0)
         {
             db.Carts.Remove(cartItem);
         }

@@ -117,7 +117,6 @@ public static class ProductEndpoints
         return TypedResults.Ok(product.Id);
     }
 
-    [Authorize]
     private static async Task<List<ProductDto>> GetAll(AppDbContext db)
     {
         return await db.Products

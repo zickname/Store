@@ -1,0 +1,20 @@
+<div class="cart-container">
+  <h1>Корзина</h1>
+  <div *ngIf="cartProducts.length === 0">
+    <p>Ваша корзина пуста.</p>
+  </div>
+  <div *ngIf="cartProducts.length > 0">
+    <div class="cart-item" *ngFor="let item of cartProducts">
+      <img [src]="item.images[0].imagePath" alt="{{ item.name }}" class="cart-item-image">
+      <div class="cart-item-details">
+        <h2>{{ item.name }}</h2>
+        <p>Цена: {{ item.price | currency }}</p>
+        <div class="cart-item-quantity">
+          <button (click)="changeQuantity(item, item.quantity - 1)">-</button>
+          <span>{{ item.quantity }}</span>
+          <button (click)="changeQuantity(item, item.quantity + 1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
