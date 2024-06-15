@@ -18,7 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { httpInterceptorProviders } from './interceptors/http.interceptor';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 
 
 
@@ -42,11 +42,9 @@ import { HttpClientModule } from '@angular/common/http';
     MatIconModule,
     MatButtonModule,
     MatCardModule,
-    FormsModule,
-    HttpClientModule
-    
+    FormsModule,    
   ],
-  providers: [httpInterceptorProviders],
+  providers: [httpInterceptorProviders, provideHttpClient()],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
