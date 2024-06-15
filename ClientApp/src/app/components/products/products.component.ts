@@ -1,12 +1,7 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CartProducts } from 'src/app/models/cart/cart-products';
-import { Products } from 'src/app/models/products';
+import { CartProduct } from 'src/app/models/cart/cart-products';
+import { Product } from 'src/app/models/products';
 import { CartService } from 'src/app/services/cart.service';
 import { ProductsService } from 'src/app/services/products.service';
 
@@ -16,15 +11,14 @@ import { ProductsService } from 'src/app/services/products.service';
   styleUrls: ['./products.component.css'],
 })
 export class ProductsComponent implements OnInit, OnDestroy {
-  products: Products[] = [];
-  cart: CartProducts[] = [];
+  products: Product[] = [];
+  cart: CartProduct[] = [];
   productsSubscription?: Subscription;
   cartSubscription?: Subscription;
 
   constructor(
     private productService: ProductsService,
-    private cartService: CartService,
-    private cdr: ChangeDetectorRef
+    private cartService: CartService
   ) {}
 
   ngOnInit() {
@@ -50,12 +44,37 @@ export class ProductsComponent implements OnInit, OnDestroy {
     console.log(item);
     return item ? item.quantity : 0;
   }
+
   changeQuantity(productId: number, quantity: number) {
     if (quantity < 0) return;
 
-    const item = this.cart.find((item) => item.productId === productId);
+    this.cartService.changeQuantity(productId, quantity).subscribe(() => {
+      const cartProduct = this.cart.find(
+        (item) => item.productId === productId
+      );
 
-    this.cartService.changeQuantity(productId, quantity).subscribe(() => {});
-    
+      if (cartProduct) {
+        if (quantity === 0) {
+          this.cart.splice(
+            this.cart.findIndex((item) => item === cartProduct),
+            1
+          );
+        } else {
+          cartProduct.quantity = quantity;
+        }
+      } else {
+        const product = this.products.find((item) => item.id === productId);
+
+        if (product) {
+          this.cart.push({
+            productId: product.id,
+            name: product.name,
+            price: product.price,
+            quantity: quantity,
+            images: product.images,
+          });
+        }
+      }
+    });
   }
 }

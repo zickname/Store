@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Products } from '../models/products';
+import { Product } from '../models/products';
 import { Observable } from 'rxjs';
 
 const httpOptions = {
@@ -15,11 +15,11 @@ export class ProductsService {
 
   constructor(private http: HttpClient) {}
 
-  getProducts(): Observable<Products[]> {
-    return this.http.get<Products[]>(this.url, httpOptions);
+  getProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.url, httpOptions);
   }
 
-  getProduct(id: number): Observable<Products[]> {
-    return this.http.get<Products[]>(`${this.url}/${id}`);
+  getProduct(id: number): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.url}/${id}`);
   }
 }

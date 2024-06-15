@@ -1,14 +1,14 @@
 .example-card {
-    max-width: 400px;
-  }
+  max-width: 400px;
+}
 
 .example-card {
-    background-color: rgb(149, 192, 230);
-    color: #000;
-    max-width: 300px;
-    max-height: auto;
-    margin-right: 20px;
-    margin-top: 20px;
+  background-color: rgb(149, 192, 230);
+  color: #000;
+  max-width: 300px;
+  max-height: auto;
+  margin-right: 20px;
+  margin-top: 20px;
 }
 
 .container {

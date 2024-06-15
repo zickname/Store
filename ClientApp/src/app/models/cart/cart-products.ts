@@ -1,11 +1,9 @@
-import { Image } from "../products";
+import { Image, Product } from '../products';
 
-export interface CartProducts {
-    id: string,
-    productId: number,
-    name: string,
-    price: number,
-    quantity: number,
-    images: Image[]
-
+export interface CartProduct {
+  productId: number;
+  name: string;
+  price: number;
+  quantity: number;
+  images: Image[];
 }

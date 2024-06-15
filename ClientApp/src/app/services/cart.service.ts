@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CartProducts } from '../models/cart/cart-products';
+import { CartProduct } from '../models/cart/cart-products';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,8 +12,8 @@ export class CartService {
 
   constructor(private http: HttpClient) {}
 
-  getCart(): Observable<CartProducts[]> {
-    return this.http.get<CartProducts[]>(`${this._host}/cart`);
+  getCart(): Observable<CartProduct[]> {
+    return this.http.get<CartProduct[]>(`${this._host}/cart`);
   }
 
   changeQuantity(productId: number, quantity: number): Observable<any> {
