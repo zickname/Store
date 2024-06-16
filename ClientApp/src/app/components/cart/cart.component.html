@@ -1,20 +1,45 @@
-<div class="cart-container">
-  <h1>Корзина</h1>
-  <div *ngIf="cartProducts.length === 0">
-    <p>Ваша корзина пуста.</p>
-  </div>
-  <div *ngIf="cartProducts.length > 0">
-    <div class="cart-item" *ngFor="let item of cartProducts">
-      <img [src]="item.images[0].imagePath" alt="{{ item.name }}" class="cart-item-image">
-      <div class="cart-item-details">
-        <h2>{{ item.name }}</h2>
-        <p>Цена: {{ item.price | currency }}</p>
-        <div class="cart-item-quantity">
-          <button (click)="changeQuantity(item, item.quantity - 1)">-</button>
-          <span>{{ item.quantity }}</span>
-          <button (click)="changeQuantity(item, item.quantity + 1)">+</button>
+<h2>Ваша корзина</h2>
+<div class="container">
+  @if (cartProducts.length === 0) {
+  <p>Ваша корзина пуста</p>
+  } @if (cartProducts.length > 0) {
+
+  <div class="cart-header">
+    <div class="cart-items">
+      @for (product of cartProducts; track product.productId) {
+      <div class="cart-item">
+        <img
+          [src]="apiUrl + product.images[0].imagePath"
+          [alt]="product.name"
+        />
+        <div class="cart-item-info">
+          <h5>{{ product.name }}</h5>
         </div>
+        <div class="cart-item-quantity">
+          <span></span>
+          <button (click)="changeQuantity(product, product.quantity - 1)">
+            -
+          </button>
+          <p>{{ product.quantity }}</p>
+          <button (click)="changeQuantity(product, product.quantity + 1)">
+            +
+          </button>
+        </div>
+        <p>{{ product.price * product.quantity }}</p>
       </div>
+      }
+    </div>
+    <div class="cart-summary">
+      <h3>Общая стоимость</h3>
+      <p>
+        <span>Товары ({{ cartProducts.length }})</span>
+      </p>
+      <p class="total">
+        <span>Общая стоимость</span><span>{{ getTotalAmount() }} ₸</span>
+      </p>
+      <button (click)="openModal()">Оформить заказ</button>
     </div>
   </div>
+
+  }
 </div>

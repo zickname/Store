@@ -1,11 +1,13 @@
-<mat-toolbar class="app-header" color="primary">
+<mat-toolbar class="header" color="primary">
   <mat-toolbar-row>
     <div>
       <span routerLink="">Online Shop</span>
     </div>
     <span class="example-spacer"></span>
     <div>
-      <mat-icon routerLink="/cart">shopping_bag</mat-icon>
+      <mat-icon [matBadge]="cartProducts.length" routerLink="/cart"
+        >shopping_bag</mat-icon
+      >
     </div>
     <div routerLink="/profile">
       <mat-icon>person</mat-icon>

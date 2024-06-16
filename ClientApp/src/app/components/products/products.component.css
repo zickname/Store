@@ -1,14 +1,16 @@
 .example-card {
-  max-width: 400px;
+  max-width: 300px;
+  position: relative;
 }
 
 .example-card {
   background-color: rgb(149, 192, 230);
   color: #000;
   max-width: 300px;
-  max-height: auto;
+  max-height: 500px;
   margin-right: 20px;
   margin-top: 20px;
+  position: relative;
 }
 
 .container {
@@ -17,10 +19,12 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
+  position: relative;
 }
 
 .image {
   max-width: 300px;
   max-height: 300px;
-  object-fit: fill;
+  object-fit: contain;
+  position: relative;
 }

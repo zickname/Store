@@ -1,24 +1,40 @@
 <div class="container">
-  <ng-container *ngFor="let product of products">
-    <mat-card class="example-card">
-      <mat-card-header>
-        <mat-card-title>{{ product.name }}</mat-card-title>
-      </mat-card-header>
-      <img class="image" mat-card-image [src]="'http://localhost:5025/' + product.images[0].imagePath" alt="{{ product.name }}">
-      <mat-card-content>
-        <mat-card-subtitle>Цена: {{ product.price }}</mat-card-subtitle>
-      </mat-card-content>
-      <mat-card-actions>
-        <ng-container *ngIf="getQuantity(product.id) > 0; else addToCartTemplate">
-          <button mat-button (click)="changeQuantity(product.id, getQuantity(product.id) - 1)">-</button>
-          {{ getQuantity(product.id) }}
-          <button mat-button (click)="changeQuantity(product.id, getQuantity(product.id) + 1)">+</button>
-        </ng-container>
-        <ng-template #addToCartTemplate>
-          <button mat-button (click)="changeQuantity(product.id, 1)">В корзину</button>
-        </ng-template>
-        <button mat-button>Подробнее</button>
-      </mat-card-actions>
-    </mat-card>
-  </ng-container>
+  @for (product of products; track $index) {
+  <mat-card class="example-card">
+    <mat-card-header>
+      <mat-card-title>{{ product.name }}</mat-card-title>
+    </mat-card-header>
+    <img
+      class="image"
+      mat-card-image
+      [src]="apiHost + product.images[0].imagePath"
+      alt="{{ product.name }}"
+    />
+    <mat-card-content>
+      <mat-card-subtitle>Цена: {{ product.price }}</mat-card-subtitle>
+    </mat-card-content>
+    <mat-card-actions>
+      @if (getQuantity(product.id)>0) {
+      <button
+        mat-button
+        (click)="changeQuantity(product.id, getQuantity(product.id) - 1)"
+      >
+        -
+      </button>
+      {{ getQuantity(product.id) }}
+      <button
+        mat-button
+        (click)="changeQuantity(product.id, getQuantity(product.id) + 1)"
+      >
+        +
+      </button>
+      } @if (getQuantity(product.id)<=0) {
+      <button mat-button (click)="changeQuantity(product.id, 1)">
+        В корзину
+      </button>
+      }
+      <button mat-button (click)="openModal(product)">Подробнее</button>
+    </mat-card-actions>
+  </mat-card>
+  }
 </div>

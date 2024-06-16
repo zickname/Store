@@ -1,9 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { CartProduct } from 'src/app/models/cart/cart-products';
+import { CartProduct } from 'src/app/models/cart-products';
 import { Product } from 'src/app/models/products';
 import { CartService } from 'src/app/services/cart.service';
 import { ProductsService } from 'src/app/services/products.service';
+import { environment } from 'src/environments/environment.development';
+import { ProductDetailsComponent } from '../product-details/product-details.component';
 
 @Component({
   selector: 'app-products',
@@ -12,13 +15,17 @@ import { ProductsService } from 'src/app/services/products.service';
 })
 export class ProductsComponent implements OnInit, OnDestroy {
   products: Product[] = [];
-  cart: CartProduct[] = [];
+  cartProducts: CartProduct[] = [];
+
+  apiHost: string = environment.apiHost;
   productsSubscription?: Subscription;
   cartSubscription?: Subscription;
 
   constructor(
     private productService: ProductsService,
-    private cartService: CartService
+    private cartService: CartService,
+
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -29,7 +36,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
       });
 
     this.cartSubscription = this.cartService.getCart().subscribe((data) => {
-      this.cart = data;
+      this.cartProducts = data;
     });
   }
 
@@ -39,9 +46,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   getQuantity(productId: number): number {
-    const item = this.cart.find((item) => item.productId === productId);
+    const item = this.cartProducts.find((item) => item.productId === productId);
 
-    console.log(item);
     return item ? item.quantity : 0;
   }
 
@@ -49,14 +55,14 @@ export class ProductsComponent implements OnInit, OnDestroy {
     if (quantity < 0) return;
 
     this.cartService.changeQuantity(productId, quantity).subscribe(() => {
-      const cartProduct = this.cart.find(
+      const cartProduct = this.cartProducts.find(
         (item) => item.productId === productId
       );
 
       if (cartProduct) {
         if (quantity === 0) {
-          this.cart.splice(
-            this.cart.findIndex((item) => item === cartProduct),
+          this.cartProducts.splice(
+            this.cartProducts.findIndex((item) => item === cartProduct),
             1
           );
         } else {
@@ -66,7 +72,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
         const product = this.products.find((item) => item.id === productId);
 
         if (product) {
-          this.cart.push({
+          this.cartProducts.push({
             productId: product.id,
             name: product.name,
             price: product.price,
@@ -75,6 +81,24 @@ export class ProductsComponent implements OnInit, OnDestroy {
           });
         }
       }
+    });
+  }
+
+  openModal(product: Product): void {
+    const dialogRef: MatDialogRef<ProductDetailsComponent> = this.dialog.open(
+      ProductDetailsComponent,
+      {
+        width: '400px',
+        data: {
+          product: product,
+          cartProducts: this.cartProducts,
+        },
+      }
+    );
+
+    dialogRef.afterClosed().subscribe((result) => {
+      // unsubscribe onAdd
+      console.log(result);
     });
   }
 }

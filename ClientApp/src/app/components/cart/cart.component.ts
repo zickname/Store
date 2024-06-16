@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CartProduct } from 'src/app/models/cart/cart-products';
+import { ArrayHelper } from 'src/app/helpers/array.helper';
+import { CartProduct } from 'src/app/models/cart-products';
 import { CartService } from 'src/app/services/cart.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-cart',
@@ -11,11 +13,13 @@ import { CartService } from 'src/app/services/cart.service';
 export class CartComponent implements OnInit {
   cartProducts: CartProduct[] = [];
   cartProductSubscription?: Subscription;
+  apiUrl: string = '';
 
   constructor(private cartService: CartService) {}
 
   ngOnInit() {
     this.loadCart();
+    this.apiUrl = environment.apiHost;
   }
 
   loadCart(): void {
@@ -26,9 +30,32 @@ export class CartComponent implements OnInit {
       );
   }
 
+  getQuantity(productId: number): number {
+    const item = this.cartProducts.find((item) => item.productId === productId);
+
+    return item ? item.quantity : 0;
+  }
+
+  getTotalAmount() {
+    const sum = this.cartProducts.reduce((acc, item) => {
+      return acc + item.quantity * item.price;
+    }, 0);
+    return sum;
+  }
+
   changeQuantity(item: CartProduct, quantity: number): void {
+    if (quantity < 0) return;
+
     this.cartService.changeQuantity(item.productId, quantity).subscribe(() => {
-      item.quantity = quantity;
+      if (quantity === 0) {
+        ArrayHelper.remove(this.cartProducts, item);
+      } else {
+        item.quantity = quantity;
+      }
     });
+  }
+
+  openModal() {
+    throw new Error('Method not implemented.');
   }
 }
