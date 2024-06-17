@@ -1,18 +1,12 @@
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: calc(100vh - 60px);
+    height: 100%;
+    min-height: 100%;
 }
 
 .header {
-  flex: 0 0 auto;
-}
-
-router-outlet ~ * {
-  min-height: calc(100vh - 60px);
-  flex: 1 0 auto;
+    flex: 0 0 auto;
 }
 
 .footer {
-  flex: 0 0 auto;
+    flex: 0 0 auto;
 }

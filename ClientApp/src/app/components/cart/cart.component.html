@@ -21,9 +21,7 @@
             -
           </button>
           <p>{{ product.quantity }}</p>
-          <button (click)="changeQuantity(product, product.quantity + 1)">
-            +
-          </button>
+          <button (click)="changeQuantity(product, product.quantity)">+</button>
         </div>
         <p>{{ product.price * product.quantity }}</p>
       </div>

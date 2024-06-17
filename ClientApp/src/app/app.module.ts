@@ -1,17 +1,14 @@
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 
-import
-  {
-    provideHttpClient,
-    withInterceptorsFromDi,
-  } from '@angular/common/http'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { FormsModule } from '@angular/forms'
 import { MatBadgeModule } from '@angular/material/badge'
 import { MatButtonModule } from '@angular/material/button'
 import { MatCardModule } from '@angular/material/card'
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatDividerModule } from '@angular/material/divider'
+import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatIconModule } from '@angular/material/icon'
 import { MatListModule } from '@angular/material/list'
 import { MatToolbarModule } from '@angular/material/toolbar'
@@ -28,38 +25,37 @@ import { ProductDetailsComponent } from './components/product-details/product-de
 import { ProductsComponent } from './components/products/products.component'
 import { httpInterceptorProviders } from './interceptors/http.interceptor'
 
-
-
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    FooterComponent,
-    LoginComponent,
-    OrdersComponent,
-    OrderDetailsComponent,
-    ProductsComponent,
-    ProductDetailsComponent,
-    CartComponent,
-    BaseComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    MatCardModule,
-    FormsModule,
-    MatDividerModule,
-    MatListModule,
-    MatBadgeModule,
-    MatDialogModule
-  ],
-  providers: [
-    provideHttpClient(withInterceptorsFromDi()),
-    httpInterceptorProviders,
-  ],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        HeaderComponent,
+        FooterComponent,
+        LoginComponent,
+        OrdersComponent,
+        OrderDetailsComponent,
+        ProductsComponent,
+        ProductDetailsComponent,
+        CartComponent,
+        BaseComponent,
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        MatCardModule,
+        FormsModule,
+        MatDividerModule,
+        MatListModule,
+        MatBadgeModule,
+        MatDialogModule,
+        MatFormFieldModule,
+    ],
+    providers: [
+        provideHttpClient(withInterceptorsFromDi()),
+        httpInterceptorProviders,
+    ],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}

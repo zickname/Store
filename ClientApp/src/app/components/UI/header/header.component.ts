@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core'
-import { CartProduct } from 'src/app/models/cart-products'
+import { Component, OnInit } from '@angular/core';
+import { CartService } from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -7,12 +7,13 @@ import { CartProduct } from 'src/app/models/cart-products'
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
+  cartProductsQuantity: number = 0;
 
-  cartProducts: CartProduct[] = []
-
-  constructor() { }
+  constructor(private cartService: CartService) {}
 
   ngOnInit() {
+    this.cartService.cartProductQuantity.subscribe((data) => {
+      this.cartProductsQuantity = data;
+    });
   }
-
 }
