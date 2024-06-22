@@ -7,12 +7,12 @@ import { CartService } from 'src/app/services/cart.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-  cartProductsQuantity: number = 0;
+  cartProductsQuantity = 0;
 
   constructor(private cartService: CartService) {}
 
   ngOnInit() {
-    this.cartService.cartProductQuantity.subscribe((data) => {
+    this.cartService.cartProductQuantity.subscribe(data => {
       this.cartProductsQuantity = data;
     });
   }

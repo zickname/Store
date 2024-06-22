@@ -35,7 +35,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
         this.products = data;
       });
 
-    this.cartSubscription = this.cartService.getCart().subscribe((data) => {
+    this.cartSubscription = this.cartService.getCart().subscribe(data => {
       this.cartProducts = data;
     });
   }
@@ -46,7 +46,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   getQuantity(productId: number): number {
-    const item = this.cartProducts.find((item) => item.productId === productId);
+    const item = this.cartProducts.find(item => item.productId === productId);
 
     return item ? item.quantity : 0;
   }
@@ -56,20 +56,20 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
     this.cartService.changeQuantity(productId, quantity).subscribe(() => {
       const cartProduct = this.cartProducts.find(
-        (item) => item.productId === productId
+        item => item.productId === productId
       );
 
       if (cartProduct) {
         if (quantity === 0) {
           this.cartProducts.splice(
-            this.cartProducts.findIndex((item) => item === cartProduct),
+            this.cartProducts.findIndex(item => item === cartProduct),
             1
           );
         } else {
           cartProduct.quantity = quantity;
         }
       } else {
-        const product = this.products.find((item) => item.id === productId);
+        const product = this.products.find(item => item.id === productId);
 
         if (product) {
           this.cartProducts.push({
@@ -96,7 +96,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
       }
     );
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       // unsubscribe onAdd
       console.log(result);
     });

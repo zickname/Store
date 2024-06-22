@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment.development';
   styleUrls: ['./product-details.component.css'],
 })
 export class ProductDetailsComponent implements OnInit {
-  apiUrl: string = '';
+  apiUrl = '';
   product!: Product;
   cartProducts: CartProduct[] = [];
 
@@ -32,14 +32,12 @@ export class ProductDetailsComponent implements OnInit {
     if (quantity < 0) return;
 
     this.cartService.changeQuantity(productId, quantity).subscribe(() => {
-      const cartProduct = this.cartProducts.find(
-        (item) => item.productId === productId
-      );
+      const cartProduct = this.cartProducts.find(item => item.productId === productId);
 
       if (cartProduct) {
         if (quantity === 0) {
           this.cartProducts.splice(
-            this.cartProducts.findIndex((item) => item === cartProduct),
+            this.cartProducts.findIndex(item => item === cartProduct),
             1
           );
         } else {
@@ -58,7 +56,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   getQuantity(productId: number): number {
-    const item = this.cartProducts.find((item) => item.productId === productId);
+    const item = this.cartProducts.find(item => item.productId === productId);
     return item ? item.quantity : 0;
   }
 }

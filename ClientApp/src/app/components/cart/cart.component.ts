@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment.development';
 export class CartComponent implements OnInit {
   cartProducts: CartProduct[] = [];
   cartProductSubscription?: Subscription;
-  apiUrl: string = '';
+  apiUrl = '';
 
   constructor(private cartService: CartService) {}
 
@@ -25,13 +25,11 @@ export class CartComponent implements OnInit {
   loadCart(): void {
     this.cartProductSubscription = this.cartService
       .getCart()
-      .subscribe(
-        (items: CartProduct[]): CartProduct[] => (this.cartProducts = items)
-      );
+      .subscribe((items: CartProduct[]): CartProduct[] => (this.cartProducts = items));
   }
 
   getQuantity(productId: number): number {
-    const item = this.cartProducts.find((item) => item.productId === productId);
+    const item = this.cartProducts.find(item => item.productId === productId);
 
     return item ? item.quantity : 0;
   }
