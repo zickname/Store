@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Store.DTOs.Accounts;
 using Store.Entities;
+using Store.Interfaces;
 using Store.Services.Data;
 using static BCrypt.Net.BCrypt;
 
@@ -25,6 +26,26 @@ public static class AccountEndpoints
 
         endpoints.MapDelete("account/delete/{id:int}", Delete)
             .WithOpenApi();
+        endpoints.MapGet("api/account", GetAccountInfo);
+    }
+
+    private static async Task<Results<Ok<AccountDto>, UnauthorizedHttpResult>> GetAccountInfo(
+        AppDbContext db,
+        ICurrentAccount currentAccount)
+    {
+        var userId = currentAccount.GetUserId();
+
+        if (userId == null)
+            return TypedResults.Unauthorized();
+
+        var account = await db.Accounts.FirstAsync(account => account.Id == userId);
+
+        var accountDto = new AccountDto(
+            account.PhoneNumber,
+            account.FirstName,
+            account.LastName);
+
+        return TypedResults.Ok(accountDto);
     }
 
     private static async Task<Results<Ok, NotFound>> Delete(int id, AppDbContext db)
