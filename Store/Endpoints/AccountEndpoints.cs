@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -29,6 +30,7 @@ public static class AccountEndpoints
         endpoints.MapGet("api/account", GetAccountInfo);
     }
 
+    [Authorize]
     private static async Task<Results<Ok<AccountDto>, UnauthorizedHttpResult>> GetAccountInfo(
         AppDbContext db,
         ICurrentAccount currentAccount)

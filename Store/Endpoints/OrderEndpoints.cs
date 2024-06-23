@@ -155,7 +155,10 @@ public static class OrderEndpoints
             UserId = (int)userId
         };
 
+        var cartProducts = await db.Carts.Where(cart => cart.UserId == userId).ToListAsync();
+
         db.Orders.Add(order);
+        db.Carts.RemoveRange(cartProducts);
         await db.SaveChangesAsync();
 
         var orderResponse = new OrderResponse(
