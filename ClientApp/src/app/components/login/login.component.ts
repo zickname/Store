@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { StorageService } from 'src/app/services/storage.service';
 
@@ -8,18 +9,16 @@ import { StorageService } from 'src/app/services/storage.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  form: any = {
-    phoneNumber: null,
-    password: null,
-  };
+  form = new UntypedFormGroup({
+    phoneNumber: new FormControl<string>('', [Validators.required]),
+    password: new FormControl<string>('', [Validators.required]),
+  });
   isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
 
-  constructor(
-    private authService: AuthService,
-    private storageService: StorageService
-  ) {}
+  authService = inject(AuthService);
+  storageService = inject(StorageService);
 
   ngOnInit(): void {
     if (this.storageService.isLoggedIn()) {
@@ -28,9 +27,13 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const { phoneNumber, password } = this.form;
+    if (this.form.valid) {
+      console.log(this.form.value);
+    }
+    // console.log(this.form);
+    const login = this.form.value;
 
-    this.authService.login(phoneNumber, password).subscribe({
+    this.authService.login(login).subscribe({
       next: data => {
         this.storageService.saveUser(data.token);
 

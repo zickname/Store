@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { CartProduct } from '../models/cart-products';
 
@@ -8,15 +8,15 @@ import { CartProduct } from '../models/cart-products';
   providedIn: 'root',
 })
 export class CartService {
+  private cartProducts = new BehaviorSubject<CartProduct[]>([]);
   cartProductQuantity = new Subject<number>();
-
-  private _apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
   getCart(): Observable<CartProduct[]> {
-    return this.http.get<CartProduct[]>(`${this._apiUrl}/cart`).pipe(
+    return this.http.get<CartProduct[]>(`${environment.apiUrl}/cart`).pipe(
       map((data: CartProduct[]) => {
+        this.cartProducts.next(data);
         this.cartProductQuantity.next(data.length);
         return data;
       })
@@ -25,7 +25,7 @@ export class CartService {
 
   changeQuantity(productId: number, quantity: number): Observable<{ poductId: number; quantity: number }[]> {
     return this.http
-      .post<{ poductId: number; quantity: number }[]>(`${this._apiUrl}/cart/change`, {
+      .post<{ poductId: number; quantity: number }[]>(`${environment.apiUrl}/cart/change`, {
         productId,
         quantity,
       })
@@ -35,5 +35,10 @@ export class CartService {
           return response;
         })
       );
+  }
+
+  clearCart() {
+    this.cartProducts.next([]);
+    this.cartProductQuantity.next(0);
   }
 }

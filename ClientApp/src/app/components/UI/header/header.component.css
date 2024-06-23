@@ -1,9 +1,5 @@
 .header {
   background-color: rgb(113, 114, 195);
-  position: fixed;
-  top: 0%;
-  height: 50px;
-  z-index: 999;
 }
 
 .example-icon {

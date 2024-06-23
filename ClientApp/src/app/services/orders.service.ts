@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
-import { Order } from '../models/order';
+import { OrderDto, OrderRequestDto } from '../models/order';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -16,15 +16,22 @@ export class OrdersService {
 
   constructor(private http: HttpClient) {}
 
-  create(order: Order): Observable<Order> {
-    return this.http.post<Order>(`${this.api_url}/orders/create`, { order });
+  createOrder(order: OrderRequestDto): Observable<OrderRequestDto> {
+    return this.http.post<OrderRequestDto>(`${this.api_url}/orders/create`, order);
   }
 
-  getOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.api_url}/orders`, httpOptions);
+  getOrders(): Observable<OrderDto[]> {
+    return this.http.get<OrderDto[]>(`${this.api_url}/account/orders`, httpOptions).pipe(
+      map(orders =>
+        orders.map(order => ({
+          ...order,
+          createDate: new Date(order.createDate).toLocaleDateString(),
+        }))
+      )
+    );
   }
 
-  getOrder(id: number): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.api_url}/orders/${id}`);
+  getOrder(id: number): Observable<OrderDto> {
+    return this.http.get<OrderDto>(`${this.api_url}/account/orders/${id}`);
   }
 }

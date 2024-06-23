@@ -1,9 +1,5 @@
 export class ArrayHelper {
-  public static arrayElementMove(
-    array: any[],
-    oldIndex: number,
-    newIndex: number
-  ): void {
+  public static arrayElementMove(array: any[], oldIndex: number, newIndex: number): void {
     if (newIndex >= array.length) {
       let k: number = newIndex - array.length + 1;
       while (k--) {

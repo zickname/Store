@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ArrayHelper } from 'src/app/helpers/array.helper';
 import { CartProduct } from 'src/app/models/cart-products';
+import { OrderRequestDto } from 'src/app/models/order';
 import { CartService } from 'src/app/services/cart.service';
+import { OrdersService } from 'src/app/services/orders.service';
 import { environment } from 'src/environments/environment.development';
 
 @Component({
@@ -11,15 +14,20 @@ import { environment } from 'src/environments/environment.development';
   styleUrls: ['./cart.component.css'],
 })
 export class CartComponent implements OnInit {
+  apiUrl = environment.apiHost;
+  showAddress = false;
   cartProducts: CartProduct[] = [];
-  cartProductSubscription?: Subscription;
-  apiUrl = '';
 
-  constructor(private cartService: CartService) {}
+  form = new UntypedFormGroup({
+    address: new FormControl<string>('', [Validators.required]),
+  });
+  cartProductSubscription?: Subscription;
+
+  cartService: CartService = inject(CartService);
+  orderService: OrdersService = inject(OrdersService);
 
   ngOnInit() {
     this.loadCart();
-    this.apiUrl = environment.apiHost;
   }
 
   loadCart(): void {
@@ -53,7 +61,29 @@ export class CartComponent implements OnInit {
     });
   }
 
-  openModal() {
-    throw new Error('Method not implemented.');
+  showInputAddress(): void {
+    this.showAddress = true;
+  }
+
+  createOrder() {
+    if (this.form.valid) {
+      const order: OrderRequestDto = {
+        address: this.form.value.address,
+        products: this.cartProducts.map(item => ({
+          productId: item.productId,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+      };
+
+      this.orderService.createOrder(order).subscribe(() => {
+        this.cartService.clearCart();
+        this.cartProducts = [];
+      });
+      // this.cartService.clearCart();
+
+      // this.cartProducts = [];
+      console.log(order);
+    }
   }
 }

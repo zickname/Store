@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { OrderDto } from 'src/app/models/order';
+import { OrdersService } from 'src/app/services/orders.service';
 
 @Component({
   selector: 'app-orders',
@@ -6,7 +9,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./orders.component.css'],
 })
 export class OrdersComponent implements OnInit {
-  constructor() {}
+  orders: OrderDto[] = [];
+  orderService: OrdersService = inject(OrdersService);
 
-  ngOnInit() {}
+  ordersSubscription?: Subscription;
+
+  ngOnInit() {
+    this.ordersSubscription = this.orderService.getOrders().subscribe(data => {
+      this.orders = data;
+      console.log(this.orders);
+    });
+  }
 }

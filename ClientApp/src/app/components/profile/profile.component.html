@@ -1,3 +1,14 @@
-<p>
-  profile works!
-</p>
+<div>
+  <h2>Мой профиль</h2>
+
+  <div class="profile">
+    <div class="info-profile">
+      <p>{{ profileInfo?.firstName }}</p>
+      <p>{{ profileInfo?.lastName }}</p>
+      <p>{{ profileInfo?.phoneNumber }}</p>
+    </div>
+    <div class="items-menu">
+      <div class="orders" routerLink="./orders">Мои заказы</div>
+    </div>
+  </div>
+</div>

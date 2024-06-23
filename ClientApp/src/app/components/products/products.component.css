@@ -6,6 +6,7 @@
 .example-card {
   background-color: rgb(149, 192, 230);
   color: #000;
+  width: auto;
   max-width: 300px;
   max-height: 500px;
   margin-right: 20px;
@@ -24,7 +25,8 @@
 
 .image {
   max-width: 300px;
-  max-height: 300px;
+  height: 125px;
   object-fit: contain;
   position: relative;
+  background-color: white;
 }

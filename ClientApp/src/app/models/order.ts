@@ -1,6 +1,15 @@
 import { OrderDetails } from './order-details';
 
-export interface Order {
+export interface OrderRequestDto {
   address: string;
-  orderDetails: OrderDetails;
+  products: OrderDetails[];
+}
+
+export interface OrderDto {
+  id: number;
+  userId: number;
+  createDate: string;
+  address: string;
+  products: OrderDetails[];
+  totalAmount: number;
 }
