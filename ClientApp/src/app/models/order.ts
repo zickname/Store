@@ -1,8 +1,8 @@
-import { OrderDetails } from './order-details';
+import { OrderDetailsRequest, OrderDetailsResponse } from './order-details';
 
 export interface OrderRequestDto {
   address: string;
-  products: OrderDetails[];
+  products: OrderDetailsRequest[];
 }
 
 export interface OrderDto {
@@ -10,6 +10,6 @@ export interface OrderDto {
   userId: number;
   createDate: string;
   address: string;
-  products: OrderDetails[];
+  products: OrderDetailsResponse[];
   totalAmount: number;
 }

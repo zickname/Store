@@ -32,6 +32,11 @@ export class OrdersService {
   }
 
   getOrder(id: number): Observable<OrderDto> {
-    return this.http.get<OrderDto>(`${this.api_url}/account/orders/${id}`);
+    return this.http.get<OrderDto>(`${this.api_url}/account/orders/${id}`).pipe(
+      map(order => ({
+        ...order,
+        createDate: new Date(order.createDate).toLocaleDateString(),
+      }))
+    );
   }
 }

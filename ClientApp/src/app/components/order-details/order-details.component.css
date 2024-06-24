@@ -1,0 +1,66 @@
+/* Общий стиль для контейнера */
+.container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+/* Стиль для блока заказа */
+.order {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+/* Стиль для информации о заказе */
+.order-info p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+/* Заголовок для раздела с товарами */
+.order h3 {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #333;
+}
+
+/* Стиль для блока с продуктами заказа */
+.order-products {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Стиль для каждого продукта в заказе */
+.order-product {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+/* Стиль для изображения продукта */
+.order-product img {
+  width: 80px;
+  height: 80px;
+  margin-right: 20px;
+  border-radius: 5px;
+}
+
+/* Стиль для информации о продукте */
+.order-product-value {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-product-value span {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #555;
+}

@@ -36,7 +36,9 @@ public static class OrderEndpoints
                     .Select(p => new OrderDetailsDto(
                         p.ProductId,
                         p.Price,
-                        p.Quantity))
+                        p.Quantity,
+                        p.Product.Name,
+                        p.Product.Images.First().ImagePath))
                     .ToList(),
                 order.Amount))
             .FirstOrDefaultAsync();
@@ -70,7 +72,9 @@ public static class OrderEndpoints
                     .Select(p => new OrderDetailsDto(
                         p.ProductId,
                         p.Price,
-                        p.Quantity))
+                        p.Quantity,
+                        p.Product.Name,
+                        p.Product.Images.First().ImagePath))
                     .ToList(),
                 order.Amount))
             .FirstOrDefaultAsync();
@@ -103,7 +107,9 @@ public static class OrderEndpoints
                     .Select(p => new OrderDetailsDto(
                         p.ProductId,
                         p.Price,
-                        p.Quantity))
+                        p.Quantity,
+                        p.Product.Name,
+                        p.Product.Images.First().ImagePath))
                     .ToList(),
                 order.Amount))
             .ToListAsync();
@@ -112,7 +118,7 @@ public static class OrderEndpoints
     }
 
     [Authorize]
-    private static async Task<Results<Ok<OrderResponse>, BadRequest<string>, UnauthorizedHttpResult>> CreateOrder(
+    private static async Task<Results<Ok<CreateOrderResponse>, BadRequest<string>, UnauthorizedHttpResult>> CreateOrder(
         CreateOrderRequest dto,
         AppDbContext db,
         ICurrentAccount account)
@@ -161,13 +167,13 @@ public static class OrderEndpoints
         db.Carts.RemoveRange(cartProducts);
         await db.SaveChangesAsync();
 
-        var orderResponse = new OrderResponse(
+        var orderResponse = new CreateOrderResponse(
             order.Id,
             order.UserId,
             order.CreatedDate,
             order.Address,
             order.DetailsList
-                .Select(item => new OrderDetailsDto(
+                .Select(item => new OrderDetailsRequest(
                     item.ProductId,
                     item.Price,
                     item.Quantity)).ToList(),
@@ -183,18 +189,20 @@ public static class OrderEndpoints
         var orders = await db.Orders
             .Include(o => o.DetailsList)
             .Include(o => o.User)
-            .Select(o => new OrderResponse(
-                o.Id,
-                o.UserId,
-                o.CreatedDate,
-                o.Address,
-                o.DetailsList
+            .Select(order => new OrderResponse(
+                order.Id,
+                order.UserId,
+                order.CreatedDate,
+                order.Address,
+                order.DetailsList
                     .Select(p => new OrderDetailsDto(
                         p.ProductId,
                         p.Price,
-                        p.Quantity))
+                        p.Quantity,
+                        p.Product.Name,
+                        p.Product.Images.First().ImagePath))
                     .ToList(),
-                o.Amount))
+                order.Amount))
             .ToListAsync();
 
         return TypedResults.Ok(orders);
