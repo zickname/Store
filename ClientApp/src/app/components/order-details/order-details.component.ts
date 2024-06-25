@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { OrderDto } from 'src/app/models/order';
 import { OrdersService } from 'src/app/services/orders.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-order-details',
@@ -10,27 +11,33 @@ import { OrdersService } from 'src/app/services/orders.service';
   styleUrls: ['./order-details.component.css'],
 })
 export class OrderDetailsComponent implements OnInit, OnDestroy {
-  order!: OrderDto;
+  private readonly orderService = inject(OrdersService);
+  private readonly route = inject(ActivatedRoute);
 
-  orderService = inject(OrdersService);
-  route = inject(ActivatedRoute);
+  public readonly apiHost = environment.apiHost;
 
-  orderSubscription?: Subscription;
+  public order: OrderDto | null = null;
+
+  subscriptions = new Subscription();
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const orderId = params.get('id');
+
       if (orderId) {
-        this.orderSubscription = this.orderService.getOrder(parseInt(orderId)).subscribe(data => {
-          this.order = data;
-        });
+        this.subscriptions.add(
+          this.orderService.getOrder(parseInt(orderId)).subscribe(data => {
+            this.order = data;
+          })
+        );
       }
     });
   }
 
+  // Спросить у ментора, имеет ли смысл првоерка subscriptions
   ngOnDestroy() {
-    if (this.orderSubscription) {
-      this.orderSubscription.unsubscribe();
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
     }
   }
 }

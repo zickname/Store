@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { CartProduct } from 'src/app/models/cart-products';
@@ -14,35 +14,33 @@ import { ProductDetailsComponent } from '../product-details/product-details.comp
   styleUrls: ['./products.component.css'],
 })
 export class ProductsComponent implements OnInit, OnDestroy {
-  products: Product[] = [];
-  cartProducts: CartProduct[] = [];
+  private readonly cartService = inject(CartService);
+  private readonly productService = inject(ProductsService);
+  private dialog = inject(MatDialog);
 
-  apiHost: string = environment.apiHost;
-  productsSubscription?: Subscription;
-  cartSubscription?: Subscription;
+  public readonly apiHost: string = environment.apiHost;
 
-  constructor(
-    private productService: ProductsService,
-    private cartService: CartService,
+  public products: Product[] = [];
+  public cartProducts: CartProduct[] = [];
 
-    public dialog: MatDialog
-  ) {}
+  public subscriptions = new Subscription();
 
   ngOnInit() {
-    this.productsSubscription = this.productService
-      .getProducts()
-      .subscribe((data: Product[]) => {
+    this.subscriptions.add(
+      this.productService.getProducts().subscribe((data: Product[]) => {
         this.products = data;
-      });
+      })
+    );
 
-    this.cartSubscription = this.cartService.getCart().subscribe(data => {
-      this.cartProducts = data;
-    });
+    this.subscriptions.add(
+      this.cartService.getCart().subscribe(data => {
+        this.cartProducts = data;
+      })
+    );
   }
 
   ngOnDestroy() {
-    this.productsSubscription?.unsubscribe();
-    this.cartSubscription?.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   getQuantity(productId: number): number {
@@ -55,9 +53,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     if (quantity < 0) return;
 
     this.cartService.changeQuantity(productId, quantity).subscribe(() => {
-      const cartProduct = this.cartProducts.find(
-        item => item.productId === productId
-      );
+      const cartProduct = this.cartProducts.find(item => item.productId === productId);
 
       if (cartProduct) {
         if (quantity === 0) {
@@ -85,16 +81,13 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   openModal(product: Product): void {
-    const dialogRef: MatDialogRef<ProductDetailsComponent> = this.dialog.open(
-      ProductDetailsComponent,
-      {
-        width: '400px',
-        data: {
-          product: product,
-          cartProducts: this.cartProducts,
-        },
-      }
-    );
+    const dialogRef: MatDialogRef<ProductDetailsComponent> = this.dialog.open(ProductDetailsComponent, {
+      width: '400px',
+      data: {
+        product: product,
+        cartProducts: this.cartProducts,
+      },
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       // unsubscribe onAdd

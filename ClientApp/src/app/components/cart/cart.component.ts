@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ArrayHelper } from 'src/app/helpers/array.helper';
@@ -13,27 +13,32 @@ import { environment } from 'src/environments/environment.development';
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
 })
-export class CartComponent implements OnInit {
-  apiUrl = environment.apiHost;
-  showAddress = false;
-  cartProducts: CartProduct[] = [];
+export class CartComponent implements OnInit, OnDestroy {
+  private readonly cartService: CartService = inject(CartService);
+  private readonly orderService: OrdersService = inject(OrdersService);
 
-  form = new UntypedFormGroup({
+  public readonly apiUrl = environment.apiHost;
+  public showAddress = false;
+  public cartProducts: CartProduct[] = [];
+
+  public form = new UntypedFormGroup({
     address: new FormControl<string>('', [Validators.required]),
   });
-  cartProductSubscription?: Subscription;
 
-  cartService: CartService = inject(CartService);
-  orderService: OrdersService = inject(OrdersService);
+  public subscriptions = new Subscription();
 
   ngOnInit() {
     this.loadCart();
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
   loadCart(): void {
-    this.cartProductSubscription = this.cartService
-      .getCart()
-      .subscribe((items: CartProduct[]): CartProduct[] => (this.cartProducts = items));
+    this.subscriptions.add(
+      this.cartService.getCart().subscribe((items: CartProduct[]): CartProduct[] => (this.cartProducts = items))
+    );
   }
 
   getQuantity(productId: number): number {
@@ -46,6 +51,7 @@ export class CartComponent implements OnInit {
     const sum = this.cartProducts.reduce((acc, item) => {
       return acc + item.quantity * item.price;
     }, 0);
+
     return sum;
   }
 
@@ -83,7 +89,7 @@ export class CartComponent implements OnInit {
       // this.cartService.clearCart();
 
       // this.cartProducts = [];
-      console.log(order);
+      // console.log(order);
     }
   }
 }

@@ -9,16 +9,16 @@ import { StorageService } from 'src/app/services/storage.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  form = new UntypedFormGroup({
+  private readonly authService = inject(AuthService);
+  private readonly storageService = inject(StorageService);
+
+  public form = new UntypedFormGroup({
     phoneNumber: new FormControl<string>('', [Validators.required]),
     password: new FormControl<string>('', [Validators.required]),
   });
-  isLoggedIn = false;
-  isLoginFailed = false;
-  errorMessage = '';
-
-  authService = inject(AuthService);
-  storageService = inject(StorageService);
+  public isLoggedIn = false;
+  public isLoginFailed = false;
+  public errorMessage = '';
 
   ngOnInit(): void {
     if (this.storageService.isLoggedIn()) {
@@ -28,25 +28,24 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      console.log(this.form.value);
+      const login = this.form.value;
+
+      this.authService.login(login).subscribe(
+        data => {
+          this.storageService.saveUser(data.token);
+
+          this.isLoginFailed = false;
+          this.isLoggedIn = true;
+          this.reloadPage();
+        },
+        err => {
+          this.errorMessage = err.error.message;
+          this.isLoginFailed = true;
+        }
+      );
     }
-    // console.log(this.form);
-    const login = this.form.value;
-
-    this.authService.login(login).subscribe({
-      next: data => {
-        this.storageService.saveUser(data.token);
-
-        this.isLoginFailed = false;
-        this.isLoggedIn = true;
-        this.reloadPage();
-      },
-      error: err => {
-        this.errorMessage = err.error.message;
-        this.isLoginFailed = true;
-      },
-    });
   }
+  // console.log(this.form);
 
   reloadPage(): void {
     window.location.replace('/');

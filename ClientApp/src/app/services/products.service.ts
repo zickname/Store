@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { Product } from '../models/products';
@@ -12,15 +12,14 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class ProductsService {
-  private api_url: string = environment.apiUrl;
-
-  constructor(private http: HttpClient) {}
+  private readonly httpClient = inject(HttpClient);
+  private readonly api_url: string = environment.apiUrl;
 
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.api_url}/products`, httpOptions);
+    return this.httpClient.get<Product[]>(`${this.api_url}/products`, httpOptions);
   }
 
   getProduct(id: number): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.api_url}/products/${id}`);
+    return this.httpClient.get<Product[]>(`${this.api_url}/products/${id}`);
   }
 }

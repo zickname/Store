@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { CartProduct } from '../models/cart-products';
@@ -8,13 +8,13 @@ import { CartProduct } from '../models/cart-products';
   providedIn: 'root',
 })
 export class CartService {
-  private cartProducts = new BehaviorSubject<CartProduct[]>([]);
-  cartProductQuantity = new Subject<number>();
+  private readonly httpClient = inject(HttpClient);
+  private readonly cartProducts = new BehaviorSubject<CartProduct[]>([]);
 
-  constructor(private http: HttpClient) {}
+  public readonly cartProductQuantity = new Subject<number>();
 
   getCart(): Observable<CartProduct[]> {
-    return this.http.get<CartProduct[]>(`${environment.apiUrl}/cart`).pipe(
+    return this.httpClient.get<CartProduct[]>(`${environment.apiUrl}/cart`).pipe(
       map((data: CartProduct[]) => {
         this.cartProducts.next(data);
         this.cartProductQuantity.next(data.length);
@@ -24,7 +24,7 @@ export class CartService {
   }
 
   changeQuantity(productId: number, quantity: number): Observable<{ poductId: number; quantity: number }[]> {
-    return this.http
+    return this.httpClient
       .post<{ poductId: number; quantity: number }[]>(`${environment.apiUrl}/cart/change`, {
         productId,
         quantity,

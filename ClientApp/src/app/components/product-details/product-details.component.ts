@@ -1,5 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, inject, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { CartProduct } from 'src/app/models/cart-products';
 import { Product } from 'src/app/models/products';
 import { CartService } from 'src/app/services/cart.service';
@@ -10,49 +11,57 @@ import { environment } from 'src/environments/environment.development';
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.css'],
 })
-export class ProductDetailsComponent implements OnInit {
-  apiUrl = '';
-  product!: Product;
-  cartProducts: CartProduct[] = [];
+export class ProductDetailsComponent implements OnInit, OnDestroy {
+  private readonly cartService = inject(CartService);
+  public readonly apiUrl = environment.apiHost;
+
+  public product: Product | null = null;
+  public cartProducts: CartProduct[] = [];
+  public subscriptions = new Subscription();
 
   constructor(
     public dialogRef: MatDialogRef<ProductDetailsComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { product: Product; cartProducts: CartProduct[] },
-    private cartService: CartService
+    public data: { product: Product; cartProducts: CartProduct[] }
   ) {}
 
   ngOnInit() {
-    this.apiUrl = environment.apiHost;
     this.product = this.data.product;
     this.cartProducts = this.data.cartProducts;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   changeQuantity(productId: number, quantity: number) {
     if (quantity < 0) return;
 
-    this.cartService.changeQuantity(productId, quantity).subscribe(() => {
-      const cartProduct = this.cartProducts.find(item => item.productId === productId);
+    this.subscriptions.add(
+      this.cartService.changeQuantity(productId, quantity).subscribe(() => {
+        const cartProduct = this.cartProducts.find(item => item.productId === productId);
 
-      if (cartProduct) {
-        if (quantity === 0) {
-          this.cartProducts.splice(
-            this.cartProducts.findIndex(item => item === cartProduct),
-            1
-          );
+        if (cartProduct) {
+          if (quantity === 0) {
+            this.cartProducts.splice(
+              this.cartProducts.findIndex(item => item === cartProduct),
+              1
+            );
+          } else {
+            cartProduct.quantity = quantity;
+          }
         } else {
-          cartProduct.quantity = quantity;
+          if (this.product)
+            this.cartProducts.push({
+              productId: this.product.id,
+              name: this.product.name,
+              price: this.product.price,
+              quantity: quantity,
+              images: this.product.images,
+            });
         }
-      } else {
-        this.cartProducts.push({
-          productId: this.product.id,
-          name: this.product.name,
-          price: this.product.price,
-          quantity: quantity,
-          images: this.product.images,
-        });
-      }
-    });
+      })
+    );
   }
 
   getQuantity(productId: number): number {

@@ -12,9 +12,9 @@ public static class OrderEndpoints
 {
     public static void MapOrderEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGet("api/admin/orders", GetAll);
         endpoints.MapGet("api/account/orders", GetAllByUser);
         endpoints.MapGet("api/account/orders/{id:int}", GetById);
+        endpoints.MapGet("api/admin/orders", GetAll);
         endpoints.MapGet("api/admin/orders/{id:int}", GetByIdForUser);
         endpoints.MapPost("api/orders/create", CreateOrder);
         endpoints.MapDelete("api/orders{id:int}", DeleteOrder);

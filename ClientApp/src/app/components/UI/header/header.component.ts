@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CartService } from 'src/app/services/cart.service';
 
 @Component({
@@ -7,9 +7,9 @@ import { CartService } from 'src/app/services/cart.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-  cartProductsQuantity = 0;
+  cartService = inject(CartService);
 
-  constructor(private cartService: CartService) {}
+  public cartProductsQuantity: number | null = null;
 
   ngOnInit() {
     this.cartService.cartProductQuantity.subscribe(data => {

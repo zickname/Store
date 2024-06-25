@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { OrderDto } from 'src/app/models/order';
 import { OrdersService } from 'src/app/services/orders.service';
@@ -8,16 +8,23 @@ import { OrdersService } from 'src/app/services/orders.service';
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css'],
 })
-export class OrdersComponent implements OnInit {
-  orders: OrderDto[] = [];
-  orderService: OrdersService = inject(OrdersService);
+export class OrdersComponent implements OnInit, OnDestroy {
+  private readonly orderService: OrdersService = inject(OrdersService);
 
-  ordersSubscription?: Subscription;
+  public orders: OrderDto[] = [];
+
+  private subscriptions = new Subscription();
 
   ngOnInit() {
-    this.ordersSubscription = this.orderService.getOrders().subscribe(data => {
-      this.orders = data;
-      console.log(this.orders);
-    });
+    this.subscriptions.add(
+      this.orderService.getOrders().subscribe(data => {
+        this.orders = data;
+        console.log(this.orders);
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 }

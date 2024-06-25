@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { OrderDto, OrderRequestDto } from '../models/order';
@@ -12,16 +12,15 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class OrdersService {
-  private api_url: string = environment.apiUrl;
-
-  constructor(private http: HttpClient) {}
+  private readonly httpClient = inject(HttpClient);
+  private readonly api_url: string = environment.apiUrl;
 
   createOrder(order: OrderRequestDto): Observable<OrderRequestDto> {
-    return this.http.post<OrderRequestDto>(`${this.api_url}/orders/create`, order);
+    return this.httpClient.post<OrderRequestDto>(`${this.api_url}/orders/create`, order);
   }
 
   getOrders(): Observable<OrderDto[]> {
-    return this.http.get<OrderDto[]>(`${this.api_url}/account/orders`, httpOptions).pipe(
+    return this.httpClient.get<OrderDto[]>(`${this.api_url}/account/orders`, httpOptions).pipe(
       map(orders =>
         orders.map(order => ({
           ...order,
@@ -32,7 +31,7 @@ export class OrdersService {
   }
 
   getOrder(id: number): Observable<OrderDto> {
-    return this.http.get<OrderDto>(`${this.api_url}/account/orders/${id}`).pipe(
+    return this.httpClient.get<OrderDto>(`${this.api_url}/account/orders/${id}`).pipe(
       map(order => ({
         ...order,
         createDate: new Date(order.createDate).toLocaleDateString(),

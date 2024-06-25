@@ -1,24 +1,26 @@
-<div class="container">
-  <div class="order">
-    <div class="order-info">
-      <p>Заказ №{{ order.id }}</p>
-      <p>Дата заказа: {{ order.createDate }}</p>
-      <p>Адрес доставки: {{ order.address }}</p>
-      <p>Сумма заказа: {{ order.totalAmount }}</p>
-    </div>
-    <h3>Товары</h3>
-    <div class="order-products">
-      @for (product of order.products; track product) {
-        <div class="order-product">
-          <img src="{{ product.imageUrl }}" alt="" />
-          <div class="order-product-value">
-            <span>{{ product.name }}</span>
-            <span>Кол-во: {{ product.quantity }}</span>
-            <span>Цена: {{ product.price }}</span>
-            <span>Сумма: {{ product.quantity * product.price }}</span>
+@if (order) {
+  <div class="container">
+    <div class="order">
+      <div class="order-info">
+        <p>Заказ №{{ order.id }}</p>
+        <p>Дата заказа: {{ order.createDate }}</p>
+        <p>Адрес доставки: {{ order.address }}</p>
+        <p>Сумма заказа: {{ order.totalAmount }}</p>
+      </div>
+      <h3>Товары</h3>
+      <div class="order-products">
+        @for (product of order.products; track $index) {
+          <div class="order-product">
+            <img src="{{ apiHost + product.imageUrl }}" alt="" />
+            <div class="order-product-value">
+              <span>{{ product.name }}</span>
+              <span>Кол-во: {{ product.quantity }}</span>
+              <span>Цена: {{ product.price }}</span>
+              <span>Сумма: {{ product.quantity * product.price }}</span>
+            </div>
           </div>
-        </div>
-      }
+        }
+      </div>
     </div>
   </div>
-</div>
+}
