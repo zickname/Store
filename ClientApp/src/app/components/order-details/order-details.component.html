@@ -7,7 +7,9 @@
         <p>Адрес доставки: {{ order.address }}</p>
         <p>Сумма заказа: {{ order.totalAmount }}</p>
       </div>
+
       <h3>Товары</h3>
+
       <div class="order-products">
         @for (product of order.products; track $index) {
           <div class="order-product">

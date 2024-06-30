@@ -1,9 +1,9 @@
 export class ArrayHelper {
-  public static arrayElementMove(array: any[], oldIndex: number, newIndex: number): void {
+  public static arrayElementMove<T>(array: any[], oldIndex: number, newIndex: number): void {
     if (newIndex >= array.length) {
       let k: number = newIndex - array.length + 1;
       while (k--) {
-        array.push(undefined as undefined as T);
+        array.push(undefined);
       }
     }
     array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);

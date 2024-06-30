@@ -1,14 +1,16 @@
-<form class="login-form" [formGroup]="form" (ngSubmit)="onSubmit()">
-  @if (isLoggedIn) {
-    <h2>Вход</h2>
-    <label for="phoneNumber" class="mb16"
-      >Номер телефона
-      <input formControlName="phoneNumber" type="tel" placeholder="Введите номер телефона" />
-    </label>
-    <label for="password" class="mb16"
-      >Пароль
-      <input formControlName="password" type="password" placeholder="Введите пароль" />
-    </label>
-    <button type="submit">Войти</button>
-  }
-</form>
+<div class="container">
+  <form class="login-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    @if (!isLoggedIn) {
+      <h2>Вход</h2>
+      <label for="phoneNumber" class="mb16">
+        Номер телефона
+        <input formControlName="phoneNumber" type="tel" placeholder="Введите номер телефона" />
+      </label>
+      <label for="password" class="mb16">
+        Пароль
+        <input formControlName="password" type="password" placeholder="Введите пароль" />
+      </label>
+      <button type="submit">Войти</button>
+    }
+  </form>
+</div>

@@ -9,15 +9,21 @@ import { OrdersComponent } from './components/orders/orders.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { ProductsComponent } from './components/products/products.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { authGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   { path: '', component: BaseComponent },
   { path: 'products', component: ProductsComponent },
   { path: 'products/:id', component: ProductDetailsComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'profile/orders', component: OrdersComponent },
-  { path: 'orders/:id', component: OrderDetailsComponent },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+    canActivate: [authGuard],
+    canActivateChild: [authGuard],
+  },
+  { path: 'profile/orders', component: OrdersComponent, canActivate: [authGuard] },
+  { path: 'orders/:id', component: OrderDetailsComponent, canActivate: [authGuard] },
   { path: 'cart', component: CartComponent },
   { path: '**', component: NotFoundPageComponent },
 ];

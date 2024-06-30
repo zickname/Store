@@ -83,6 +83,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   openModal(product: Product): void {
     const dialogRef: MatDialogRef<ProductDetailsComponent> = this.dialog.open(ProductDetailsComponent, {
       width: '400px',
+      autoFocus: false,
       data: {
         product: product,
         cartProducts: this.cartProducts,

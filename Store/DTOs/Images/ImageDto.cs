@@ -2,8 +2,4 @@
 
 namespace Store.DTOs.Images;
 
-public record ImageDto(
-    int ImageId,
-    
-    [Required]
-    string ImagePath);
+public record ImageDto(int ImageId, [Required] string ImagePath);

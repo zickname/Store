@@ -21,9 +21,7 @@ export class LoginComponent implements OnInit {
   public errorMessage = '';
 
   ngOnInit(): void {
-    if (this.storageService.isLoggedIn()) {
-      this.isLoggedIn = true;
-    }
+    this.isLoggedIn = this.storageService.isLoggedIn() ? true : false;
   }
 
   onSubmit(): void {

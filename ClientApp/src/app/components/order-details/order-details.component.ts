@@ -11,14 +11,13 @@ import { environment } from 'src/environments/environment.development';
   styleUrls: ['./order-details.component.css'],
 })
 export class OrderDetailsComponent implements OnInit, OnDestroy {
+  private readonly subscriptions = new Subscription();
   private readonly orderService = inject(OrdersService);
   private readonly route = inject(ActivatedRoute);
 
   public readonly apiHost = environment.apiHost;
 
   public order: OrderDto | null = null;
-
-  subscriptions = new Subscription();
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {

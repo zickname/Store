@@ -3,6 +3,7 @@
   @if (cartProducts.length === 0) {
     <p>Ваша корзина пуста</p>
   }
+
   @if (cartProducts.length > 0) {
     <div class="cart-header">
       <div class="cart-items">
@@ -10,7 +11,7 @@
           <div class="cart-item">
             <img [src]="apiUrl + product.images[0].imagePath" [alt]="product.name" />
             <div class="cart-item-info">
-              <h5>{{ product.name }}</h5>
+              <h6>{{ product.name }}</h6>
             </div>
             <div class="cart-item-quantity">
               <span></span>
@@ -22,7 +23,7 @@
           </div>
         }
       </div>
-      <span class="example-spacer"></span>
+
       @if (showAddress) {
         <div [formGroup]="form" class="car-summary">
           <input formControlName="address" type="text" placeholder="Введите адрес доставки" />

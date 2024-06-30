@@ -7,7 +7,7 @@ import { CartService } from 'src/app/services/cart.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-  cartService = inject(CartService);
+  private readonly cartService = inject(CartService);
 
   public cartProductsQuantity: number | null = null;
 

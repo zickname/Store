@@ -9,15 +9,14 @@ import { OrdersService } from 'src/app/services/orders.service';
   styleUrls: ['./orders.component.css'],
 })
 export class OrdersComponent implements OnInit, OnDestroy {
-  private readonly orderService: OrdersService = inject(OrdersService);
+  private readonly subscriptions = new Subscription();
+  private readonly ordersService = inject(OrdersService);
 
   public orders: OrderDto[] = [];
 
-  private subscriptions = new Subscription();
-
   ngOnInit() {
     this.subscriptions.add(
-      this.orderService.getOrders().subscribe(data => {
+      this.ordersService.getOrders().subscribe(data => {
         this.orders = data;
         console.log(this.orders);
       })
@@ -25,6 +24,8 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.unsubscribe();
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
+    }
   }
 }

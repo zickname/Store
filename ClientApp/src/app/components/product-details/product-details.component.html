@@ -6,11 +6,13 @@
       {{ product.description }}
     </div>
     <div class="product-price">Цена: {{ product.price | currency }}</div>
+
     @if (getQuantity(product.id) <= 0) {
       <button mat-button color="primary" class="add-to-cart" (click)="changeQuantity(product.id, 1)">
         Добавить в корзину
       </button>
     }
+
     @if (getQuantity(product.id) > 0) {
       <div class="mat-button">
         <button
@@ -20,7 +22,9 @@
           (click)="changeQuantity(product.id, getQuantity(product.id) - 1)">
           -
         </button>
-        <p>{{ getQuantity(product.id) }}</p>
+
+        <span>{{ getQuantity(product.id) }} шт</span>
+
         <button
           mat-button
           color="primary"
