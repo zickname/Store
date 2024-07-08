@@ -1,39 +1,31 @@
 @if (product) {
-  <div class="product-container">
-    <div class="product-title">{{ product.name }}</div>
-    <img [src]="apiUrl + product.images[0].imagePath" [alt]="product.name" class="product-image" />
-    <div class="product-description">
+  <div class="product__container">
+    <div class="product__title">{{ product.name }}</div>
+    <img class="product__image" [src]="apiUrl + product.images[0].imagePath" [alt]="product.name" loading="lazy" />
+    <div class="product__description">
       {{ product.description }}
     </div>
-    <div class="product-price">Цена: {{ product.price | currency }}</div>
+    <div class="product__price">Цена: {{ product.price | currency }}</div>
 
     @if (getQuantity(product.id) <= 0) {
-      <button mat-button color="primary" class="add-to-cart" (click)="changeQuantity(product.id, 1)">
+      <button mat-button color="primary" class="product__add-to-cart-btn" (click)="changeQuantity(product.id, 1)">
         Добавить в корзину
       </button>
     }
 
     @if (getQuantity(product.id) > 0) {
-      <div class="mat-button">
-        <button
-          mat-button
-          color="primary"
-          class="add-to-cart"
-          (click)="changeQuantity(product.id, getQuantity(product.id) - 1)">
-          -
+      <div class="product__actions">
+        <button class="product__increement-btn" (click)="changeQuantity(product.id, getQuantity(product.id) - 1)">
+          <i class="fa-solid fa-minus"></i>
         </button>
 
-        <span>{{ getQuantity(product.id) }} шт</span>
+        <span class="product__quantity">{{ getQuantity(product.id) }}</span>
 
-        <button
-          mat-button
-          color="primary"
-          class="add-to-cart"
-          (click)="changeQuantity(product.id, getQuantity(product.id) + 1)">
-          +
+        <button class="product__increement-btn" (click)="changeQuantity(product.id, getQuantity(product.id) + 1)">
+          <i class="fa-solid fa-plus"></i>
         </button>
       </div>
     }
-    <button mat-button mat-dialog-close>Закрыть</button>
+    <button class="product-card__btn" mat-dialog-close>Закрыть</button>
   </div>
 }

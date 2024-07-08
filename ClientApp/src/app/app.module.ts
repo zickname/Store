@@ -17,6 +17,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './components/UI/footer/footer.component';
 import { HeaderComponent } from './components/UI/header/header.component';
+import { ProfileLayoutComponent } from './components/UI/profile-layout/profile-layout.component';
 import { BaseComponent } from './components/base/base.component';
 import { CartComponent } from './components/cart/cart.component';
 import { LoginComponent } from './components/login/login.component';
@@ -26,6 +27,8 @@ import { ProductDetailsComponent } from './components/product-details/product-de
 import { ProductsComponent } from './components/products/products.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { httpInterceptorProviders } from './interceptors/http.interceptor';
+import { DigitsCurrencyPipe } from './pipes/digitsCurrency.pipe';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,8 @@ import { httpInterceptorProviders } from './interceptors/http.interceptor';
     CartComponent,
     BaseComponent,
     ProfileComponent,
+    ProfileLayoutComponent,
+    DigitsCurrencyPipe,
   ],
   imports: [
     BrowserModule,
@@ -56,8 +61,9 @@ import { httpInterceptorProviders } from './interceptors/http.interceptor';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
+    FontAwesomeModule,
   ],
-  providers: [provideHttpClient(withInterceptorsFromDi()), httpInterceptorProviders],
+  providers: [provideHttpClient(withInterceptorsFromDi()), httpInterceptorProviders, DigitsCurrencyPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

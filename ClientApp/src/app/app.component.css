@@ -1,5 +1,10 @@
-/* .wrapper {
+.wrapper {
+  height: 100dvh;
   display: flex;
   flex-direction: column;
-  padding-bottom: 65px;
-} */
+}
+
+.main {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}

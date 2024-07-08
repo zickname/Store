@@ -1,7 +1,7 @@
 @if (order) {
-  <div class="container">
-    <div class="order">
-      <div class="order-info">
+  <div class="order-container">
+    <div class="order__content">
+      <div class="order__content-info">
         <p>Заказ №{{ order.id }}</p>
         <p>Дата заказа: {{ order.createDate }}</p>
         <p>Адрес доставки: {{ order.address }}</p>
@@ -10,11 +10,11 @@
 
       <h3>Товары</h3>
 
-      <div class="order-products">
+      <div class="order__products-content">
         @for (product of order.products; track $index) {
-          <div class="order-product">
+          <div class="order__product">
             <img src="{{ apiHost + product.imageUrl }}" alt="" />
-            <div class="order-product-value">
+            <div class="order__product-value">
               <span>{{ product.name }}</span>
               <span>Кол-во: {{ product.quantity }}</span>
               <span>Цена: {{ product.price }}</span>

@@ -1,5 +1,9 @@
 .header {
-  background-color: rgb(113, 114, 195);
+  background-color: rgb(var(--secondary-color));
+}
+
+.company {
+  cursor: pointer;
 }
 
 .example-icon {

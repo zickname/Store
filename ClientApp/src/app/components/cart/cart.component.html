@@ -1,46 +1,68 @@
-<h2>Моя корзина</h2>
-<div class="container">
+@if (!isLoading) {
   @if (cartProducts.length === 0) {
     <p>Ваша корзина пуста</p>
   }
 
-  @if (cartProducts.length > 0) {
-    <div class="cart-header">
-      <div class="cart-items">
+  <div class="container">
+    @if (cartProducts.length > 0) {
+      <div class="cart-list">
+        <h1>Корзина</h1>
         @for (product of cartProducts; track product.productId) {
-          <div class="cart-item">
-            <img [src]="apiUrl + product.images[0].imagePath" [alt]="product.name" />
-            <div class="cart-item-info">
-              <h6>{{ product.name }}</h6>
+          <div class="cart-item__block">
+            <div class="cart-item">
+              <img
+                class="cart-item__image"
+                width="100px"
+                height="100px"
+                [src]="apiUrl + product.images[0].imagePath"
+                [alt]="product.name" />
+
+              <div class="cart-item__title">
+                <span>{{ product.name }}</span>
+              </div>
+
+              <div class="cart-item__quantity-btn">
+                <button class="cart-item__btn-change" (click)="changeQuantity(product, product.quantity - 1)">
+                  <i class="fa-solid fa-minus"></i>
+                </button>
+                <span class="mx-4">{{ product.quantity }}</span>
+                <button class="cart-item__btn-change" (click)="changeQuantity(product, product.quantity + 1)">
+                  <i class="fa-solid fa-plus fa-sm"></i>
+                </button>
+              </div>
+
+              <span class="cart-item__amount mx-4">{{ product.price * product.quantity }}</span>
             </div>
-            <div class="cart-item-quantity">
-              <span></span>
-              <button mat-button (click)="changeQuantity(product, product.quantity - 1)">-</button>
-              <p>{{ product.quantity }}</p>
-              <button mat-button (click)="changeQuantity(product, product.quantity + 1)">+</button>
-            </div>
-            <p>{{ product.price * product.quantity }}</p>
           </div>
         }
       </div>
 
-      @if (showAddress) {
-        <div [formGroup]="form" class="car-summary">
-          <input formControlName="address" type="text" placeholder="Введите адрес доставки" />
+      <div class="cart-order__content">
+        <div class="cart-order__sticky-wrap">
+          @if (!showAddress) {
+            <div class="cart-order__actions">
+              <p class="cart-order__count">
+                <span>Товары ({{ cartProducts.length }})</span>
+              </p>
+              <p class="cart-order__totalSum">
+                <span>Итого: </span><span>{{ getTotalAmount() | digitsCurrency }}</span>
+              </p>
+              <button class="cart-order__submit-btn" (click)="showInputAddress()">Оформить заказ</button>
+            </div>
+          } @else {
+            <div class="">
+              <div [formGroup]="form" class="cart-order__address">
+                <input
+                  class="cart-order__address-input"
+                  formControlName="address"
+                  type="text"
+                  placeholder="Введите адрес доставки" />
+              </div>
+              <button class="cart-order__submit-btn" type="submit" (click)="createOrder()">Подтвердить заказ</button>
+            </div>
+          }
         </div>
-        <button mat-button (click)="createOrder()">Оформить заказ</button>
-      } @else {
-        <div class="cart-summary">
-          <h3>Общая стоимость</h3>
-          <p>
-            <span>Товары ({{ cartProducts.length }})</span>
-          </p>
-          <p class="total">
-            <span>Общая стоимость</span><span>{{ getTotalAmount() }} ₸</span>
-          </p>
-          <button mat-button (click)="showInputAddress()">Подтвердить заказ</button>
-        </div>
-      }
-    </div>
-  }
-</div>
+      </div>
+    }
+  </div>
+}

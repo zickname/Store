@@ -1,36 +1,92 @@
-.example-card {
-  background-color: rgb(149, 192, 230);
-  color: #000;
-  min-height: 300px;
-  min-width: 300px;
-  max-width: 300px;
-  max-height: 500px;
-  display: flex;
-  height: 100%;
-  position: relative;
-}
-
-.container {
+.product-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2vw;
-  justify-items: center;
-  align-items: center;
-  padding: 10px;
-  margin: 0 auto 0;
-  position: relative;
-  padding-bottom: 65px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1vw;
+  padding: 15px;
 }
 
-.image {
-  max-width: 300px;
-  height: 200px;
-  object-fit: contain;
+.product-card {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(240, 246, 251);
+  color: #000;
   position: relative;
-  background-color: white;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 10px 3px rgba(34, 60, 80, 0.2);
+  cursor: pointer;
 }
 
-.mat-mdc-card-header {
-  padding: 0.5rem;
+.product-card:hover {
+  transform: scale(1.03);
+  transition: 500ms;
+}
+
+.product-card__header {
+  display: flex;
   flex-grow: 1;
+  padding: 0.5rem;
+  font-size: 1.5em;
+  font-weight: 700;
+}
+
+.product-card__image {
+  object-fit: contain;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1/1;
+  background-color: #fff;
+}
+
+.product-card__price {
+  padding: 0.5rem;
+}
+
+.product-card__actions {
+  display: flex;
+  justify-content: center;
+}
+
+.product-card__btn {
+  margin: 0 4px;
+}
+
+.product-card__increement-btn {
+  width: 2.5em;
+  height: 2.5em;
+  padding: 0.5em;
+}
+
+.product-card__quantity {
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 0 8px;
+}
+
+@media (width <= 1200px) {
+  .product-list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (width <= 974px) {
+  .product-list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2vw;
+  }
+}
+
+@media (width <= 700px) {
+  .product-list {
+    grid-template-columns: repeat(2, 2fr);
+    gap: 2vw;
+  }
+}
+
+@media (width <= 422px) {
+  .product-list {
+    grid-template-columns: repeat(2, 45vw);
+    gap: 2vw;
+  }
 }

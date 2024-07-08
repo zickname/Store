@@ -20,6 +20,7 @@ export class CartComponent implements OnInit, OnDestroy {
   public readonly apiUrl = environment.apiHost;
   public showAddress = false;
   public cartProducts: CartProduct[] = [];
+  public isLoading = true;
 
   public form = new UntypedFormGroup({
     address: new FormControl<string>('', [Validators.required]),
@@ -37,7 +38,10 @@ export class CartComponent implements OnInit, OnDestroy {
 
   loadCart(): void {
     this.subscriptions.add(
-      this.cartService.getCart().subscribe((items: CartProduct[]): CartProduct[] => (this.cartProducts = items))
+      this.cartService.getCart().subscribe((items: CartProduct[]) => {
+        this.cartProducts = items;
+        this.isLoading = false;
+      })
     );
   }
 
