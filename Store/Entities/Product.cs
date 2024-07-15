@@ -2,7 +2,7 @@
 
 public class Product
 {
-    public int Id { get; set; }
+    public int Id { get; init; }
 
     public required string Name { get; set; }
 
@@ -15,8 +15,4 @@ public class Product
     public DateTime? LastModifiedDate { get; set; }
 
     public List<Image> Images { get; } = [];
-
-    public List<OrderDetails> OrderDetailsList { get; set; } = [];
-
-    public List<Cart> Carts { get; set; } = [];
 }

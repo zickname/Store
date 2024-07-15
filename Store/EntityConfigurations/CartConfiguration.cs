@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Store.Entities;
 
-namespace Store.Configurations;
+namespace Store.EntityConfigurations;
 
 public class CartConfiguration : IEntityTypeConfiguration<Cart>
 {
@@ -22,12 +22,12 @@ public class CartConfiguration : IEntityTypeConfiguration<Cart>
             .IsRequired();
 
         builder.HasOne(cart => cart.User)
-            .WithMany(cart => cart.Carts)
+            .WithMany(account => account.Carts)
             .HasForeignKey(cart => cart.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(cart => cart.Product)
-        .WithMany(product => product.Carts)
+        .WithMany()
         .HasForeignKey(cart => cart.ProductId)
         .OnDelete(DeleteBehavior.Cascade);
     }

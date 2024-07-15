@@ -1,4 +1,3 @@
 ﻿namespace Store.DTOs.Accounts;
 
-public record LoginResponse(
-    string Token);
+public record LoginResponse(string Token);

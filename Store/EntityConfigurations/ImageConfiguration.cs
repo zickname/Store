@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Store.Entities;
 
-namespace Store.Configurations;
+namespace Store.EntityConfigurations;
 
 public class ImageConfiguration : IEntityTypeConfiguration<Image>
 {

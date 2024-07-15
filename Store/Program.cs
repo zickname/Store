@@ -41,8 +41,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-builder.Services.AddCors(optons =>
-    optons.AddPolicy("AllowSpecificOrigin", policyBuilder => policyBuilder
+builder.Services.AddCors(options =>
+    options.AddPolicy("AllowSpecificOrigin", policyBuilder => policyBuilder
         .WithOrigins("http://localhost:4200")
         .AllowAnyOrigin()
         .AllowAnyHeader()));
@@ -53,7 +53,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentAccount, CurrentAccount>();
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connections));
+builder.Services.AddDbContext<AppDbContext>();
 
 
 var app = builder.Build();
@@ -77,9 +77,10 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.MapProductEndpoints();
 app.MapImageEndpoints();
-app.MapAccountsEndpoints();
-app.MapCartsEndpoints();
+app.MapAccountEndpoints();
+app.MapCartEndpoints();
 app.MapOrderEndpoints();
+app.MapFavoriteProductEndpoints();
 
 
 //TODO Если есть header Autorization, то просто в консоль записать есть или нету.

@@ -12,7 +12,9 @@ public class Account
 
     public required string PhoneNumber { get; set; }
 
-    public List<Cart?> Carts { get; set; } = [];
+    public List<Cart>? Carts { get; set; } = [];
 
     public List<Order>? Orders { get; set; } = [];
+
+    public List<FavoriteProduct>? FavoriteProducts { get; set; } = [];
 }

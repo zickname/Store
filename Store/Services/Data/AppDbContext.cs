@@ -4,12 +4,12 @@ using Store.Entities;
 
 namespace Store.Services.Data;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+public class AppDbContext(IConfiguration configuration) : DbContext
 {
     public DbSet<Account> Accounts => Set<Account>();
 
     public DbSet<Cart> Carts => Set<Cart>();
-
+    
     public DbSet<Image> Images => Set<Image>();
 
     public DbSet<Product> Products => Set<Product>();
@@ -18,10 +18,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     public DbSet<OrderDetails> OrderDetails => Set<OrderDetails>();
 
+    public DbSet<FavoriteProduct> FavoriteProducts => Set<FavoriteProduct>();
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql().UseSnakeCaseNamingConvention();
-        optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
+        optionsBuilder.UseNpgsql(configuration.GetConnectionString("DefaultConnections"))
+            .UseNpgsql().UseSnakeCaseNamingConvention()
+            .LogTo(Console.WriteLine, LogLevel.Information);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

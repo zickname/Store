@@ -11,7 +11,7 @@ namespace Store.Endpoints;
 
 public static class CartEndpoints
 {
-    public static void MapCartsEndpoints(this IEndpointRouteBuilder endpoints)
+    public static void MapCartEndpoints(this IEndpointRouteBuilder endpoints)
     {
         endpoints.MapPost("api/cart/change", Change);
         endpoints.MapGet("api/cart", GetCart);
@@ -54,9 +54,10 @@ public static class CartEndpoints
             return TypedResults.Unauthorized();
 
         var productExists = await db.Products.AnyAsync(product => product.Id == data.ProductId);
+
         if (!productExists)
             return TypedResults.BadRequest("Произошла ошибка при выполнении");
-        
+
         var cartItem = await db.Carts.FirstOrDefaultAsync(
             item => item.ProductId == data.ProductId && item.UserId == userId);
 

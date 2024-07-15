@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Store.Entities;
 
-namespace Store.Configurations;
+namespace Store.EntityConfigurations;
 
 public class AccountConfigurations : IEntityTypeConfiguration<Account>
 {
@@ -42,6 +42,11 @@ public class AccountConfigurations : IEntityTypeConfiguration<Account>
         builder.HasMany(account => account.Orders)
             .WithOne(order => order.User)
             .HasForeignKey(order => order.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(account => account.FavoriteProducts)
+            .WithOne(favoriteProducts => favoriteProducts.User)
+            .HasForeignKey(favoriteProduct => favoriteProduct.Id)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

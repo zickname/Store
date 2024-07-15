@@ -1,14 +1,12 @@
 ﻿namespace Store.Entities;
 
-public class Cart
+public class FavoriteProduct
 {
-    public int Id { get; init; }
+    public int Id { get; set; }
 
     public int UserId { get; set; }
 
     public int ProductId { get; set; }
-
-    public int Quantity { get; set; }
 
     public Account User { get; set; } = null!;
 

@@ -17,8 +17,10 @@ namespace Store.Endpoints;
 
 public static class AccountEndpoints
 {
-    public static void MapAccountsEndpoints(this IEndpointRouteBuilder endpoints)
+    public static void MapAccountEndpoints(this IEndpointRouteBuilder endpoints)
     {
+        endpoints.MapGet("api/account", GetAccountInfo);
+        
         endpoints.MapPost("api/account/create", Create)
             .WithOpenApi();
 
@@ -27,7 +29,6 @@ public static class AccountEndpoints
 
         endpoints.MapDelete("account/delete/{id:int}", Delete)
             .WithOpenApi();
-        endpoints.MapGet("api/account", GetAccountInfo);
     }
 
     [Authorize]

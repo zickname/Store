@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Store.Entities;
 
-namespace Store.Configurations;
+namespace Store.EntityConfigurations;
 
 public class OrderDetailsConfiguration : IEntityTypeConfiguration<OrderDetails>
 {
@@ -31,7 +31,7 @@ public class OrderDetailsConfiguration : IEntityTypeConfiguration<OrderDetails>
             .HasForeignKey(orderDetails => orderDetails.OrderId);
 
         builder.HasOne(orderDetails => orderDetails.Product)
-            .WithMany(product => product.OrderDetailsList)
+            .WithMany()
             .HasForeignKey(e => e.ProductId);
     }
 }

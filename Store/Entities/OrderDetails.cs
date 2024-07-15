@@ -2,7 +2,7 @@
 
 public class OrderDetails
 {
-    public int Id { get; set; }
+    public int Id { get; init; }
 
     public int OrderId { get; set; }
 

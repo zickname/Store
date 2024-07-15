@@ -98,6 +98,42 @@ namespace Store.Migrations
                     b.ToTable("carts", "store");
                 });
 
+            modelBuilder.Entity("Store.Entities.FavoriteProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AccountId")
+                        .HasColumnType("integer")
+                        .HasColumnName("account_id");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer")
+                        .HasColumnName("product_id");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_user_favorite_products");
+
+                    b.HasIndex("AccountId")
+                        .HasDatabaseName("ix_user_favorite_products_account_id");
+
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("ix_user_favorite_products_product_id");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_user_favorite_products_user_id");
+
+                    b.ToTable("user_favorite_products", "store");
+                });
+
             modelBuilder.Entity("Store.Entities.Image", b =>
                 {
                     b.Property<int>("Id")
@@ -250,7 +286,7 @@ namespace Store.Migrations
             modelBuilder.Entity("Store.Entities.Cart", b =>
                 {
                     b.HasOne("Store.Entities.Product", "Product")
-                        .WithMany("Carts")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -262,6 +298,32 @@ namespace Store.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_carts_accounts_user_id");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Store.Entities.FavoriteProduct", b =>
+                {
+                    b.HasOne("Store.Entities.Account", null)
+                        .WithMany("FavoriteProducts")
+                        .HasForeignKey("AccountId")
+                        .HasConstraintName("fk_user_favorite_products_accounts_account_id");
+
+                    b.HasOne("Store.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_favorite_products_products_product_id");
+
+                    b.HasOne("Store.Entities.Account", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_favorite_products_accounts_user_id");
 
                     b.Navigation("Product");
 
@@ -301,7 +363,7 @@ namespace Store.Migrations
                         .HasConstraintName("fk_order_details_orders_order_id");
 
                     b.HasOne("Store.Entities.Product", "Product")
-                        .WithMany("OrderDetailsList")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -316,6 +378,8 @@ namespace Store.Migrations
                 {
                     b.Navigation("Carts");
 
+                    b.Navigation("FavoriteProducts");
+
                     b.Navigation("Orders");
                 });
 
@@ -326,11 +390,7 @@ namespace Store.Migrations
 
             modelBuilder.Entity("Store.Entities.Product", b =>
                 {
-                    b.Navigation("Carts");
-
                     b.Navigation("Images");
-
-                    b.Navigation("OrderDetailsList");
                 });
 #pragma warning restore 612, 618
         }
