@@ -32,4 +32,8 @@ export class StorageService {
 
     return false;
   }
+
+  public logout(): void {
+    window.localStorage.removeItem(USER_KEY);
+  }
 }

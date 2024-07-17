@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment.development';
   styleUrls: ['./cart.component.css'],
 })
 export class CartComponent implements OnInit, OnDestroy {
+  private readonly subscriptions = new Subscription();
   private readonly cartService: CartService = inject(CartService);
   private readonly orderService: OrdersService = inject(OrdersService);
 
@@ -25,8 +26,6 @@ export class CartComponent implements OnInit, OnDestroy {
   public form = new UntypedFormGroup({
     address: new FormControl<string>('', [Validators.required]),
   });
-
-  public subscriptions = new Subscription();
 
   ngOnInit() {
     this.loadCart();
@@ -90,10 +89,6 @@ export class CartComponent implements OnInit, OnDestroy {
         this.cartService.clearCart();
         this.cartProducts = [];
       });
-      // this.cartService.clearCart();
-
-      // this.cartProducts = [];
-      // console.log(order);
     }
   }
 }

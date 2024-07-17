@@ -11,10 +11,12 @@
           "skipTests": true
         },
         "@schematics/angular:directive": {
-          "standalone": false
+          "standalone": false,
+          "skipTests": true
         },
         "@schematics/angular:pipe": {
-          "standalone": false
+          "standalone": false,
+          "skipTests": true
         }
       },
       "root": "",
@@ -24,6 +26,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "baseHref": "/",
+            "deployUrl": "/",
             "outputPath": "dist/client-app",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -74,6 +78,10 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "port": 4200,
+            "host": "192.168.0.12"
+          },
           "configurations": {
             "production": {
               "buildTarget": "ClientApp:build:production"

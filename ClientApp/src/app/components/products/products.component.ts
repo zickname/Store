@@ -1,9 +1,11 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { CartProduct } from 'src/app/models/cart-products';
+import { FavoriteProducts } from 'src/app/models/favorite-products';
 import { Product } from 'src/app/models/products';
 import { CartService } from 'src/app/services/cart.service';
+import { FavoritesService } from 'src/app/services/favorites.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { environment } from 'src/environments/environment.development';
 import { ProductDetailsComponent } from '../product-details/product-details.component';
@@ -14,16 +16,18 @@ import { ProductDetailsComponent } from '../product-details/product-details.comp
   styleUrls: ['./products.component.css'],
 })
 export class ProductsComponent implements OnInit, OnDestroy {
+  private readonly subscriptions = new Subscription();
   private readonly cartService = inject(CartService);
+  private readonly favoritesService = inject(FavoritesService);
   private readonly productService = inject(ProductsService);
   private dialog = inject(MatDialog);
 
-  public readonly apiHost: string = environment.apiHost;
+  public readonly apiHost = environment.apiHost;
 
   public products: Product[] = [];
   public cartProducts: CartProduct[] = [];
-
-  public subscriptions = new Subscription();
+  public favoriteProducts: FavoriteProducts[] = [];
+  public isLoading = false;
 
   ngOnInit() {
     this.subscriptions.add(
@@ -37,10 +41,28 @@ export class ProductsComponent implements OnInit, OnDestroy {
         this.cartProducts = data;
       })
     );
+
+    this.subscriptions.add(
+      this.favoritesService.getFavoriteProducts().subscribe(data => {
+        this.favoriteProducts = data;
+      })
+    );
   }
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
+  }
+
+  openModal(product: Product): void {
+    this.dialog.open(ProductDetailsComponent, {
+      width: '400px',
+      restoreFocus: true,
+      autoFocus: false,
+      data: {
+        product: product,
+        cartProducts: this.cartProducts,
+      },
+    });
   }
 
   getQuantity(productId: number): number {
@@ -80,19 +102,29 @@ export class ProductsComponent implements OnInit, OnDestroy {
     });
   }
 
-  openModal(product: Product): void {
-    const dialogRef: MatDialogRef<ProductDetailsComponent> = this.dialog.open(ProductDetailsComponent, {
-      width: '400px',
-      autoFocus: false,
-      data: {
-        product: product,
-        cartProducts: this.cartProducts,
-      },
-    });
+  isFavorite(productId: number): boolean {
+    return this.favoriteProducts.some(fav => fav.productId === productId);
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      // unsubscribe onAdd
-      console.log(result);
-    });
+  toggleFavorite(product: Product, $event: Event) {
+    $event.stopPropagation();
+
+    const currentButton = $event.currentTarget as HTMLElement;
+
+    if (this.isFavorite(product.id)) {
+      this.subscriptions.add(
+        this.favoritesService.removeFavoriteProduct(product.id).subscribe(() => {
+          this.favoriteProducts = this.favoriteProducts.filter(fav => fav.productId !== product.id);
+        })
+      );
+    } else {
+      currentButton.classList.add('active');
+      this.favoritesService.addFavoriteProduct(product.id).subscribe(() => {
+        this.favoriteProducts.push({ id: 0, productId: product.id });
+        setTimeout(() => {
+          currentButton.classList.remove('active');
+        }, 200);
+      });
+    }
   }
 }

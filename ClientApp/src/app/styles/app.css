@@ -1,0 +1,42 @@
+.shp-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: var(--color-primary-light);
+  border: none;
+  border-radius: 12px;
+  width: 100%;
+  padding: 0.5em;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.1s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+@media (hover: hover) {
+  .shp-button:hover {
+    background-color: var(--color-primary);
+  }
+}
+
+@media (hover: none) {
+  .shp-button:active {
+    background-color: var(--color-primary);
+  }
+}
+
+.shp-button:disabled {
+  background-color: var(--color-primary-content);
+  cursor: default;
+}
+
+.cart-item__btn-change,
+.product-card__increement-btn,
+.product-card__increement-btn {
+  width: 2em;
+  height: 2em;
+  padding: 0.5em;
+}

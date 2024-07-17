@@ -1,7 +1,7 @@
 <div class="container">
   <div class="items">
     @for (order of orders; track $index) {
-      <div routerLink="./{{ order.id }}">
+      <div [routerLink]="'' + order.id">
         <p>Заказ №{{ order.id }}</p>
         <p>Дата заказа {{ order.createDate }}</p>
         <p>Сумма: {{ order.totalAmount }}</p>

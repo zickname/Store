@@ -48,6 +48,12 @@
   outline: none;
 }
 
+.login-form__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .login-form__button {
   width: 100%;
   padding: 10px;

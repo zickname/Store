@@ -16,11 +16,6 @@
   cursor: pointer;
 }
 
-.product-card:hover {
-  transform: scale(1.03);
-  transition: 500ms;
-}
-
 .product-card__header {
   display: flex;
   flex-grow: 1;
@@ -36,7 +31,39 @@
   width: 100%;
   height: auto;
   aspect-ratio: 1/1;
-  background-color: #fff;
+  background-color: var(--color-primary-content);
+}
+
+.product-card__image-container {
+  position: relative;
+}
+
+.product-card__favorite-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 0;
+  color: var(--color-primary);
+  background: no-repeat;
+  border: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+@keyframes heartbeat {
+  0%,
+  50%,
+  100% {
+    transform: scale(1);
+  }
+  25%,
+  75% {
+    transform: scale(1.2);
+  }
+}
+
+.product-card__favorite-icon.active {
+  animation: heartbeat 0.5s ease-in-out infinite;
 }
 
 .product-card__price {
@@ -48,7 +75,7 @@
   justify-content: center;
 }
 
-.product-card__btn {
+.product-card__add-to-card-btn {
   margin: 0 4px;
 }
 

@@ -1,31 +1,35 @@
 @if (product) {
-  <div class="product__container">
-    <div class="product__title">{{ product.name }}</div>
-    <img class="product__image" [src]="apiUrl + product.images[0].imagePath" [alt]="product.name" loading="lazy" />
-    <div class="product__description">
+  <div class="product-card">
+    <div class="product-card__title">{{ product.name }}</div>
+    <img class="product-card__image" [src]="apiUrl + product.images[0].imagePath" [alt]="product.name" loading="lazy" />
+    <div class="product-card__description">
       {{ product.description }}
     </div>
-    <div class="product__price">Цена: {{ product.price | currency }}</div>
+    <div class="product-card__price">Цена: {{ product.price | currency }}</div>
 
     @if (getQuantity(product.id) <= 0) {
-      <button mat-button color="primary" class="product__add-to-cart-btn" (click)="changeQuantity(product.id, 1)">
+      <button class="shp-button product-card__add-to-cart-btn" (click)="changeQuantity(product.id, 1)">
         Добавить в корзину
       </button>
     }
 
     @if (getQuantity(product.id) > 0) {
-      <div class="product__actions">
-        <button class="product__increement-btn" (click)="changeQuantity(product.id, getQuantity(product.id) - 1)">
+      <div class="product-card__actions">
+        <button
+          class="shp-button product-card__increement-btn"
+          (click)="changeQuantity(product.id, getQuantity(product.id) - 1)">
           <i class="fa-solid fa-minus"></i>
         </button>
 
-        <span class="product__quantity">{{ getQuantity(product.id) }}</span>
+        <span class="product-card__quantity">{{ getQuantity(product.id) }}</span>
 
-        <button class="product__increement-btn" (click)="changeQuantity(product.id, getQuantity(product.id) + 1)">
+        <button
+          class="shp-button product-card__increement-btn"
+          (click)="changeQuantity(product.id, getQuantity(product.id) + 1)">
           <i class="fa-solid fa-plus"></i>
         </button>
       </div>
     }
-    <button class="product-card__btn" mat-dialog-close>Закрыть</button>
+    <button class="shp-button product-card__btn" mat-dialog-close>Закрыть</button>
   </div>
 }

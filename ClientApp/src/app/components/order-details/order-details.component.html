@@ -1,4 +1,4 @@
-@if (order) {
+@if (order$ | async; as order) {
   <div class="order-container">
     <div class="order__content">
       <div class="order__content-info">

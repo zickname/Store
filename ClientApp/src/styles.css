@@ -1,4 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'app/styles/variables.css';
-@import 'app/styles/global.css';
+@import 'app/styles/app.css';
 @import 'app/styles/normalize.css';
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.2s;
+  animation-timing-function: ease-out;
+}
+
+::view-transition-new(root) {
+  animation-name: expand;
+}
+
+@keyframes expand {
+  from {
+    transform: translate(100%);
+  }
+  to {
+    transform: translate(0%);
+  }
+}

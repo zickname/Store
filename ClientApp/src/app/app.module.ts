@@ -13,22 +13,24 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FooterComponent } from './components/UI/footer/footer.component';
-import { HeaderComponent } from './components/UI/header/header.component';
-import { ProfileLayoutComponent } from './components/UI/profile-layout/profile-layout.component';
-import { BaseComponent } from './components/base/base.component';
 import { CartComponent } from './components/cart/cart.component';
+import { BaseComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { OrderDetailsComponent } from './components/order-details/order-details.component';
 import { OrdersComponent } from './components/orders/orders.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { ProductsComponent } from './components/products/products.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { FooterComponent } from './components/UI/footer/footer.component';
+import { HeaderComponent } from './components/UI/header/header.component';
 import { httpInterceptorProviders } from './interceptors/http.interceptor';
+import { OrdersLayoutComponent } from './layouts/orders-layout/orders-layout.component';
+import { ProfileLayoutComponent } from './layouts/profile-layout/profile-layout.component';
 import { DigitsCurrencyPipe } from './pipes/digitsCurrency.pipe';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { RegistrationsComponent } from './components/registrations/registrations.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     BaseComponent,
     ProfileComponent,
     ProfileLayoutComponent,
+    OrdersLayoutComponent,
     DigitsCurrencyPipe,
+    RegistrationsComponent,
   ],
   imports: [
     BrowserModule,

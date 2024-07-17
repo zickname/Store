@@ -1,5 +1,5 @@
 .header {
-  background-color: rgb(var(--secondary-color));
+  background-color: var(--color-primary-light);
 }
 
 .company {

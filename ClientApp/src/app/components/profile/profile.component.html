@@ -2,14 +2,14 @@
   <h2>Мой профиль</h2>
 
   <div class="profile">
-    <div class="info-profile">
+    <div class="profile__info">
       <p>{{ profileInfo?.firstName }}</p>
       <p>{{ profileInfo?.lastName }}</p>
       <p>{{ profileInfo?.phoneNumber }}</p>
     </div>
-    <div class="items-menu">
-      <div class="orders" routerLink="./orders">Мои заказы</div>
+    <div class="profile__menu">
+      <button class="shp-button" routerLink="./orders">Мои заказы</button>
+      <button class="shp-button" type="submit" (click)="logout()">Выйти из аккаунта</button>
     </div>
   </div>
-  <router-outlet></router-outlet>
 </div>

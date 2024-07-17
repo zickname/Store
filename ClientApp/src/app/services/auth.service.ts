@@ -24,11 +24,6 @@ export class AuthService {
     });
   }
 
-  // TODO: Сделать выход с аккаунта
-  // logout(): Observable<object> {
-  //   return this.http.post(environment.apiUrl + 'login', {}, this.httpOptions);
-  // }
-
   getProfileInfo(): Observable<ProfileInfo> {
     return this.httpClient.get<ProfileInfo>(environment.apiUrl + '/account');
   }

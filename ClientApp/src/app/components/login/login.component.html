@@ -6,8 +6,9 @@
         <label for="phoneNumber" class="login-form__label">
           Номер телефона
           <input
-            class="login-form__input"
+            id="phoneNumber"
             formControlName="phoneNumber"
+            class="login-form__input"
             type="tel"
             placeholder="Введите номер телефона" />
         </label>
@@ -15,10 +16,18 @@
       <div class="login-form__field">
         <label for="password" class="login-form__label">
           Пароль
-          <input class="login-form__input" formControlName="password" type="password" placeholder="Введите пароль" />
+          <input
+            id="password"
+            class="login-form__input"
+            formControlName="password"
+            type="password"
+            placeholder="Введите пароль" />
         </label>
       </div>
-      <button class="login-form__button" type="submit">Войти</button>
+      <div class="login-form__actions">
+        <button class="login-form__button" type="submit">Войти</button>
+        <button class="login-form__button" type="submit">Регистрация</button>
+      </div>
     }
   </form>
 </div>

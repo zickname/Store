@@ -22,16 +22,20 @@
               </div>
 
               <div class="cart-item__quantity-btn">
-                <button class="cart-item__btn-change" (click)="changeQuantity(product, product.quantity - 1)">
+                <button
+                  class="shp-button cart-item__btn-change"
+                  (click)="changeQuantity(product, product.quantity - 1)">
                   <i class="fa-solid fa-minus"></i>
                 </button>
                 <span class="mx-4">{{ product.quantity }}</span>
-                <button class="cart-item__btn-change" (click)="changeQuantity(product, product.quantity + 1)">
+                <button
+                  class="shp-button cart-item__btn-change"
+                  (click)="changeQuantity(product, product.quantity + 1)">
                   <i class="fa-solid fa-plus fa-sm"></i>
                 </button>
               </div>
 
-              <span class="cart-item__amount mx-4">{{ product.price * product.quantity }}</span>
+              <span class="cart-item__amount mx-4">{{ product.price * product.quantity | digitsCurrency }}</span>
             </div>
           </div>
         }
@@ -47,7 +51,7 @@
               <p class="cart-order__totalSum">
                 <span>Итого: </span><span>{{ getTotalAmount() | digitsCurrency }}</span>
               </p>
-              <button class="cart-order__submit-btn" (click)="showInputAddress()">Оформить заказ</button>
+              <button class="cart-order__submit-btn shp-button" (click)="showInputAddress()">Оформить заказ</button>
             </div>
           } @else {
             <div class="">
@@ -58,7 +62,9 @@
                   type="text"
                   placeholder="Введите адрес доставки" />
               </div>
-              <button class="cart-order__submit-btn" type="submit" (click)="createOrder()">Подтвердить заказ</button>
+              <button class="cart-order__submit-btn shp-button" type="submit" (click)="createOrder()">
+                Подтвердить заказ
+              </button>
             </div>
           }
         </div>
