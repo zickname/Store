@@ -4,9 +4,9 @@ using Store.Entities;
 
 namespace Store.EntityConfigurations;
 
-public class AccountConfigurations : IEntityTypeConfiguration<Account>
+public class AccountConfigurations : IEntityTypeConfiguration<AccountEntity>
 {
-    public void Configure(EntityTypeBuilder<Account> builder)
+    public void Configure(EntityTypeBuilder<AccountEntity> builder)
     {
         builder.ToTable("accounts", schema: "store");
 
@@ -46,7 +46,7 @@ public class AccountConfigurations : IEntityTypeConfiguration<Account>
 
         builder.HasMany(account => account.FavoriteProducts)
             .WithOne(favoriteProducts => favoriteProducts.User)
-            .HasForeignKey(favoriteProduct => favoriteProduct.Id)
+            .HasForeignKey(favoriteProduct => favoriteProduct.UserId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

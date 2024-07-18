@@ -1,6 +1,6 @@
 ﻿namespace Store.Entities;
 
-public class Account
+public class AccountEntity
 {
     public int Id { get; init; }
 

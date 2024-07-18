@@ -1,0 +1,48 @@
+@if (product) {
+  <mat-card class="product-card" (click)="openModal(product)">
+    <mat-card-header class="product-card__header">
+      <mat-card-title class="product-card__title">{{ product.name }}</mat-card-title>
+    </mat-card-header>
+    <div class="product-card__image-container">
+      <img
+        class="product-card__image"
+        mat-card-image
+        width="100px"
+        height="100px"
+        [src]="apiHost + product.images[0].imagePath"
+        alt="{{ product.name }}" />
+      <button class="product-card__favorite-icon" [class.active]="isActive" (click)="toggleFavorite(product, $event)">
+        <i
+          class="fa-heart fa-2xl fa-flip-horizontal"
+          [ngClass]="isFavorite(product.id) ? 'fa-solid' : 'fa-regular'"></i>
+      </button>
+    </div>
+    <mat-card-content class="product-card__price">
+      <mat-card-subtitle class="product-card__price">Цена: {{ product.price | digitsCurrency }}</mat-card-subtitle>
+    </mat-card-content>
+
+    <mat-card-actions class="product-card__actions" (click)="$event.stopPropagation()">
+      @if (getQuantity(product.id) > 0) {
+        <button
+          class="shp-button product-card__increement-btn"
+          (click)="changeQuantity(product.id, getQuantity(product.id) - 1)">
+          <i class="fa-solid fa-minus"></i>
+        </button>
+
+        <span class="product-card__quantity"> {{ getQuantity(product.id) }} </span>
+
+        <button
+          class="shp-button product-card__increement-btn"
+          (click)="changeQuantity(product.id, getQuantity(product.id) + 1)">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      }
+
+      @if (getQuantity(product.id) <= 0) {
+        <button class="shp-button product-card__add-to-card-btn" (click)="changeQuantity(product.id, 1)">
+          В корзину
+        </button>
+      }
+    </mat-card-actions>
+  </mat-card>
+}

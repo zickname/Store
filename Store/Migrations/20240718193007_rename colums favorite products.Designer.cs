@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Store.Services.Data;
@@ -11,9 +12,11 @@ using Store.Services.Data;
 namespace Store.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240718193007_rename colums favorite products")]
+    partial class renamecolumsfavoriteproducts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,6 +110,10 @@ namespace Store.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AccountEntityId")
+                        .HasColumnType("integer")
+                        .HasColumnName("account_entity_id");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("integer")
                         .HasColumnName("product_id");
@@ -117,6 +124,9 @@ namespace Store.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_user_favorite_products");
+
+                    b.HasIndex("AccountEntityId")
+                        .HasDatabaseName("ix_user_favorite_products_account_entity_id");
 
                     b.HasIndex("ProductId")
                         .HasDatabaseName("ix_user_favorite_products_product_id");
@@ -299,6 +309,11 @@ namespace Store.Migrations
 
             modelBuilder.Entity("Store.Entities.FavoriteProduct", b =>
                 {
+                    b.HasOne("Store.Entities.AccountEntity", null)
+                        .WithMany("FavoriteProducts")
+                        .HasForeignKey("AccountEntityId")
+                        .HasConstraintName("fk_user_favorite_products_accounts_account_entity_id");
+
                     b.HasOne("Store.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
@@ -307,7 +322,7 @@ namespace Store.Migrations
                         .HasConstraintName("fk_user_favorite_products_products_product_id");
 
                     b.HasOne("Store.Entities.AccountEntity", "User")
-                        .WithMany("FavoriteProducts")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()

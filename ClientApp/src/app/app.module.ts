@@ -21,16 +21,17 @@ import { BaseComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { OrderDetailsComponent } from './components/order-details/order-details.component';
 import { OrdersComponent } from './components/orders/orders.component';
+import { ProductCardComponent } from './components/product-card/product-card.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { ProductsComponent } from './components/products/products.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { RegistrationsComponent } from './components/registrations/registrations.component';
 import { FooterComponent } from './components/UI/footer/footer.component';
 import { HeaderComponent } from './components/UI/header/header.component';
 import { httpInterceptorProviders } from './interceptors/http.interceptor';
 import { OrdersLayoutComponent } from './layouts/orders-layout/orders-layout.component';
 import { ProfileLayoutComponent } from './layouts/profile-layout/profile-layout.component';
 import { DigitsCurrencyPipe } from './pipes/digitsCurrency.pipe';
-import { RegistrationsComponent } from './components/registrations/registrations.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { RegistrationsComponent } from './components/registrations/registrations
     OrdersLayoutComponent,
     DigitsCurrencyPipe,
     RegistrationsComponent,
+    ProductCardComponent,
   ],
   imports: [
     BrowserModule,

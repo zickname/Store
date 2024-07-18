@@ -6,7 +6,7 @@ namespace Store.Services.Data;
 
 public class AppDbContext(IConfiguration configuration) : DbContext
 {
-    public DbSet<Account> Accounts => Set<Account>();
+    public DbSet<AccountEntity> Accounts => Set<AccountEntity>();
 
     public DbSet<Cart> Carts => Set<Cart>();
     

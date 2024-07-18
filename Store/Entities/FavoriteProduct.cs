@@ -8,7 +8,7 @@ public class FavoriteProduct
 
     public int ProductId { get; set; }
 
-    public Account User { get; set; } = null!;
+    public AccountEntity User { get; set; } = null!;
 
     public Product Product { get; set; } = null!;
 }

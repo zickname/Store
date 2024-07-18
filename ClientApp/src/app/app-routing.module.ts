@@ -16,7 +16,7 @@ import { ProfileLayoutComponent } from './layouts/profile-layout/profile-layout.
 
 const routerOptions: ExtraOptions = {
   // enableViewTransitions: true,
-  enableTracing: true,
+  // enableTracing: true,
 };
 
 const routes: Routes = [

@@ -91,7 +91,7 @@ public static class AccountEndpoints
 
         var hashPassword = HashPassword(data.Password);
 
-        var newAccount = new Account()
+        var newAccount = new AccountEntity()
         {
             FirstName = data.FirstName,
             LastName = data.LastName,

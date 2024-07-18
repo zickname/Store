@@ -14,5 +14,5 @@ public class Order
 
     public List<OrderDetails> DetailsList { get; set; } = [];
 
-    public Account User { get; set; } = null!;
+    public AccountEntity User { get; set; } = null!;
 }

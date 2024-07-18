@@ -21,12 +21,13 @@ public class FavoriteProductConfigurations : IEntityTypeConfiguration<FavoritePr
             .IsRequired();
 
         builder.HasOne(favoriteProduct => favoriteProduct.User)
-            .WithMany()
-            .HasForeignKey(favoriteProduct => favoriteProduct.UserId)
+            .WithMany(user => user.FavoriteProducts)
+            .HasForeignKey(user => user.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(favoriteProduct => favoriteProduct.Product)
             .WithMany()
-            .HasForeignKey(favoriteProduct => favoriteProduct.ProductId);
+            .HasForeignKey(product => product.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
