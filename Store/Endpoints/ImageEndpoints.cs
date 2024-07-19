@@ -9,12 +9,12 @@ public static class ImageEndpoints
 {
     public static void MapImageEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapPost("api/image-upload", UploadImage)
+        endpoints.MapPost("api/images/upload", Upload)
             .DisableAntiforgery();
     }
 
     [Authorize]
-    private static async Task<Results<Ok<int>, BadRequest<string>>> UploadImage(
+    private static async Task<Results<Ok<int>, BadRequest<string>>> Upload(
         IFormFile file,
         IConfiguration configuration,
         IWebHostEnvironment environment,

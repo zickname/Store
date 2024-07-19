@@ -13,12 +13,12 @@ public static class CartEndpoints
 {
     public static void MapCartEndpoints(this IEndpointRouteBuilder endpoints)
     {
+        endpoints.MapGet("api/cart", Get);
         endpoints.MapPost("api/cart/change", Change);
-        endpoints.MapGet("api/cart", GetCart);
     }
 
     [Authorize]
-    private static async Task<Results<Ok<List<CartDto>>, BadRequest<string>, UnauthorizedHttpResult>> GetCart(
+    private static async Task<Results<Ok<List<CartDto>>, BadRequest<string>, UnauthorizedHttpResult>> Get(
         AppDbContext db,
         ICurrentAccount currentAccount)
     {

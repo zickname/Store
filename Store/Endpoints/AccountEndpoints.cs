@@ -21,13 +21,13 @@ public static class AccountEndpoints
     {
         endpoints.MapGet("api/account", GetAccountInfo);
         
-        endpoints.MapPost("api/account/create", Create)
+        endpoints.MapPost("api/accounts/create", Create)
             .WithOpenApi();
 
         endpoints.MapPost("api/account/authenticate", Authenticate)
             .WithOpenApi();
 
-        endpoints.MapDelete("account/delete/{id:int}", Delete)
+        endpoints.MapDelete("accounts/delete/{id:int}", Delete)
             .WithOpenApi();
     }
 

@@ -12,16 +12,16 @@ public static class OrderEndpoints
 {
     public static void MapOrderEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGet("api/account/orders", GetAllByUser);
-        endpoints.MapGet("api/account/orders/{id:int}", GetById);
+        endpoints.MapGet("api/account/orders", GetAllForUser);
+        endpoints.MapGet("api/account/orders/{id:int}", GetByIdForUser);
         endpoints.MapGet("api/admin/orders", GetAll);
-        endpoints.MapGet("api/admin/orders/{id:int}", GetByIdForUser);
-        endpoints.MapPost("api/orders/create", CreateOrder);
-        endpoints.MapDelete("api/orders{id:int}", DeleteOrder);
+        endpoints.MapGet("api/admin/orders/{id:int}", GetById);
+        endpoints.MapPost("api/orders/create", Create);
+        endpoints.MapDelete("api/orders/{id:int}", Delete);
     }
 
     [Authorize]
-    private static async Task<Results<Ok<OrderResponse>, BadRequest<string>>> GetById(int id, AppDbContext db)
+    private static async Task<Results<Ok<OrderResponse>, BadRequest<string>>> GetByIdForUser(int id, AppDbContext db)
     {
         var orders = await db.Orders
             .Where(order => order.Id == id)
@@ -49,7 +49,7 @@ public static class OrderEndpoints
     }
 
     [Authorize]
-    private static async Task<Results<Ok<OrderResponse>, BadRequest<string>, UnauthorizedHttpResult>> GetByIdForUser(
+    private static async Task<Results<Ok<OrderResponse>, BadRequest<string>, UnauthorizedHttpResult>> GetById(
         int id,
         AppDbContext db,
         ICurrentAccount account)
@@ -85,7 +85,7 @@ public static class OrderEndpoints
     }
 
     [Authorize]
-    private static async Task<Results<Ok<List<OrderResponse>>, UnauthorizedHttpResult>> GetAllByUser(
+    private static async Task<Results<Ok<List<OrderResponse>>, UnauthorizedHttpResult>> GetAllForUser(
         AppDbContext db,
         ICurrentAccount account)
     {
@@ -118,7 +118,7 @@ public static class OrderEndpoints
     }
 
     [Authorize]
-    private static async Task<Results<Ok<CreateOrderResponse>, BadRequest<string>, UnauthorizedHttpResult>> CreateOrder(
+    private static async Task<Results<Ok<CreateOrderResponse>, BadRequest<string>, UnauthorizedHttpResult>> Create(
         CreateOrderRequest dto,
         AppDbContext db,
         ICurrentAccount account)
@@ -209,7 +209,7 @@ public static class OrderEndpoints
     }
 
     [Authorize]
-    private static async Task<Results<Ok, NotFound<string>>> DeleteOrder(int id, AppDbContext db)
+    private static async Task<Results<Ok, NotFound<string>>> Delete(int id, AppDbContext db)
     {
         var order = await db.Orders
             .Include(order => order.DetailsList)

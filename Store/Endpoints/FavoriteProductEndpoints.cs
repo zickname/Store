@@ -11,12 +11,12 @@ public static class FavoriteProductEndpoints
 {
     public static void MapFavoriteProductEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGet("api/favorite-products", GetFavoriteProducts);
-        endpoints.MapPost("api/add-item-favorites", AddItemFavorites);
-        endpoints.MapPost("api/remove-item-favorites", RemoveItemFavorites);
+        endpoints.MapGet("api/favorite-products", Get);
+        endpoints.MapPost("api/favorite-products/add", Add);
+        endpoints.MapPost("api/favorite-products/remove", Remove);
     }
 
-    private static async Task<Results<Ok<List<FavoriteProductDto>>, UnauthorizedHttpResult>> GetFavoriteProducts(
+    private static async Task<Results<Ok<List<FavoriteProductDto>>, UnauthorizedHttpResult>> Get(
         ICurrentAccount account, AppDbContext db)
     {
         var userId = account.GetUserId();
@@ -35,7 +35,7 @@ public static class FavoriteProductEndpoints
         return TypedResults.Ok(favoriteProducts);
     }
 
-    private static async Task<Results<Ok, UnauthorizedHttpResult, NotFound<string>>> RemoveItemFavorites(
+    private static async Task<Results<Ok, UnauthorizedHttpResult, NotFound<string>>> Remove(
         FavoriteProductRequest favoriteProductRequest,
         ICurrentAccount account,
         AppDbContext db)
@@ -64,7 +64,7 @@ public static class FavoriteProductEndpoints
         return TypedResults.Ok();
     }
 
-    private static async Task<Results<Ok, UnauthorizedHttpResult>> AddItemFavorites(
+    private static async Task<Results<Ok, UnauthorizedHttpResult>> Add(
         FavoriteProductRequest favoriteProductRequest,
         ICurrentAccount account,
         AppDbContext db)
