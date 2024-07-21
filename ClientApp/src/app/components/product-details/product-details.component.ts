@@ -20,14 +20,15 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   public subscriptions = new Subscription();
 
   constructor(
-    public dialogRef: MatDialogRef<ProductDetailsComponent>,
+    private readonly dialogRef: MatDialogRef<ProductDetailsComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { product: Product; cartProducts: CartProduct[] }
+    private readonly data: { product: Product; cartProducts: CartProduct[] }
   ) {}
 
   ngOnInit() {
     this.product = this.data.product;
     this.cartProducts = this.data.cartProducts;
+    console.log(this.dialogRef.componentRef);
   }
 
   ngOnDestroy(): void {

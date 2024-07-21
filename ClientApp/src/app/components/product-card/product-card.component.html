@@ -1,8 +1,9 @@
 @if (product) {
-  <mat-card class="product-card" (click)="openModal(product)">
+  <mat-card class="product-card">
     <mat-card-header class="product-card__header">
       <mat-card-title class="product-card__title">{{ product.name }}</mat-card-title>
     </mat-card-header>
+
     <div class="product-card__image-container">
       <img
         class="product-card__image"
@@ -17,6 +18,7 @@
           [ngClass]="isFavorite(product.id) ? 'fa-solid' : 'fa-regular'"></i>
       </button>
     </div>
+
     <mat-card-content class="product-card__price">
       <mat-card-subtitle class="product-card__price">Цена: {{ product.price | digitsCurrency }}</mat-card-subtitle>
     </mat-card-content>

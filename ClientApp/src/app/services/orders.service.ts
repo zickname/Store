@@ -16,7 +16,7 @@ export class OrdersService {
   private readonly api_url: string = environment.apiUrl;
 
   createOrder(order: OrderRequestDto): Observable<OrderRequestDto> {
-    return this.httpClient.post<OrderRequestDto>(`${this.api_url}/orders/create`, order);
+    return this.httpClient.post<OrderRequestDto>(`${this.api_url}/orders`, order);
   }
 
   getOrders(): Observable<OrderDto[]> {

@@ -16,10 +16,10 @@ export class FavoritesService {
   }
 
   addFavoriteProduct(id: number): Observable<FavoriteProducts[]> {
-    return this.httpClient.post<FavoriteProducts[]>(`${this.api_url}/add-item-favorites`, { id });
+    return this.httpClient.post<FavoriteProducts[]>(`${this.api_url}/favorite-products/add`, { id });
   }
 
   removeFavoriteProduct(id: number): Observable<FavoriteProducts[]> {
-    return this.httpClient.post<FavoriteProducts[]>(`${this.api_url}/remove-item-favorites`, { id });
+    return this.httpClient.post<FavoriteProducts[]>(`${this.api_url}/favorite-products/remove`, { id });
   }
 }

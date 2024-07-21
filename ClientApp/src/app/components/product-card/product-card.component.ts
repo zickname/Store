@@ -1,5 +1,4 @@
 import { Component, inject, Input, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { CartProduct } from 'src/app/models/cart-products';
 import { FavoriteProducts } from 'src/app/models/favorite-products';
@@ -7,7 +6,6 @@ import { Product } from 'src/app/models/products';
 import { CartService } from 'src/app/services/cart.service';
 import { FavoritesService } from 'src/app/services/favorites.service';
 import { environment } from 'src/environments/environment.development';
-import { ProductDetailsComponent } from '../product-details/product-details.component';
 
 @Component({
   selector: 'app-product-card',
@@ -18,30 +16,14 @@ export class ProductCardComponent implements OnDestroy {
   private readonly subscriptions = new Subscription();
   private readonly cartService = inject(CartService);
   private readonly favoritesService = inject(FavoritesService);
-  private dialog = inject(MatDialog);
 
   public readonly apiHost = environment.apiHost;
 
   @Input() public cartProducts: CartProduct[] = [];
   @Input() public favoriteProducts: FavoriteProducts[] = [];
-  @Input() public isShowModal = false;
   @Input() public product: Product | null = null;
 
   public isActive = false;
-
-  openModal(product: Product): void {
-    if (this.isShowModal) {
-      this.dialog.open(ProductDetailsComponent, {
-        width: '400px',
-        restoreFocus: true,
-        autoFocus: false,
-        data: {
-          product: product,
-          cartProducts: this.cartProducts,
-        },
-      });
-    }
-  }
 
   getQuantity(productId: number): number {
     const item = this.cartProducts.find(item => item.productId === productId);

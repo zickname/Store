@@ -3,4 +3,7 @@
   --color-primary-dark: #3e3eea;
   --color-primary-light: #9a9af4;
   --color-primary-content: #ffffff;
+
+  /* ErrorColor */
+  --color-alert-error: #aa77f1;
 }

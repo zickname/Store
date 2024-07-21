@@ -16,6 +16,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AlertComponent } from './components/alert/alert.component';
 import { CartComponent } from './components/cart/cart.component';
 import { BaseComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
@@ -51,6 +52,7 @@ import { DigitsCurrencyPipe } from './pipes/digitsCurrency.pipe';
     DigitsCurrencyPipe,
     RegistrationsComponent,
     ProductCardComponent,
+    AlertComponent,
   ],
   imports: [
     BrowserModule,
