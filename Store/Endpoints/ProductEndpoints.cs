@@ -20,7 +20,7 @@ public static class ProductEndpoints
             .WithName("GetProduct")
             .WithOpenApi();
 
-        endpoints.MapPost("api/products/create", Create)
+        endpoints.MapPost("api/products", Create)
             .WithName("AddProduct")
             .WithOpenApi();
 

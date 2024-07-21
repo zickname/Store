@@ -23,6 +23,7 @@ public static class CartEndpoints
         ICurrentAccount currentAccount)
     {
         var userId = currentAccount.GetUserId();
+        
         if (userId == null)
             return TypedResults.Unauthorized();
 

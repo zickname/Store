@@ -16,15 +16,22 @@ public static class OrderEndpoints
         endpoints.MapGet("api/account/orders/{id:int}", GetByIdForUser);
         endpoints.MapGet("api/admin/orders", GetAll);
         endpoints.MapGet("api/admin/orders/{id:int}", GetById);
-        endpoints.MapPost("api/orders/create", Create);
+        endpoints.MapPost("api/orders", Create);
         endpoints.MapDelete("api/orders/{id:int}", Delete);
     }
 
     [Authorize]
-    private static async Task<Results<Ok<OrderResponse>, BadRequest<string>>> GetByIdForUser(int id, AppDbContext db)
+    private static async Task<Results<Ok<OrderResponse>, UnauthorizedHttpResult, BadRequest<string>>> GetByIdForUser(int id, AppDbContext db, ICurrentAccount account)
     {
+        var userId = account.GetUserId();
+
+        if (userId == null)
+        {
+            return TypedResults.Unauthorized();
+        }
+        
         var orders = await db.Orders
-            .Where(order => order.Id == id)
+            .Where(order => order.Id == id && order.UserId == userId)
             .Include(order => order.DetailsList)
             .Include(order => order.User)
             .Select(order => new OrderResponse(
