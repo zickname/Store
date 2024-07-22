@@ -1,34 +1,40 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { filter, Observable, Subject } from 'rxjs';
+import { Alert, AlertOptions, AlertType } from '../models/alert.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AlertService {
-  private readonly successMessage = new Subject<string>();
-  private readonly errorMessage = new Subject<string>();
+  private readonly alertSubject = new Subject<Alert>();
+  private defaultId = 'default-alert';
 
-  public readonly errorMessage$ = this.errorMessage.asObservable();
-  public readonly successMessage$ = this.successMessage.asObservable();
-
-  setSuccessMessage(message: string) {
-    this.successMessage.next(message);
+  onAlert(id = this.defaultId): Observable<Alert> {
+    return this.alertSubject.asObservable().pipe(filter(x => x && x.id === id));
   }
 
-  setErrorMessage(message: string) {
-    this.errorMessage.next(message);
+  success(message: string, options?: AlertOptions) {
+    this.alert(new Alert({ ...options, type: AlertType.Success, message }));
   }
 
-  clearSuccessMessage() {
-    this.setSuccessMessage('');
+  error(message: string, options?: AlertOptions) {
+    this.alert(new Alert({ ...options, type: AlertType.Error, message }));
   }
 
-  clearErrorMessage() {
-    this.setErrorMessage('');
+  info(message: string, options?: AlertOptions) {
+    this.alert(new Alert({ ...options, type: AlertType.Info, message }));
   }
 
-  clearAllMessages() {
-    this.clearSuccessMessage();
-    this.clearErrorMessage();
+  warn(message: string, options?: AlertOptions) {
+    this.alert(new Alert({ ...options, type: AlertType.Warning, message }));
+  }
+
+  alert(alert: Alert) {
+    alert.id = alert.id || this.defaultId;
+    this.alertSubject.next(alert);
+  }
+
+  clear(id = this.defaultId) {
+    this.alertSubject.next(new Alert({ id }));
   }
 }

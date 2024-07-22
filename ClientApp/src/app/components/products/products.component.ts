@@ -45,7 +45,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
             this.cartProducts = data;
           }),
           catchError(() => {
-            this.alertService.setErrorMessage('Произошла ошибка при запросе');
+            this.alertService.error('Произошла ошибка при запросе', { autoClose: false });
             return of([]);
           })
         )

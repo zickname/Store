@@ -1,5 +1,6 @@
-@if (successMessage$ | async; as successMessage) {
-  <div class="alertbar">
-    {{ successMessage }}
+@for (alert of alerts; track $index) {
+  <div class="{{ cssClass(alert) }}">
+    <div [innerHTML]="alert.message"></div>
+    <button type="button" class="btn-close" (click)="removeAlert(alert)"></button>
   </div>
 }
