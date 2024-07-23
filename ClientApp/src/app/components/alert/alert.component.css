@@ -1,36 +1,8 @@
 @import '../../styles/variables.css';
+
 :host {
   display: block;
 }
-/* .alertbar {
-  position: fixed;
-  top: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--color-alert-error);
-  color: #fff;
-  padding: 16px;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  animation: fadeInOut 8s forwards;
-}
-
-@keyframes fadeInOut {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-} */
 
 .alert {
   position: fixed;
@@ -91,9 +63,4 @@
   color: #856404;
   background-color: #fff3cd;
   border-color: #ffeeba;
-}
-
-.fade {
-  transition: opacity 0.25s ease-out;
-  opacity: 0;
 }

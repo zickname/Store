@@ -1,0 +1,33 @@
+<div class="container">
+  <form class="login-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    @if (!isLoggedIn) {
+      <h2 class="login-form__title">Вход</h2>
+      <div class="login-form__field">
+        <label for="phoneNumber" class="login-form__label">
+          Номер телефона
+          <input
+            id="phoneNumber"
+            formControlName="phoneNumber"
+            class="login-form__input"
+            type="tel"
+            placeholder="Введите номер телефона" />
+        </label>
+      </div>
+      <div class="login-form__field">
+        <label for="password" class="login-form__label">
+          Пароль
+          <input
+            id="password"
+            class="login-form__input"
+            formControlName="password"
+            type="password"
+            placeholder="Введите пароль" />
+        </label>
+      </div>
+      <div class="login-form__actions">
+        <button class="login-form__button" type="submit">Войти</button>
+        <button class="login-form__button" type="submit">Регистрация</button>
+      </div>
+    }
+  </form>
+</div>

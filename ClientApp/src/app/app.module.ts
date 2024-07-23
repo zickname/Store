@@ -33,6 +33,7 @@ import { httpInterceptorProviders } from './interceptors/http.interceptor';
 import { OrdersLayoutComponent } from './layouts/orders-layout/orders-layout.component';
 import { ProfileLayoutComponent } from './layouts/profile-layout/profile-layout.component';
 import { DigitsCurrencyPipe } from './pipes/digitsCurrency.pipe';
+import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { DigitsCurrencyPipe } from './pipes/digitsCurrency.pipe';
     RegistrationsComponent,
     ProductCardComponent,
     AlertComponent,
+    LoginDialogComponent,
   ],
   imports: [
     BrowserModule,

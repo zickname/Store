@@ -14,7 +14,6 @@ export class AlertComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly alertService = inject(AlertService);
 
-  private readonly fade = true;
   private readonly id = 'default-alert';
   public alerts: Alert[] = [];
 
@@ -52,13 +51,7 @@ export class AlertComponent implements OnInit, OnDestroy {
   removeAlert(alert: Alert) {
     if (!this.alerts.includes(alert)) return;
 
-    const timeout = this.fade ? 250 : 0;
-
-    alert.fade = this.fade;
-
-    setTimeout(() => {
-      this.alerts = this.alerts.filter(x => x !== alert);
-    }, timeout);
+    this.alerts = this.alerts.filter(x => x !== alert);
   }
 
   cssClass(alert: Alert) {
@@ -75,10 +68,6 @@ export class AlertComponent implements OnInit, OnDestroy {
 
     if (alert.type !== undefined) {
       classes.push(alertTypeClass[alert.type]);
-    }
-
-    if (alert.fade) {
-      classes.push('fade');
     }
 
     return classes.join(' ');

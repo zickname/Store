@@ -1,10 +1,11 @@
 import { Component, inject, Input, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { catchError, delay, of, Subscription, tap } from 'rxjs';
 import { CartProduct } from 'src/app/models/cart-products';
 import { FavoriteProducts } from 'src/app/models/favorite-products';
 import { Product } from 'src/app/models/products';
 import { CartService } from 'src/app/services/cart.service';
 import { FavoritesService } from 'src/app/services/favorites.service';
+import { LoginDialogService } from 'src/app/services/login-dialog.service';
 import { environment } from 'src/environments/environment.development';
 
 @Component({
@@ -16,6 +17,7 @@ export class ProductCardComponent implements OnDestroy {
   private readonly subscriptions = new Subscription();
   private readonly cartService = inject(CartService);
   private readonly favoritesService = inject(FavoritesService);
+  private readonly dialogService = inject(LoginDialogService);
 
   public readonly apiHost = environment.apiHost;
 
@@ -34,30 +36,32 @@ export class ProductCardComponent implements OnDestroy {
   changeQuantity(productId: number, quantity: number) {
     if (quantity < 0) return;
 
-    this.cartService.changeQuantity(productId, quantity).subscribe(() => {
-      const cartProduct = this.cartProducts.find(item => item.productId === productId);
+    this.subscriptions.add(
+      this.cartService.changeQuantity(productId, quantity).subscribe(() => {
+        const cartProduct = this.cartProducts.find(item => item.productId === productId);
 
-      if (cartProduct) {
-        if (quantity === 0) {
-          this.cartProducts.splice(
-            this.cartProducts.findIndex(item => item === cartProduct),
-            1
-          );
+        if (cartProduct) {
+          if (quantity === 0) {
+            this.cartProducts.splice(
+              this.cartProducts.findIndex(item => item === cartProduct),
+              1
+            );
+          } else {
+            cartProduct.quantity = quantity;
+          }
         } else {
-          cartProduct.quantity = quantity;
+          if (this.product) {
+            this.cartProducts.push({
+              productId: this.product.id,
+              name: this.product.name,
+              price: this.product.price,
+              quantity: quantity,
+              images: this.product.images,
+            });
+          }
         }
-      } else {
-        if (this.product) {
-          this.cartProducts.push({
-            productId: this.product.id,
-            name: this.product.name,
-            price: this.product.price,
-            quantity: quantity,
-            images: this.product.images,
-          });
-        }
-      }
-    });
+      })
+    );
   }
 
   isFavorite(productId: number): boolean {
@@ -67,8 +71,6 @@ export class ProductCardComponent implements OnDestroy {
   toggleFavorite(product: Product, $event: Event) {
     $event.stopPropagation();
 
-    // const currentButton = $event.currentTarget as HTMLElement;
-
     if (this.isFavorite(product.id)) {
       this.subscriptions.add(
         this.favoritesService.removeFavoriteProduct(product.id).subscribe(() => {
@@ -77,14 +79,22 @@ export class ProductCardComponent implements OnDestroy {
       );
     } else {
       this.isActive = true;
-      // currentButton.classList.add('active');
-      this.favoritesService.addFavoriteProduct(product.id).subscribe(() => {
-        this.favoriteProducts.push({ id: 0, productId: product.id });
-        setTimeout(() => {
-          // currentButton.classList.remove('active');
-          this.isActive = false;
-        }, 200);
-      });
+
+      this.subscriptions.add(
+        this.favoritesService
+          .addFavoriteProduct(product.id)
+          .pipe(
+            tap(() => {
+              this.favoriteProducts.push({ id: 0, productId: product.id });
+              return of(true).pipe(delay(200));
+            }),
+            catchError(() => {
+              this.dialogService.openDialog();
+              return of(null);
+            })
+          )
+          .subscribe(() => (this.isActive = false))
+      );
     }
   }
   ngOnDestroy() {
