@@ -10,32 +10,34 @@
         @for (product of cartProducts; track product.productId) {
           <div class="cart-item__block">
             <div class="cart-item">
-              <img
-                class="cart-item__image"
-                width="100px"
-                height="100px"
-                [src]="apiUrl + product.images[0].imagePath"
-                [alt]="product.name" />
-
               <div class="cart-item__title">
+                <img
+                  class="cart-item__image"
+                  width="100px"
+                  height="100px"
+                  [src]="apiUrl + product.images[0].imagePath"
+                  [alt]="product.name" />
+
                 <span>{{ product.name }}</span>
               </div>
 
-              <div class="cart-item__quantity-btn">
-                <button
-                  class="shp-button cart-item__btn-change"
-                  (click)="changeQuantity(product, product.quantity - 1)">
-                  <i class="fa-solid fa-minus"></i>
-                </button>
-                <span class="mx-4">{{ product.quantity }}</span>
-                <button
-                  class="shp-button cart-item__btn-change"
-                  (click)="changeQuantity(product, product.quantity + 1)">
-                  <i class="fa-solid fa-plus fa-sm"></i>
-                </button>
-              </div>
+              <div class="cart-item__quantity">
+                <div class="cart-item__quantity-btn">
+                  <button
+                    class="shp-button cart-item__btn-change"
+                    (click)="changeQuantity(product, product.quantity - 1)">
+                    <i class="fa-solid fa-minus"></i>
+                  </button>
+                  <span class="mx-4">{{ product.quantity }}</span>
+                  <button
+                    class="shp-button cart-item__btn-change"
+                    (click)="changeQuantity(product, product.quantity + 1)">
+                    <i class="fa-solid fa-plus fa-sm"></i>
+                  </button>
+                </div>
 
-              <span class="cart-item__amount mx-4">{{ product.price * product.quantity | digitsCurrency }}</span>
+                <span class="cart-item__amount mx-4">{{ product.price * product.quantity | digitsCurrency }}</span>
+              </div>
             </div>
           </div>
         }

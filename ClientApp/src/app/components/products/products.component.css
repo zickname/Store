@@ -27,7 +27,7 @@
 
 @media (width <= 422px) {
   .product-list {
-    grid-template-columns: repeat(2, 45vw);
+    grid-template-columns: repeat(2, 1fr);
     gap: 2vw;
   }
 }

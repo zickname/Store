@@ -1,11 +1,10 @@
 import { Component, inject, Input, OnDestroy } from '@angular/core';
-import { catchError, delay, of, Subscription, tap } from 'rxjs';
+import { delay, of, Subscription, tap } from 'rxjs';
 import { CartProduct } from 'src/app/models/cart-products';
 import { FavoriteProducts } from 'src/app/models/favorite-products';
 import { Product } from 'src/app/models/products';
 import { CartService } from 'src/app/services/cart.service';
 import { FavoritesService } from 'src/app/services/favorites.service';
-import { LoginDialogService } from 'src/app/services/login-dialog.service';
 import { environment } from 'src/environments/environment.development';
 
 @Component({
@@ -17,7 +16,6 @@ export class ProductCardComponent implements OnDestroy {
   private readonly subscriptions = new Subscription();
   private readonly cartService = inject(CartService);
   private readonly favoritesService = inject(FavoritesService);
-  private readonly dialogService = inject(LoginDialogService);
 
   public readonly apiHost = environment.apiHost;
 
@@ -37,30 +35,39 @@ export class ProductCardComponent implements OnDestroy {
     if (quantity < 0) return;
 
     this.subscriptions.add(
-      this.cartService.changeQuantity(productId, quantity).subscribe(() => {
-        const cartProduct = this.cartProducts.find(item => item.productId === productId);
+      this.cartService
+        .changeQuantity(productId, quantity)
+        .pipe(
+          tap(response => {
+            if (response.length === 0) {
+              return;
+            }
 
-        if (cartProduct) {
-          if (quantity === 0) {
-            this.cartProducts.splice(
-              this.cartProducts.findIndex(item => item === cartProduct),
-              1
-            );
-          } else {
-            cartProduct.quantity = quantity;
-          }
-        } else {
-          if (this.product) {
-            this.cartProducts.push({
-              productId: this.product.id,
-              name: this.product.name,
-              price: this.product.price,
-              quantity: quantity,
-              images: this.product.images,
-            });
-          }
-        }
-      })
+            const cartProduct = this.cartProducts.find(item => item.productId === productId);
+
+            if (cartProduct) {
+              if (quantity === 0) {
+                this.cartProducts.splice(
+                  this.cartProducts.findIndex(item => item === cartProduct),
+                  1
+                );
+              } else {
+                cartProduct.quantity = quantity;
+              }
+            } else {
+              if (this.product) {
+                this.cartProducts.push({
+                  productId: this.product.id,
+                  name: this.product.name,
+                  price: this.product.price,
+                  quantity: quantity,
+                  images: this.product.images,
+                });
+              }
+            }
+          })
+        )
+        .subscribe()
     );
   }
 
@@ -78,24 +85,20 @@ export class ProductCardComponent implements OnDestroy {
         })
       );
     } else {
-      this.isActive = true;
-
       this.subscriptions.add(
         this.favoritesService
           .addFavoriteProduct(product.id)
           .pipe(
             tap(() => {
+              this.isActive = true;
               this.favoriteProducts.push({ id: 0, productId: product.id });
               return of(true).pipe(delay(200));
-            }),
-            catchError(() => {
-              this.dialogService.openDialog();
-              return of(null);
             })
           )
-          .subscribe(() => (this.isActive = false))
+          .subscribe()
       );
     }
+    this.isActive = false;
   }
   ngOnDestroy() {
     this.subscriptions.unsubscribe();

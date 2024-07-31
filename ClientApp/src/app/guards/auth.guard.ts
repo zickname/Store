@@ -1,15 +1,16 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { CanActivateFn } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 import { StorageService } from '../services/storage.service';
 
 export const authGuard: CanActivateFn = () => {
   const storageService = inject(StorageService);
-  const router = inject(Router);
+  const authService = inject(AuthService);
 
   if (storageService.isLoggedIn()) {
     return true;
   } else {
-    router.navigate(['login']);
+    authService.openLoginDialog();
     return false;
   }
 };

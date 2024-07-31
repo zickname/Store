@@ -6,7 +6,7 @@
       "name": "Launch Chrome",
       "request": "launch",
       "type": "chrome",
-      "url": "http://192.168.0.12:4200",
+      "url": "http://192.168.100.94:4200",
       "webRoot": "${workspaceFolder}",
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
     },
@@ -15,7 +15,7 @@
       "type": "chrome",
       "request": "launch",
       "preLaunchTask": "npm: start",
-      "url": "http://192.168.0.12:4200/"
+      "url": "http://192.168.100.94:4200"
     },
     {
       "name": "ng test",

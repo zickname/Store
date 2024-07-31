@@ -6,17 +6,19 @@ import { AuthService } from 'src/app/services/auth.service';
 import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  selector: 'app-registration',
+  templateUrl: './registration.component.html',
+  styleUrls: ['./registration.component.css'],
 })
-export class LoginComponent {
+export class RegistrationComponent {
   private readonly authService = inject(AuthService);
   private readonly storageService = inject(StorageService);
   private dialogRef = inject(MatDialogRef<AuthDialogComponent>);
 
-  @Output() switchToRegister = new EventEmitter<void>();
+  @Output() switchToLogin = new EventEmitter<void>();
   public form = new FormGroup({
+    firstName: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
+    lastName: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     phoneNumber: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     password: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
   });
@@ -25,14 +27,14 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.form.valid) {
-      const login = {
+      const registrationData = {
+        firstName: this.form.controls.firstName.value,
+        lastName: this.form.controls.lastName.value,
         phoneNumber: this.form.controls.phoneNumber.value,
         password: this.form.controls.password.value,
       };
 
-      this.authService.login(login).subscribe(data => {
-        this.storageService.saveUser(data.token);
-        this.isLoginFailed = false;
+      this.authService.register(registrationData).subscribe(() => {
         this.dialogRef.close();
       });
     }

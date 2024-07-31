@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,14 +27,14 @@ import { ProductCardComponent } from './components/product-card/product-card.com
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { ProductsComponent } from './components/products/products.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { RegistrationsComponent } from './components/registrations/registrations.component';
+import { RegistrationComponent } from './components/registration/registration.component';
 import { FooterComponent } from './components/UI/footer/footer.component';
 import { HeaderComponent } from './components/UI/header/header.component';
 import { httpInterceptorProviders } from './interceptors/http.interceptor';
+import { AuthDialogComponent } from './layouts/auth-layout/auth-dialog.component';
 import { OrdersLayoutComponent } from './layouts/orders-layout/orders-layout.component';
 import { ProfileLayoutComponent } from './layouts/profile-layout/profile-layout.component';
 import { DigitsCurrencyPipe } from './pipes/digitsCurrency.pipe';
-import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
 
 @NgModule({
   declarations: [
@@ -51,10 +52,10 @@ import { LoginDialogComponent } from './components/login-dialog/login-dialog.com
     ProfileLayoutComponent,
     OrdersLayoutComponent,
     DigitsCurrencyPipe,
-    RegistrationsComponent,
+    RegistrationComponent,
     ProductCardComponent,
     AlertComponent,
-    LoginDialogComponent,
+    AuthDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,6 +73,7 @@ import { LoginDialogComponent } from './components/login-dialog/login-dialog.com
     ReactiveFormsModule,
     MatInputModule,
     FontAwesomeModule,
+    BrowserAnimationsModule,
   ],
   providers: [provideHttpClient(withInterceptorsFromDi()), httpInterceptorProviders, DigitsCurrencyPipe],
   bootstrap: [AppComponent],

@@ -1,0 +1,53 @@
+<div class="container">
+  <form class="registration-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <h2 class="registration-form__title">Регистарация</h2>
+    <div class="registration-form__field">
+      <label for="firstName" class="registration-form__label">
+        Имя
+        <input
+          id="firstName"
+          formControlName="firstName"
+          class="registration-form__input"
+          type="text"
+          placeholder="Введите имя" />
+      </label>
+    </div>
+    <div class="registration-form__field">
+      <label for="lastName" class="registration-form__label">
+        Фамилия
+        <input
+          id="lastName"
+          formControlName="lastName"
+          class="registration-form__input"
+          type="text"
+          placeholder="Введите фамилию" />
+      </label>
+    </div>
+    <div class="registration-form__field">
+      <label for="phoneNumber" class="registration-form__label">
+        Номер телефона
+        <input
+          id="phoneNumber"
+          formControlName="phoneNumber"
+          class="registration-form__input"
+          type="tel"
+          placeholder="Введите номер телефона" />
+      </label>
+    </div>
+    <div class="registration-form__field">
+      <label for="password" class="registration-form__label">
+        Пароль
+        <input
+          id="password"
+          class="registration-form__input"
+          formControlName="password"
+          type="password"
+          placeholder="Введите пароль" />
+      </label>
+    </div>
+    <div class="registration-form__actions">
+      <button class="registration-form__button" type="submit">Зарегистрироваться</button>
+      <button class="registration-form__button" type="button" (click)="switchToLogin.emit()">Вернуться назад</button>
+    </div>
+  </form>
+</div>

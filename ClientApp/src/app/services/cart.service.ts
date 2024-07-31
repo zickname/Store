@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { CartProduct } from '../models/cart-products';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,7 @@ import { CartProduct } from '../models/cart-products';
 export class CartService {
   private readonly httpClient = inject(HttpClient);
   private readonly cartProducts = new BehaviorSubject<CartProduct[]>([]);
+  private readonly authService = inject(AuthService);
 
   public readonly cartProductQuantity = new Subject<number>();
 
@@ -33,6 +35,12 @@ export class CartService {
         map((response: { poductId: number; quantity: number }[]): { poductId: number; quantity: number }[] => {
           this.cartProductQuantity.next(response.length);
           return response;
+        }),
+        catchError((err: HttpErrorResponse) => {
+          if (err.status === 401) {
+            this.authService.openLoginDialog();
+          }
+          return of([]);
         })
       );
   }

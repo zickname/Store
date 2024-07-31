@@ -8,6 +8,7 @@
   background-color: rgb(240, 246, 251);
   color: #000;
   position: relative;
+  width: 100%;
   box-sizing: border-box;
   box-shadow: 0px 0px 10px 3px rgba(34, 60, 80, 0.2);
   cursor: pointer;
@@ -17,8 +18,9 @@
   display: flex;
   flex-grow: 1;
   padding: 0.5rem;
-  font-size: 1.5em;
+  font-size: 1.5rem;
   font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .product-card__image {
@@ -52,12 +54,12 @@
     transform: scale(1);
   }
   100% {
-    transform: scale(1.5);
+    transform: scale(1.4);
   }
 }
 
 .product-card__favorite-icon.active {
-  animation: heartbeat 0.3s ease-in;
+  animation: heartbeat 0.2s ease-in-out;
 }
 
 .product-card__price {

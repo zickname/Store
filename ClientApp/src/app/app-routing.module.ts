@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { CartComponent } from './components/cart/cart.component';
 import { BaseComponent } from './components/home/home.component';
-import { LoginComponent } from './components/login/login.component';
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 import { OrderDetailsComponent } from './components/order-details/order-details.component';
 import { OrdersComponent } from './components/orders/orders.component';
@@ -24,7 +23,6 @@ const routes: Routes = [
 
   { path: 'products', component: ProductsComponent },
   { path: 'products/:id', component: ProductDetailsComponent },
-  { path: 'login', component: LoginComponent },
 
   {
     path: 'profile',
@@ -42,7 +40,7 @@ const routes: Routes = [
       },
     ],
   },
-  { path: 'cart', component: CartComponent },
+  { path: 'cart', component: CartComponent, canActivate: [authGuard] },
   { path: '**', component: NotFoundPageComponent },
 ];
 

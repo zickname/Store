@@ -22,13 +22,13 @@ export class ProductsComponent implements OnInit, OnDestroy {
   private readonly favoritesService = inject(FavoritesService);
   private readonly productService = inject(ProductsService);
   private readonly alertService = inject(AlertService);
-  private dialog = inject(MatDialog);
+  private readonly dialog = inject(MatDialog);
 
   public readonly apiHost = environment.apiHost;
 
-  public products: Product[] = [];
-  public cartProducts: CartProduct[] = [];
-  public favoriteProducts: FavoriteProducts[] = [];
+  products: Product[] = [];
+  cartProducts: CartProduct[] = [];
+  favoriteProducts: FavoriteProducts[] = [];
 
   ngOnInit() {
     this.subscriptions.add(
@@ -45,7 +45,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
             this.cartProducts = data;
           }),
           catchError(() => {
-            this.alertService.error('Произошла ошибка при запросе', { autoClose: false });
+            this.alertService.error('Произошла ошибка при запросе', { autoClose: true });
             return of([]);
           })
         )
