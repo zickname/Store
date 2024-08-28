@@ -13,12 +13,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { CartComponent } from './components/cart/cart.component';
+import { FavoriteProductsComponent } from './components/favorite-products/favorite-products.component';
 import { BaseComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { OrderDetailsComponent } from './components/order-details/order-details.component';
@@ -35,28 +37,35 @@ import { AuthDialogComponent } from './layouts/auth-layout/auth-dialog.component
 import { OrdersLayoutComponent } from './layouts/orders-layout/orders-layout.component';
 import { ProfileLayoutComponent } from './layouts/profile-layout/profile-layout.component';
 import { DigitsCurrencyPipe } from './pipes/digitsCurrency.pipe';
+import { DialogComponent } from './feature/dialog/components/dialog/dialog.component';
+import { DialogDirective } from './feature/dialog/directives/dialog.directive';
+import {DialogService} from "./feature/dialog/services/dialog.service";
+import {NotFoundPageComponent} from "./components/not-found-page/not-found-page.component";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    FooterComponent,
-    LoginComponent,
-    OrdersComponent,
-    OrderDetailsComponent,
-    ProductsComponent,
-    ProductDetailsComponent,
-    CartComponent,
-    BaseComponent,
-    ProfileComponent,
-    ProfileLayoutComponent,
-    OrdersLayoutComponent,
-    DigitsCurrencyPipe,
-    RegistrationComponent,
-    ProductCardComponent,
-    AlertComponent,
-    AuthDialogComponent,
-  ],
+    declarations: [
+        AppComponent,
+        HeaderComponent,
+        FooterComponent,
+        LoginComponent,
+        OrdersComponent,
+        OrderDetailsComponent,
+        ProductsComponent,
+        ProductDetailsComponent,
+        CartComponent,
+        BaseComponent,
+        ProfileComponent,
+        ProfileLayoutComponent,
+        OrdersLayoutComponent,
+        DigitsCurrencyPipe,
+        RegistrationComponent,
+        ProductCardComponent,
+        AlertComponent,
+        AuthDialogComponent,
+        FavoriteProductsComponent,
+        DialogComponent,
+        NotFoundPageComponent
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -74,8 +83,19 @@ import { DigitsCurrencyPipe } from './pipes/digitsCurrency.pipe';
     MatInputModule,
     FontAwesomeModule,
     BrowserAnimationsModule,
+    NoopAnimationsModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+    DialogDirective
   ],
-  providers: [provideHttpClient(withInterceptorsFromDi()), httpInterceptorProviders, DigitsCurrencyPipe],
-  bootstrap: [AppComponent],
+    providers: [
+        provideHttpClient(withInterceptorsFromDi()),
+        httpInterceptorProviders,
+        DigitsCurrencyPipe,
+        provideNgxMask(),
+    ],
+    bootstrap: [AppComponent],
+    exports: [
+    ]
 })
 export class AppModule {}

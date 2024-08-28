@@ -6,6 +6,15 @@ import { Product } from 'src/app/models/products';
 import { CartService } from 'src/app/services/cart.service';
 import { FavoritesService } from 'src/app/services/favorites.service';
 import { environment } from 'src/environments/environment.development';
+import {
+  MatCard, MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardImage,
+  MatCardSubtitle,
+  MatCardTitle
+} from "@angular/material/card";
+import {CurrencyPipe, NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-product-card',
@@ -37,12 +46,7 @@ export class ProductCardComponent implements OnDestroy {
     this.subscriptions.add(
       this.cartService
         .changeQuantity(productId, quantity)
-        .pipe(
-          tap(response => {
-            if (response.length === 0) {
-              return;
-            }
-
+        .subscribe(response => {
             const cartProduct = this.cartProducts.find(item => item.productId === productId);
 
             if (cartProduct) {
@@ -66,8 +70,6 @@ export class ProductCardComponent implements OnDestroy {
               }
             }
           })
-        )
-        .subscribe()
     );
   }
 
@@ -87,15 +89,12 @@ export class ProductCardComponent implements OnDestroy {
     } else {
       this.subscriptions.add(
         this.favoritesService
-          .addFavoriteProduct(product.id)
-          .pipe(
-            tap(() => {
-              this.isActive = true;
-              this.favoriteProducts.push({ id: 0, productId: product.id });
-              return of(true).pipe(delay(200));
-            })
-          )
-          .subscribe()
+          .addFavoriteProduct(product.id).subscribe(()=>{
+            this.isActive = true;
+            this.favoriteProducts.push({ id: 0, productId: product.id });
+            return of(true).pipe(delay(200));
+          }
+        )
       );
     }
     this.isActive = false;

@@ -16,7 +16,7 @@
     @if (getQuantity(product.id) > 0) {
       <div class="product-card__actions">
         <button
-          class="shp-button product-card__increement-btn"
+          class="shp-button product-card__increment-btn"
           (click)="changeQuantity(product.id, getQuantity(product.id) - 1)">
           <i class="fa-solid fa-minus"></i>
         </button>
@@ -24,7 +24,7 @@
         <span class="product-card__quantity">{{ getQuantity(product.id) }}</span>
 
         <button
-          class="shp-button product-card__increement-btn"
+          class="shp-button product-card__increment-btn"
           (click)="changeQuantity(product.id, getQuantity(product.id) + 1)">
           <i class="fa-solid fa-plus"></i>
         </button>

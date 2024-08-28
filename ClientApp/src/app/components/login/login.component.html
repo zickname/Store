@@ -7,6 +7,7 @@
         <input
           id="phoneNumber"
           formControlName="phoneNumber"
+          mask="+0(000)-000-00-00"
           class="login-form__input"
           type="tel"
           placeholder="Введите номер телефона" />
@@ -25,7 +26,7 @@
     </div>
     <div class="login-form__actions">
       <button class="login-form__button" type="submit">Войти</button>
-      <button class="login-form__button" type="submit" (click)="switchToRegister.emit()">Регистрация</button>
+      <button class="login-form__button" type="button" (click)="switchToRegister.emit()">Регистрация</button>
     </div>
   </form>
 </div>

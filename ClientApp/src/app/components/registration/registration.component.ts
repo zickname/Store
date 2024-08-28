@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AuthDialogComponent } from 'src/app/layouts/auth-layout/auth-dialog.component';
 import { AuthService } from 'src/app/services/auth.service';

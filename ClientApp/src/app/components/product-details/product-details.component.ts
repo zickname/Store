@@ -1,6 +1,6 @@
 import { Component, inject, Inject, OnDestroy, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
+import {MAT_DIALOG_DATA, MatDialogClose, MatDialogRef} from '@angular/material/dialog';
+import { Subscription, tap } from 'rxjs';
 import { CartProduct } from 'src/app/models/cart-products';
 import { Product } from 'src/app/models/products';
 import { CartService } from 'src/app/services/cart.service';
@@ -28,7 +28,6 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.product = this.data.product;
     this.cartProducts = this.data.cartProducts;
-    console.log(this.dialogRef.componentRef);
   }
 
   ngOnDestroy(): void {
@@ -39,29 +38,31 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     if (quantity < 0) return;
 
     this.subscriptions.add(
-      this.cartService.changeQuantity(productId, quantity).subscribe(() => {
-        const cartProduct = this.cartProducts.find(item => item.productId === productId);
+      this.cartService
+        .changeQuantity(productId, quantity)
+        .subscribe(() => {
+            const cartProduct = this.cartProducts.find(item => item.productId === productId);
 
-        if (cartProduct) {
-          if (quantity === 0) {
-            this.cartProducts.splice(
-              this.cartProducts.findIndex(item => item === cartProduct),
-              1
-            );
-          } else {
-            cartProduct.quantity = quantity;
-          }
-        } else {
-          if (this.product)
-            this.cartProducts.push({
-              productId: this.product.id,
-              name: this.product.name,
-              price: this.product.price,
-              quantity: quantity,
-              images: this.product.images,
-            });
-        }
-      })
+            if (cartProduct) {
+              if (quantity === 0) {
+                this.cartProducts.splice(
+                  this.cartProducts.findIndex(item => item === cartProduct),
+                  1
+                );
+              } else {
+                cartProduct.quantity = quantity;
+              }
+            } else {
+              if (this.product)
+                this.cartProducts.push({
+                  productId: this.product.id,
+                  name: this.product.name,
+                  price: this.product.price,
+                  quantity: quantity,
+                  images: this.product.images,
+                });
+            }
+          })
     );
   }
 

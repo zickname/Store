@@ -1,6 +1,6 @@
 <div class="container">
+  <h2 class="title">Регистарация</h2>
   <form class="registration-form" [formGroup]="form" (ngSubmit)="onSubmit()">
-    <h2 class="registration-form__title">Регистарация</h2>
     <div class="registration-form__field">
       <label for="firstName" class="registration-form__label">
         Имя
@@ -30,6 +30,7 @@
           id="phoneNumber"
           formControlName="phoneNumber"
           class="registration-form__input"
+          mask="+0(000)-000-00-00"
           type="tel"
           placeholder="Введите номер телефона" />
       </label>

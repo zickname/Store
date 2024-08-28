@@ -1,11 +1,18 @@
 <mat-toolbar class="header" color="primary">
   <mat-toolbar-row>
     <div class="company">
-      <span routerLink="">Online Shop</span>
+      <span (click)="test()">Online Shop</span>
     </div>
     <span class="example-spacer"></span>
     <div>
-      <mat-icon aria-hidden="false" [matBadge]="cartProductsQuantity" routerLink="/cart">shopping_bag</mat-icon>
+      <mat-icon aria-hidden="false" [matBadge]="favoriteProductsQuantity$ | async" routerLink="/profile/favorites">
+        favorite
+      </mat-icon>
+    </div>
+    <div>
+      <mat-icon aria-hidden="false" [matBadge]="cartProductsQuantity$ | async" routerLink="/cart">
+        shopping_bag
+      </mat-icon>
     </div>
     <div routerLink="/profile">
       <mat-icon>person</mat-icon>
