@@ -1,0 +1,9 @@
+<div class="product-list">
+  @for (product of products; track $index) {
+    <app-product-card
+      [product]="product"
+      [cartProducts]="cartProducts"
+      [favoriteProducts]="favoriteProducts"
+      (click)="openModal(product)"></app-product-card>
+  }
+</div>
