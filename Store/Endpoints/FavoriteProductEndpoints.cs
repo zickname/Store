@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Store.DTOs.FavoriteProducts;
+using Store.DTOs.Images;
+using Store.DTOs.Products;
 using Store.Entities;
 using Store.Interfaces;
 using Store.Services.Data;
@@ -16,7 +18,7 @@ public static class FavoriteProductEndpoints
         endpoints.MapPost("api/favorite-products/remove", Remove);
     }
 
-    private static async Task<Results<Ok<List<FavoriteProductDto>>, UnauthorizedHttpResult>> Get(
+    private static async Task<Results<Ok<List<ProductDto>>, UnauthorizedHttpResult>> Get(
         ICurrentAccount account, AppDbContext db)
     {
         var userId = account.GetUserId();
@@ -28,15 +30,26 @@ public static class FavoriteProductEndpoints
 
         var favoriteProducts = await db.FavoriteProducts
             .Where(favoriteProduct => favoriteProduct.UserId == userId)
-            .Select(favoriteProduct => new FavoriteProductDto(
-                favoriteProduct.Id,
-                favoriteProduct.ProductId)).ToListAsync();
+            .Include(favoriteProduct => favoriteProduct.Product)
+            .ThenInclude(product => product.Images)
+            .Select(favoriteProduct => favoriteProduct.Product)
+            .Select(product => new ProductDto(
+                product.Id,
+                product.Name,
+                product.Price,
+                product.Description,
+                product.Images
+                    .Select(image => new ImageDto(image.Id, image.ImagePath))
+                    .ToList()
+                )
+            )
+            .ToListAsync();
 
         return TypedResults.Ok(favoriteProducts);
     }
 
     private static async Task<Results<Ok, UnauthorizedHttpResult, NotFound<string>>> Remove(
-        FavoriteProductRequest favoriteProductRequest,
+        FavoriteProductsRequest favoriteProductsRequest,
         ICurrentAccount account,
         AppDbContext db)
     {
@@ -49,7 +62,7 @@ public static class FavoriteProductEndpoints
 
         var favoriteProduct = await db.FavoriteProducts
             .Where(favoriteProduct =>
-                favoriteProduct.UserId == userId && favoriteProduct.ProductId == favoriteProductRequest.Id)
+                favoriteProduct.UserId == userId && favoriteProduct.ProductId == favoriteProductsRequest.Id)
             .FirstOrDefaultAsync();
 
         if (favoriteProduct == null)
@@ -65,7 +78,7 @@ public static class FavoriteProductEndpoints
     }
 
     private static async Task<Results<Ok, UnauthorizedHttpResult>> Add(
-        FavoriteProductRequest favoriteProductRequest,
+        FavoriteProductsRequest favoriteProductsRequest,
         ICurrentAccount account,
         AppDbContext db)
     {
@@ -78,7 +91,7 @@ public static class FavoriteProductEndpoints
 
         var favoriteProduct = new FavoriteProduct
         {
-            ProductId = favoriteProductRequest.Id,
+            ProductId = favoriteProductsRequest.Id,
             UserId = (int)userId
         };
 
