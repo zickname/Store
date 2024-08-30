@@ -1,21 +1,22 @@
-import {Component, inject, Input, OnDestroy} from '@angular/core';
-import {delay, of, Subscription, tap} from 'rxjs';
-import {CartProduct} from 'src/app/models/cart-products';
-import {FavoriteProducts} from 'src/app/models/favorite-products';
-import {Product} from 'src/app/models/products';
-import {CartService} from 'src/app/services/cart.service';
-import {FavoritesService} from 'src/app/services/favorites.service';
-import {environment} from 'src/environments/environment.development';
+import { Component, inject, Input, OnDestroy } from '@angular/core';
+import { delay, of, Subscription, tap } from 'rxjs';
+import { CartProduct } from 'src/app/models/cart-products';
+import { FavoriteProducts } from 'src/app/models/favorite-products';
+import { Product } from 'src/app/models/products';
+import { CartService } from 'src/app/services/cart.service';
+import { FavoritesService } from 'src/app/services/favorites.service';
+import { environment } from 'src/environments/environment.development';
 import {
-  MatCard, MatCardActions,
+  MatCard,
+  MatCardActions,
   MatCardContent,
   MatCardHeader,
   MatCardImage,
   MatCardSubtitle,
-  MatCardTitle
-} from "@angular/material/card";
-import {CurrencyPipe, NgClass} from "@angular/common";
-import {DigitsCurrencyPipe} from '../../pipes/digitsCurrency.pipe';
+  MatCardTitle,
+} from '@angular/material/card';
+import { CurrencyPipe, NgClass } from '@angular/common';
+import { DigitsCurrencyPipe } from '../../pipes/digitsCurrency.pipe';
 
 @Component({
   selector: 'app-product-card',
@@ -57,37 +58,33 @@ export class ProductCardComponent implements OnDestroy {
     if (quantity < 0) return;
 
     this.subscriptions.add(
-      this.cartService
-        .changeQuantity(productId, quantity)
-        .subscribe(response => {
-          const cartProduct = this.cartProducts.find(item => item.productId === productId);
+      this.cartService.changeQuantity(productId, quantity).subscribe(response => {
+        const cartProduct = this.cartProducts.find(item => item.productId === productId);
 
-          if (cartProduct) {
-            if (quantity === 0) {
-              this.cartProducts.splice(
+        if (cartProduct) {
+          quantity !== 0
+            ? (cartProduct.quantity = quantity)
+            : this.cartProducts.splice(
                 this.cartProducts.findIndex(item => item === cartProduct),
                 1
               );
-            } else {
-              cartProduct.quantity = quantity;
-            }
-          } else {
-            if (this.product) {
-              this.cartProducts.push({
-                productId: this.product.id,
-                name: this.product.name,
-                price: this.product.price,
-                quantity: quantity,
-                images: this.product.images,
-              });
-            }
+        } else {
+          if (this.product) {
+            this.cartProducts.push({
+              productId: this.product.id,
+              name: this.product.name,
+              price: this.product.price,
+              quantity: quantity,
+              images: this.product.images,
+            });
           }
-        })
+        }
+      })
     );
   }
 
   isFavorite(productId: number): boolean {
-    return this.favoriteProducts.some(fav => fav.productId === productId);
+    return this.favoriteProducts.some(fav => fav.id === productId);
   }
 
   toggleFavorite(product: Product, $event: Event) {
@@ -96,18 +93,15 @@ export class ProductCardComponent implements OnDestroy {
     if (this.isFavorite(product.id)) {
       this.subscriptions.add(
         this.favoritesService.removeFavoriteProduct(product.id).subscribe(() => {
-          this.favoriteProducts = this.favoriteProducts.filter(fav => fav.productId !== product.id);
+          this.favoriteProducts = this.favoriteProducts.filter(fav => fav.id !== product.id);
         })
       );
     } else {
       this.subscriptions.add(
-        this.favoritesService
-          .addFavoriteProduct(product.id).subscribe(() => {
-            this.isActive = true;
-            this.favoriteProducts.push({id: 0, productId: product.id});
-            return of(true).pipe(delay(200));
-          }
-        )
+        this.favoritesService.addFavoriteProduct(product.id).subscribe(() => {
+          this.isActive = true;
+          this.favoriteProducts.push(product);
+        })
       );
     }
     this.isActive = false;
