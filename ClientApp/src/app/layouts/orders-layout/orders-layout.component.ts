@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'app-orders-layout',
   template: '<router-outlet></router-outlet>',
+  standalone: true,
+  imports: [RouterOutlet],
 })
-export class OrdersLayoutComponent {}
+export class OrdersLayoutComponent {
+}

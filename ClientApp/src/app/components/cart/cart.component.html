@@ -16,7 +16,7 @@
                   width="100px"
                   height="100px"
                   [src]="apiUrl + product.images[0].imagePath"
-                  [alt]="product.name" />
+                  [alt]="product.name"/>
 
                 <span>{{ product.name }}</span>
               </div>
@@ -62,7 +62,7 @@
                   class="cart-order__address-input"
                   formControlName="address"
                   type="text"
-                  placeholder="Введите адрес доставки" />
+                  placeholder="Введите адрес доставки"/>
               </div>
               <button class="cart-order__submit-btn shp-button" type="submit" (click)="createOrder()">
                 Подтвердить заказ

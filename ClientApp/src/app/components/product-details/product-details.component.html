@@ -1,7 +1,7 @@
 @if (product) {
   <div class="product-card">
     <div class="product-card__title">{{ product.name }}</div>
-    <img class="product-card__image" [src]="apiUrl + product.images[0].imagePath" [alt]="product.name" loading="lazy" />
+    <img class="product-card__image" [src]="apiUrl + product.images[0].imagePath" [alt]="product.name" loading="lazy"/>
     <div class="product-card__description">
       {{ product.description }}
     </div>

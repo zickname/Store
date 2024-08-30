@@ -14,7 +14,7 @@ import { authGuard } from './guards/auth.guard';
 import { OrdersLayoutComponent } from './layouts/orders-layout/orders-layout.component';
 import { ProfileLayoutComponent } from './layouts/profile-layout/profile-layout.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', component: BaseComponent, pathMatch: 'full' },
   { path: 'products', component: ProductsComponent },
   { path: 'products/:id', component: ProductDetailsComponent },

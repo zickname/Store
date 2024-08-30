@@ -1,9 +1,9 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of, take, tap} from 'rxjs';
-import { environment } from 'src/environments/environment.development';
-import { FavoriteProducts } from '../models/favorite-products';
-import { AuthService } from './auth.service';
+import {environment} from 'src/environments/environment.development';
+import {FavoriteProducts} from '../models/favorite-products';
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -45,12 +45,11 @@ export class FavoritesService {
   }
 
 
-
   removeFavoriteProduct(id: number): Observable<FavoriteProducts[]> {
-    return this.httpClient.post<FavoriteProducts[]>(`${this.api_url}/favorite-products/remove`, { id }).pipe(
+    return this.httpClient.post<FavoriteProducts[]>(`${this.api_url}/favorite-products/remove`, {id}).pipe(
       tap({
         next: () => {
-            this.favoriteProductsQuantity.next(this.favoriteProductsQuantity.getValue() - 1);
+          this.favoriteProductsQuantity.next(this.favoriteProductsQuantity.getValue() - 1);
         },
         error: (err: HttpErrorResponse) => {
           if (err.status === 401) {

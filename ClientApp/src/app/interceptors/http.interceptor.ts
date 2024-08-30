@@ -6,6 +6,7 @@ import { StorageService } from '../services/storage.service';
 @Injectable()
 export class HttpRequestInterceptor implements HttpInterceptor {
   constructor(private storageService: StorageService) {}
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     req = req.clone({
       setHeaders: { Authorization: `Bearer ${this.storageService.getUser()}` },

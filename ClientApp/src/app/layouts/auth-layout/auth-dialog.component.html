@@ -1,7 +1,5 @@
-<!-- <div [@slideInAnimation]="state"> -->
 @if (state === 'login') {
 <app-login (switchToRegister)="goToRegister()"></app-login>
 } @else if (state === 'register') {
 <app-registration (switchToLogin)="goToLogin()"></app-registration>
 }
-<!-- </div> -->

@@ -1,9 +1,9 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, Observable, of, Subject, tap } from 'rxjs';
-import { environment } from 'src/environments/environment.development';
-import { CartProduct } from '../models/cart-products';
-import { AuthService } from './auth.service';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
+import {BehaviorSubject, catchError, map, Observable, of, Subject, tap} from 'rxjs';
+import {environment} from 'src/environments/environment.development';
+import {CartProduct} from '../models/cart-products';
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root',

@@ -13,7 +13,7 @@
       <div class="order__products-content">
         @for (product of order.products; track $index) {
           <div class="order__product">
-            <img src="{{ apiHost + product.imageUrl }}" alt="" />
+            <img src="{{ apiHost + product.imageUrl }}" alt=""/>
             <div class="order__product-value">
               <span>{{ product.name }}</span>
               <span>Кол-во: {{ product.quantity }}</span>

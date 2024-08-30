@@ -1,20 +1,23 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { catchError, of, Subscription, tap } from 'rxjs';
-import { CartProduct } from 'src/app/models/cart-products';
-import { FavoriteProducts } from 'src/app/models/favorite-products';
-import { Product } from 'src/app/models/products';
-import { AlertService } from 'src/app/services/alert.service';
-import { CartService } from 'src/app/services/cart.service';
-import { FavoritesService } from 'src/app/services/favorites.service';
-import { ProductsService } from 'src/app/services/products.service';
-import { environment } from 'src/environments/environment.development';
-import { ProductDetailsComponent } from '../product-details/product-details.component';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {catchError, of, Subscription, tap} from 'rxjs';
+import {CartProduct} from 'src/app/models/cart-products';
+import {FavoriteProducts} from 'src/app/models/favorite-products';
+import {Product} from 'src/app/models/products';
+import {AlertService} from 'src/app/services/alert.service';
+import {CartService} from 'src/app/services/cart.service';
+import {FavoritesService} from 'src/app/services/favorites.service';
+import {ProductsService} from 'src/app/services/products.service';
+import {environment} from 'src/environments/environment.development';
+import {ProductDetailsComponent} from '../product-details/product-details.component';
+import {ProductCardComponent} from '../product-card/product-card.component';
 
 @Component({
   selector: 'app-favorite-products',
   templateUrl: './favorite-products.component.html',
   styleUrls: ['./favorite-products.component.css'],
+  standalone: true,
+  imports: [ProductCardComponent],
 })
 export class FavoriteProductsComponent implements OnInit, OnDestroy {
   private readonly subscriptions = new Subscription();

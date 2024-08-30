@@ -10,12 +10,14 @@ import {FavoritesService} from 'src/app/services/favorites.service';
 import {ProductsService} from 'src/app/services/products.service';
 import {environment} from 'src/environments/environment.development';
 import {ProductDetailsComponent} from '../product-details/product-details.component';
-import {ProductCardComponent} from "../product-card/product-card.component";
+import {ProductCardComponent} from '../product-card/product-card.component';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
+  standalone: true,
+  imports: [ProductCardComponent],
 })
 export class ProductsComponent implements OnInit, OnDestroy {
   private readonly subscriptions = new Subscription();

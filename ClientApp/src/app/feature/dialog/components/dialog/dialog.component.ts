@@ -10,6 +10,8 @@ import {DialogRef} from "../../dialog-ref";
 @Component({
   templateUrl: './dialog.component.html',
   styleUrl: './dialog.component.css',
+  standalone: true,
+  imports: [DialogDirective],
 })
 export class DialogComponent implements AfterViewInit, OnDestroy {
   private readonly cd = inject(ChangeDetectorRef);

@@ -1,15 +1,18 @@
-import { Component, inject, Inject, OnDestroy, OnInit } from '@angular/core';
+import {Component, inject, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogClose, MatDialogRef} from '@angular/material/dialog';
-import { Subscription, tap } from 'rxjs';
-import { CartProduct } from 'src/app/models/cart-products';
-import { Product } from 'src/app/models/products';
-import { CartService } from 'src/app/services/cart.service';
-import { environment } from 'src/environments/environment.development';
+import {Subscription, tap} from 'rxjs';
+import {CartProduct} from 'src/app/models/cart-products';
+import {Product} from 'src/app/models/products';
+import {CartService} from 'src/app/services/cart.service';
+import {environment} from 'src/environments/environment.development';
+import {CurrencyPipe} from '@angular/common';
 
 @Component({
   selector: 'app-product-details',
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.css'],
+  standalone: true,
+  imports: [MatDialogClose, CurrencyPipe],
 })
 export class ProductDetailsComponent implements OnInit, OnDestroy {
   private readonly cartService = inject(CartService);
@@ -23,7 +26,8 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     private readonly dialogRef: MatDialogRef<ProductDetailsComponent>,
     @Inject(MAT_DIALOG_DATA)
     private readonly data: { product: Product; cartProducts: CartProduct[] }
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.product = this.data.product;
@@ -41,28 +45,28 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       this.cartService
         .changeQuantity(productId, quantity)
         .subscribe(() => {
-            const cartProduct = this.cartProducts.find(item => item.productId === productId);
+          const cartProduct = this.cartProducts.find(item => item.productId === productId);
 
-            if (cartProduct) {
-              if (quantity === 0) {
-                this.cartProducts.splice(
-                  this.cartProducts.findIndex(item => item === cartProduct),
-                  1
-                );
-              } else {
-                cartProduct.quantity = quantity;
-              }
+          if (cartProduct) {
+            if (quantity === 0) {
+              this.cartProducts.splice(
+                this.cartProducts.findIndex(item => item === cartProduct),
+                1
+              );
             } else {
-              if (this.product)
-                this.cartProducts.push({
-                  productId: this.product.id,
-                  name: this.product.name,
-                  price: this.product.price,
-                  quantity: quantity,
-                  images: this.product.images,
-                });
+              cartProduct.quantity = quantity;
             }
-          })
+          } else {
+            if (this.product)
+              this.cartProducts.push({
+                productId: this.product.id,
+                name: this.product.name,
+                price: this.product.price,
+                quantity: quantity,
+                images: this.product.images,
+              });
+          }
+        })
     );
   }
 

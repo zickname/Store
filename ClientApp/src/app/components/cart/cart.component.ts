@@ -1,17 +1,24 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { ArrayHelper } from 'src/app/helpers/array.helper';
-import { CartProduct } from 'src/app/models/cart-products';
-import { OrderRequestDto } from 'src/app/models/order';
-import { CartService } from 'src/app/services/cart.service';
-import { OrdersService } from 'src/app/services/orders.service';
-import { environment } from 'src/environments/environment.development';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {ArrayHelper} from 'src/app/helpers/array.helper';
+import {CartProduct} from 'src/app/models/cart-products';
+import {OrderRequestDto} from 'src/app/models/order';
+import {CartService} from 'src/app/services/cart.service';
+import {OrdersService} from 'src/app/services/orders.service';
+import {environment} from 'src/environments/environment.development';
+import {DigitsCurrencyPipe} from '../../pipes/digitsCurrency.pipe';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
+  standalone: true,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    DigitsCurrencyPipe,
+  ],
 })
 export class CartComponent implements OnInit, OnDestroy {
   private readonly subscriptions = new Subscription();

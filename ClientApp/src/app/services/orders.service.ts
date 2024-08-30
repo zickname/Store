@@ -1,11 +1,11 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
-import { environment } from 'src/environments/environment.development';
-import { OrderDto, OrderRequestDto } from '../models/order';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
+import {map, Observable} from 'rxjs';
+import {environment} from 'src/environments/environment.development';
+import {OrderDto, OrderRequestDto} from '../models/order';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  headers: new HttpHeaders({'Content-Type': 'application/json'}),
 };
 
 @Injectable({

@@ -1,14 +1,21 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { AuthDialogComponent } from 'src/app/layouts/auth-layout/auth-dialog.component';
-import { AuthService } from 'src/app/services/auth.service';
-import { StorageService } from 'src/app/services/storage.service';
+import {Component, EventEmitter, inject, Output} from '@angular/core';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule} from '@angular/forms';
+import {MatDialogRef} from '@angular/material/dialog';
+import {AuthDialogComponent} from 'src/app/layouts/auth-layout/auth-dialog.component';
+import {AuthService} from 'src/app/services/auth.service';
+import {StorageService} from 'src/app/services/storage.service';
+import {NgxMaskDirective} from 'ngx-mask';
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css'],
+  standalone: true,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgxMaskDirective,
+  ],
 })
 export class RegistrationComponent {
   private readonly authService = inject(AuthService);
@@ -17,10 +24,10 @@ export class RegistrationComponent {
 
   @Output() switchToLogin = new EventEmitter<void>();
   public form = new FormGroup({
-    firstName: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
-    lastName: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
-    phoneNumber: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
-    password: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
+    firstName: new FormControl<string>('', {nonNullable: true, validators: [Validators.required]}),
+    lastName: new FormControl<string>('', {nonNullable: true, validators: [Validators.required]}),
+    phoneNumber: new FormControl<string>('', {nonNullable: true, validators: [Validators.required]}),
+    password: new FormControl<string>('', {nonNullable: true, validators: [Validators.required]}),
   });
   public isLoginFailed = false;
   public errorMessage = '';

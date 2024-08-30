@@ -1,13 +1,14 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { Alert, AlertType } from 'src/app/models/alert.model';
-import { AlertService } from 'src/app/services/alert.service';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {NavigationStart, Router} from '@angular/router';
+import {Subscription} from 'rxjs';
+import {Alert, AlertType} from 'src/app/models/alert.model';
+import {AlertService} from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-alert',
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.css'],
+  standalone: true,
 })
 export class AlertComponent implements OnInit, OnDestroy {
   private readonly subscriptions = new Subscription();

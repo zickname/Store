@@ -1,11 +1,11 @@
-import { Component, inject, Input, OnDestroy } from '@angular/core';
-import { delay, of, Subscription, tap } from 'rxjs';
-import { CartProduct } from 'src/app/models/cart-products';
-import { FavoriteProducts } from 'src/app/models/favorite-products';
-import { Product } from 'src/app/models/products';
-import { CartService } from 'src/app/services/cart.service';
-import { FavoritesService } from 'src/app/services/favorites.service';
-import { environment } from 'src/environments/environment.development';
+import {Component, inject, Input, OnDestroy} from '@angular/core';
+import {delay, of, Subscription, tap} from 'rxjs';
+import {CartProduct} from 'src/app/models/cart-products';
+import {FavoriteProducts} from 'src/app/models/favorite-products';
+import {Product} from 'src/app/models/products';
+import {CartService} from 'src/app/services/cart.service';
+import {FavoritesService} from 'src/app/services/favorites.service';
+import {environment} from 'src/environments/environment.development';
 import {
   MatCard, MatCardActions,
   MatCardContent,
@@ -15,11 +15,24 @@ import {
   MatCardTitle
 } from "@angular/material/card";
 import {CurrencyPipe, NgClass} from "@angular/common";
+import {DigitsCurrencyPipe} from '../../pipes/digitsCurrency.pipe';
 
 @Component({
   selector: 'app-product-card',
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css',
+  standalone: true,
+  imports: [
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardImage,
+    NgClass,
+    MatCardContent,
+    MatCardSubtitle,
+    MatCardActions,
+    DigitsCurrencyPipe,
+  ],
 })
 export class ProductCardComponent implements OnDestroy {
   private readonly subscriptions = new Subscription();
@@ -47,29 +60,29 @@ export class ProductCardComponent implements OnDestroy {
       this.cartService
         .changeQuantity(productId, quantity)
         .subscribe(response => {
-            const cartProduct = this.cartProducts.find(item => item.productId === productId);
+          const cartProduct = this.cartProducts.find(item => item.productId === productId);
 
-            if (cartProduct) {
-              if (quantity === 0) {
-                this.cartProducts.splice(
-                  this.cartProducts.findIndex(item => item === cartProduct),
-                  1
-                );
-              } else {
-                cartProduct.quantity = quantity;
-              }
+          if (cartProduct) {
+            if (quantity === 0) {
+              this.cartProducts.splice(
+                this.cartProducts.findIndex(item => item === cartProduct),
+                1
+              );
             } else {
-              if (this.product) {
-                this.cartProducts.push({
-                  productId: this.product.id,
-                  name: this.product.name,
-                  price: this.product.price,
-                  quantity: quantity,
-                  images: this.product.images,
-                });
-              }
+              cartProduct.quantity = quantity;
             }
-          })
+          } else {
+            if (this.product) {
+              this.cartProducts.push({
+                productId: this.product.id,
+                name: this.product.name,
+                price: this.product.price,
+                quantity: quantity,
+                images: this.product.images,
+              });
+            }
+          }
+        })
     );
   }
 
@@ -89,9 +102,9 @@ export class ProductCardComponent implements OnDestroy {
     } else {
       this.subscriptions.add(
         this.favoritesService
-          .addFavoriteProduct(product.id).subscribe(()=>{
+          .addFavoriteProduct(product.id).subscribe(() => {
             this.isActive = true;
-            this.favoriteProducts.push({ id: 0, productId: product.id });
+            this.favoriteProducts.push({id: 0, productId: product.id});
             return of(true).pipe(delay(200));
           }
         )
@@ -99,6 +112,7 @@ export class ProductCardComponent implements OnDestroy {
     }
     this.isActive = false;
   }
+
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
