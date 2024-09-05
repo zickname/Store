@@ -2,7 +2,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {inject, Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of, take, tap} from 'rxjs';
 import {environment} from 'src/environments/environment.development';
-import {FavoriteProducts} from '../models/favorite-products';
+import {FavoriteProduct} from '../models/favorite-product';
 import {AuthService} from './auth.service';
 
 @Injectable({
@@ -19,16 +19,16 @@ export class FavoritesService {
     return this.favoriteProductsQuantity.asObservable();
   }
 
-  getFavoriteProducts(): Observable<FavoriteProducts[]> {
-    return this.httpClient.get<FavoriteProducts[]>(`${this.api_url}/favorite-products`).pipe(
+  getFavoriteProducts(): Observable<FavoriteProduct[]> {
+    return this.httpClient.get<FavoriteProduct[]>(`${this.api_url}/favorite-products`).pipe(
       tap(response => {
         this.favoriteProductsQuantity.next(response.length);
       })
     );
   }
 
-  addFavoriteProduct(id: number): Observable<FavoriteProducts[]> {
-    return this.httpClient.post<FavoriteProducts[]>(`${this.api_url}/favorite-products/add`, {id}).pipe(
+  addFavoriteProduct(id: number): Observable<FavoriteProduct[]> {
+    return this.httpClient.post<FavoriteProduct[]>(`${this.api_url}/favorite-products/add`, {id}).pipe(
       tap(
         {
           next: () => {
@@ -45,8 +45,8 @@ export class FavoritesService {
   }
 
 
-  removeFavoriteProduct(id: number): Observable<FavoriteProducts[]> {
-    return this.httpClient.post<FavoriteProducts[]>(`${this.api_url}/favorite-products/remove`, {id}).pipe(
+  removeFavoriteProduct(id: number): Observable<FavoriteProduct[]> {
+    return this.httpClient.post<FavoriteProduct[]>(`${this.api_url}/favorite-products/remove`, {id}).pipe(
       tap({
         next: () => {
           this.favoriteProductsQuantity.next(this.favoriteProductsQuantity.getValue() - 1);

@@ -1,8 +1,8 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs';
-import {OrderDto} from 'src/app/models/order';
-import {OrdersService} from 'src/app/services/orders.service';
-import {RouterLink} from "@angular/router";
+import { Component, effect, inject, OnDestroy, signal } from '@angular/core';
+import { OrderDto } from 'src/app/models/order';
+import { OrdersService } from 'src/app/services/orders.service';
+import { RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-orders',
@@ -11,23 +11,25 @@ import {RouterLink} from "@angular/router";
   standalone: true,
   imports: [RouterLink],
 })
-export class OrdersComponent implements OnInit, OnDestroy {
-  private readonly subscriptions = new Subscription();
+export class OrdersComponent implements OnDestroy {
+  private readonly subscription = new Subscription();
   private readonly ordersService = inject(OrdersService);
 
-  public orders: OrderDto[] = [];
+  public ordersSig = signal<OrderDto[]>([]);
 
-  ngOnInit() {
-    this.subscriptions.add(
+  constructor() {
+    effect(() => {
+      this.ordersSig().reverse();
+    });
+
+    this.subscription.add(
       this.ordersService.getOrders().subscribe(data => {
-        this.orders = data;
+        this.ordersSig.set(data);
       })
     );
   }
 
-  ngOnDestroy() {
-    if (this.subscriptions) {
-      this.subscriptions.unsubscribe();
-    }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

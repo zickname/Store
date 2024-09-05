@@ -5,12 +5,12 @@
     </div>
     <span class="example-spacer"></span>
     <div>
-      <mat-icon aria-hidden="false" [matBadge]="favoriteProductsQuantity$ | async" routerLink="/profile/favorites">
+      <mat-icon aria-hidden="false" [matBadge]="favoriteProductsQuantity$()" routerLink="/profile/favorites">
         favorite
       </mat-icon>
     </div>
     <div>
-      <mat-icon aria-hidden="false" [matBadge]="cartProductsQuantity$ | async" routerLink="/cart">
+      <mat-icon aria-hidden="false" [matBadge]="cartProductsQuantity$()" routerLink="/cart">
         shopping_bag
       </mat-icon>
     </div>

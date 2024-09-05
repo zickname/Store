@@ -1,9 +1,11 @@
 <div class="product-list">
-  @for (product of products; track $index) {
+  @for (product of favoriteProducts(); track $index) {
     <app-product-card
       [product]="product"
-      [cartProducts]="cartProducts"
-      [favoriteProducts]="favoriteProducts"
-      (click)="openModal(product)"></app-product-card>
+      [cartProducts]="cartProducts()"
+      [(favoriteProducts)]="favoriteProducts"
+      (click)="openModal(product)">
+    </app-product-card>
   }
 </div>
+

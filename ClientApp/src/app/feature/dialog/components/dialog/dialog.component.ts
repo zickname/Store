@@ -1,11 +1,16 @@
 import {
-  AfterViewInit, ChangeDetectorRef,
-  Component, ComponentRef,
-  inject, OnDestroy, Type, ViewChild
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ComponentRef,
+  inject,
+  OnDestroy,
+  Type,
+  ViewChild,
 } from '@angular/core';
-import {DialogDirective} from "../../directives/dialog.directive";
-import {Subject} from "rxjs";
-import {DialogRef} from "../../dialog-ref";
+import { DialogDirective } from '../../directives/dialog.directive';
+import { DialogRef } from '../../dialog-ref';
+import { DialogConfig } from '../../dialog-config';
 
 @Component({
   templateUrl: './dialog.component.html',
@@ -15,11 +20,11 @@ import {DialogRef} from "../../dialog-ref";
 })
 export class DialogComponent implements AfterViewInit, OnDestroy {
   private readonly cd = inject(ChangeDetectorRef);
-  private readonly dialogRef = inject(DialogRef)
+  private readonly dialogRef = inject(DialogRef);
+  public readonly config = inject(DialogConfig);
 
   public componentRef: ComponentRef<any> | null = null;
   public childComponentType: Type<any> | null = null;
-
   @ViewChild(DialogDirective) insertionPoint: DialogDirective | undefined;
 
   ngAfterViewInit() {
@@ -35,10 +40,11 @@ export class DialogComponent implements AfterViewInit, OnDestroy {
 
   close() {
     this.cd.markForCheck();
+    this.dialogRef.destroy()
   }
 
   onOverlayClicked(event: MouseEvent) {
-    this.dialogRef.close();
+    this.dialogRef.destroy();
   }
 
   onDialogClicked(event: MouseEvent) {
@@ -47,7 +53,7 @@ export class DialogComponent implements AfterViewInit, OnDestroy {
 
   loadChildComponent(componentType: Type<any>): void {
     const viewContainerRef = this.insertionPoint?.viewContainerRef;
-    console.log(viewContainerRef)
+    console.log(viewContainerRef);
     viewContainerRef?.clear();
 
     this.componentRef = viewContainerRef?.createComponent(componentType)!;

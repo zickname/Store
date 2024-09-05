@@ -2,4 +2,6 @@
   data?: T;
   width?: string;
   height?: string;
+
+  showCloseButton?: boolean;
 }

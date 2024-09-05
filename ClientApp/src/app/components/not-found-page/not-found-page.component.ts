@@ -13,6 +13,8 @@ export class NotFoundPageComponent implements OnInit {
   private readonly config = inject(DialogConfig);
   private data: any;
 
+
+  //TODO: Переписать signal
   ngOnInit() {
     this.data = this.config.data;
     console.log(this.data);

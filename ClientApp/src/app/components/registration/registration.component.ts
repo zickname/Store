@@ -1,9 +1,8 @@
-import {Component, EventEmitter, inject, Output} from '@angular/core';
+import {Component, inject, output} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {AuthDialogComponent} from 'src/app/layouts/auth-layout/auth-dialog.component';
 import {AuthService} from 'src/app/services/auth.service';
-import {StorageService} from 'src/app/services/storage.service';
 import {NgxMaskDirective} from 'ngx-mask';
 
 @Component({
@@ -19,18 +18,16 @@ import {NgxMaskDirective} from 'ngx-mask';
 })
 export class RegistrationComponent {
   private readonly authService = inject(AuthService);
-  private readonly storageService = inject(StorageService);
   private dialogRef = inject(MatDialogRef<AuthDialogComponent>);
 
-  @Output() switchToLogin = new EventEmitter<void>();
-  public form = new FormGroup({
+  protected switchToLogin = output();
+
+  protected readonly form = new FormGroup({
     firstName: new FormControl<string>('', {nonNullable: true, validators: [Validators.required]}),
     lastName: new FormControl<string>('', {nonNullable: true, validators: [Validators.required]}),
     phoneNumber: new FormControl<string>('', {nonNullable: true, validators: [Validators.required]}),
     password: new FormControl<string>('', {nonNullable: true, validators: [Validators.required]}),
   });
-  public isLoginFailed = false;
-  public errorMessage = '';
 
   onSubmit(): void {
     if (this.form.valid) {

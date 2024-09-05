@@ -1,101 +1,90 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {ArrayHelper} from 'src/app/helpers/array.helper';
-import {CartProduct} from 'src/app/models/cart-products';
-import {OrderRequestDto} from 'src/app/models/order';
-import {CartService} from 'src/app/services/cart.service';
-import {OrdersService} from 'src/app/services/orders.service';
-import {environment} from 'src/environments/environment.development';
-import {DigitsCurrencyPipe} from '../../pipes/digitsCurrency.pipe';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ArrayHelper } from 'src/app/helpers/array.helper';
+import { CartProduct } from 'src/app/models/cart-products';
+import { OrderRequestDto } from 'src/app/models/order';
+import { CartService } from 'src/app/services/cart.service';
+import { OrdersService } from 'src/app/services/orders.service';
+import { environment } from 'src/environments/environment.development';
+import { DigitsCurrencyPipe } from '../../pipes/digitsCurrency.pipe';
+import { NgOptimizedImage } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
   standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    DigitsCurrencyPipe,
-  ],
+  imports: [FormsModule, ReactiveFormsModule, DigitsCurrencyPipe, NgOptimizedImage],
 })
 export class CartComponent implements OnInit, OnDestroy {
-  private readonly subscriptions = new Subscription();
+  private readonly subscription = new Subscription();
   private readonly cartService: CartService = inject(CartService);
   private readonly orderService: OrdersService = inject(OrdersService);
 
   public readonly apiUrl = environment.apiHost;
-  public showAddress = false;
-  public cartProducts: CartProduct[] = [];
-  public isLoading = true;
+  public readonly isLoading = signal<boolean>(false);
+  public readonly showAddress = signal<boolean>(false);
+  public readonly cartProducts = signal<CartProduct[]>([]);
 
-  public form = new UntypedFormGroup({
-    address: new FormControl<string>('', [Validators.required]),
+  public form = new FormGroup({
+    address: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
   });
 
   ngOnInit() {
-    this.loadCart();
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
-
-  loadCart(): void {
-    this.subscriptions.add(
-      this.cartService.getCart().subscribe((items: CartProduct[]) => {
-        this.cartProducts = items;
-        this.isLoading = false;
+    this.subscription.add(
+      this.cartService.getCart().subscribe((items: CartProduct[]) : void => {
+        this.cartProducts.set(items);
+        this.isLoading.set(true);
       })
     );
   }
 
-  getQuantity(productId: number): number {
-    const item = this.cartProducts.find(item => item.productId === productId);
-
-    return item ? item.quantity : 0;
-  }
-
-  getTotalAmount() {
-    const sum = this.cartProducts.reduce((acc, item) => {
+  getTotalAmount() : number {
+    return this.cartProducts().reduce((acc, item) => {
       return acc + item.quantity * item.price;
     }, 0);
-
-    return sum;
   }
 
   changeQuantity(item: CartProduct, quantity: number): void {
     if (quantity < 0) return;
 
-    this.cartService.changeQuantity(item.productId, quantity).subscribe(() => {
-      if (quantity === 0) {
-        ArrayHelper.remove(this.cartProducts, item);
-      } else {
-        item.quantity = quantity;
-      }
-    });
+    this.subscription.add(
+      this.cartService.changeQuantity(item.productId, quantity).subscribe(() : void => {
+        if (quantity === 0) {
+          ArrayHelper.remove(this.cartProducts(), item);
+        } else {
+          item.quantity = quantity;
+        }
+      })
+    );
   }
 
   showInputAddress(): void {
-    this.showAddress = true;
+    this.showAddress.set(true);
   }
 
-  createOrder() {
+  createOrder() : void {
     if (this.form.valid) {
       const order: OrderRequestDto = {
-        address: this.form.value.address,
-        products: this.cartProducts.map(item => ({
+        address: this.form.controls.address.value,
+        products: this.cartProducts().map(item => ({
           productId: item.productId,
           price: item.price,
           quantity: item.quantity,
         })),
       };
 
-      this.orderService.createOrder(order).subscribe(() => {
-        this.cartService.clearCart();
-        this.cartProducts = [];
-      });
+      this.subscription.add(
+        this.orderService.createOrder(order).subscribe(() : void => {
+          this.cartService.clearCart();
+          this.cartProducts.set([]);
+        })
+      );
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

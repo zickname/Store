@@ -1,4 +1,5 @@
-﻿import {ApplicationConfig, importProvidersFrom, provideZoneChangeDetection} from "@angular/core";
+﻿import { NG_EVENT_PLUGINS } from "@taiga-ui/event-plugins";
+import {ApplicationConfig, importProvidersFrom, provideZoneChangeDetection} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
@@ -48,6 +49,11 @@ export const appConfig: ApplicationConfig = {
     provideNgxMask(),
     provideAnimations(),
     provideNoopAnimations(),
-    provideRouter(routes)
-  ],
+    provideRouter(routes),
+        NG_EVENT_PLUGINS,
+        NG_EVENT_PLUGINS,
+        NG_EVENT_PLUGINS,
+        NG_EVENT_PLUGINS,
+        NG_EVENT_PLUGINS
+    ],
 }

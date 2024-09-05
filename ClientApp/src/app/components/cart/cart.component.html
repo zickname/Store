@@ -1,21 +1,21 @@
-@if (!isLoading) {
-  @if (cartProducts.length === 0) {
+@if (isLoading()) {
+  @if (cartProducts().length === 0) {
     <p>Ваша корзина пуста</p>
   }
 
   <div class="container">
-    @if (cartProducts.length > 0) {
+    @if (cartProducts().length > 0) {
       <div class="cart-list">
         <h1>Корзина</h1>
-        @for (product of cartProducts; track product.productId) {
+        @for (product of cartProducts(); track product.productId) {
           <div class="cart-item__block">
             <div class="cart-item">
               <div class="cart-item__title">
                 <img
                   class="cart-item__image"
-                  width="100px"
-                  height="100px"
-                  [src]="apiUrl + product.images[0].imagePath"
+                  [width]="100"
+                  [height]="100"
+                  [ngSrc]="apiUrl + product.images[0].imagePath" priority
                   [alt]="product.name"/>
 
                 <span>{{ product.name }}</span>
@@ -45,10 +45,10 @@
 
       <div class="cart-order__content">
         <div class="cart-order__sticky-wrap">
-          @if (!showAddress) {
+          @if (!showAddress()) {
             <div class="cart-order__actions">
               <p class="cart-order__count">
-                <span>Товары ({{ cartProducts.length }})</span>
+                <span>Товары ({{ cartProducts().length }})</span>
               </p>
               <p class="cart-order__totalSum">
                 <span>Итого: </span><span>{{ getTotalAmount() | digitsCurrency }}</span>

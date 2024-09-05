@@ -73,6 +73,7 @@
 
 .product-card__add-to-card-btn {
   margin: 0 4px;
+  height: 2.5rem;
 }
 
 .product-card__increment-btn {

@@ -82,9 +82,6 @@ app.MapCartEndpoints();
 app.MapOrderEndpoints();
 app.MapFavoriteProductEndpoints();
 
-
-//TODO Если есть header Autorization, то просто в консоль записать есть или нету.
-
 app.UseAuthentication();
 app.UseAuthorization();
 

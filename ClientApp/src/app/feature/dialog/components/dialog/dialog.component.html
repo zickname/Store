@@ -1,5 +1,12 @@
 <div class="overlay" (click)="onOverlayClicked($event)">
   <div class="dialog" (click)="onDialogClicked($event)">
     <ng-template appDialog/>
+    @if (true) {
+      <button
+        class="absolute top-2.5 right-2.5 bg-none border-none text-2xl cursor-pointer hover:text-red-500"
+        (click)="close()">
+        &#x2715;
+      </button>
+    }
   </div>
 </div>
