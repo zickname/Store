@@ -1,8 +1,7 @@
 <div class="product-list">
-  @for (product of favoriteProducts(); track $index) {
+  @for (product of productsCard(); track $index) {
     <app-product-card
       [product]="product"
-      [cartProducts]="cartProducts()"
       [(favoriteProducts)]="favoriteProducts"
       (click)="openModal(product)">
     </app-product-card>

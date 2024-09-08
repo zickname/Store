@@ -1,8 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'app/styles/variables.css';
-@import 'app/styles/app.css';
+/*@import 'app/styles/app.css';*/
 @import 'app/styles/normalize.css';
 
 @tailwind base;
-@tailwind components;
 @tailwind utilities;
+@tailwind components;

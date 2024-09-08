@@ -22,7 +22,7 @@ export class HeaderComponent {
   private readonly favoriteService = inject(FavoritesService);
   private readonly dialogService = inject(DialogService);
 
-  public cartProductsQuantity$ = toSignal(this.cartService.cartProductQuantity);
+  public cartProductsQuantity$ = toSignal(this.cartService.cartProductsQuantity);
   public favoriteProductsQuantity$ = toSignal(this.favoriteService.favoriteProductsQuantity$);
 
   test() {

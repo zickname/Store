@@ -3,9 +3,9 @@
 
   <div class="profile">
     <div class="profile__info">
-      <p>{{ profileInfo?.firstName }}</p>
-      <p>{{ profileInfo?.lastName }}</p>
-      <p>{{ profileInfo?.phoneNumber }}</p>
+      <p>{{ profileInfo()?.firstName }}</p>
+      <p>{{ profileInfo()?.lastName }}</p>
+      <p>{{ profileInfo()?.phoneNumber }}</p>
     </div>
     <div class="profile__menu">
       <button class="shp-button" routerLink="./orders">Мои заказы</button>

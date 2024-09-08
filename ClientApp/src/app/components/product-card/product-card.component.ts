@@ -1,5 +1,5 @@
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { Component, computed, inject, input, model, OnDestroy, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, model, OnDestroy, signal } from '@angular/core';
 import {
   MatCard,
   MatCardActions,
@@ -17,6 +17,7 @@ import { FavoritesService } from 'src/app/services/favorites.service';
 import { environment } from 'src/environments/environment.development';
 import { FavoriteProduct } from '../../models/favorite-product';
 import { DigitsCurrencyPipe } from '../../pipes/digitsCurrency.pipe';
+import {ProductCard} from "../../models/product-card";
 
 @Component({
   standalone: true,
@@ -43,46 +44,21 @@ export class ProductCardComponent implements OnDestroy {
 
   public readonly apiHost = environment.apiHost;
 
-  public cartProducts = model.required<CartProduct[]>();
   public favoriteProducts = model.required<FavoriteProduct[]>();
-  public product = input.required<Product>();
+  public product = input.required<ProductCard>();
   public isActive = signal<boolean>(false);
   public isFavorite = computed<boolean>(() =>
     this.favoriteProducts().some(favoriteProduct => favoriteProduct.id === this.product().id)
   );
-  public productQuantity = computed<number>(() => {
-    const item = this.cartProducts().find(item => item.productId === this.product().id);
-    console.log(this.cartProducts());
-    return item ? item.quantity : 0;
-  });
 
   changeQuantity(quantity: number) {
-    if (quantity < 0 || !this.product()) return;
+    if (quantity < 0) return;
 
     const product = this.product();
 
     this.subscription.add(
       this.cartService.changeQuantity(product.id, quantity).subscribe(() => {
-        const updatedCartProducts = this.cartProducts().some(item => item.productId === product.id)
-          ? quantity === 0
-            ? this.cartProducts().filter(item => item.productId !== product.id)
-            : this.cartProducts().map(item =>
-                item.productId === product.id
-                  ? { ...item, quantity }
-                  : item
-              )
-          : [
-              ...this.cartProducts(),
-              {
-                productId: product.id,
-                name: product.name,
-                price: product.price,
-                quantity,
-                images: product.images,
-              },
-            ];
-
-        this.cartProducts.set(updatedCartProducts);
+        this.product().quantity = quantity
       })
     );
   }

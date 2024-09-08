@@ -1,9 +1,9 @@
-<mat-toolbar class="header" color="primary">
+<mat-toolbar class="header bg-primary-light">
   <mat-toolbar-row>
-    <div class="company">
+    <div class="company cursor-pointer">
       <span (click)="test()">Online Shop</span>
     </div>
-    <span class="example-spacer"></span>
+    <span class="example-spacer flex-1"></span>
     <div>
       <mat-icon aria-hidden="false" [matBadge]="favoriteProductsQuantity$()" routerLink="/profile/favorites">
         favorite

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CartProduct } from 'src/app/models/cart-products';
 import { FavoriteProduct } from '../../models/favorite-product';
@@ -10,6 +10,8 @@ import { ProductsService } from 'src/app/services/products.service';
 import { ProductDetailsComponent } from '../product-details/product-details.component';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { Subscription } from 'rxjs';
+import { ProductDialogData } from '../../models/product-dialog-data';
+import { ProductCard } from '../../models/product-card';
 
 @Component({
   standalone: true,
@@ -18,7 +20,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent implements OnInit, OnDestroy {
   private readonly subscription = new Subscription();
   private readonly cartService = inject(CartService);
   private readonly favoritesService = inject(FavoritesService);
@@ -26,9 +28,17 @@ export class ProductsComponent implements OnInit {
   private readonly alertService = inject(AlertService);
   private readonly dialog = inject(MatDialog);
 
-  public products = signal<Product[]>([]);
-  public cartProducts = signal<CartProduct[]>([]);
+  private readonly products = signal<Product[]>([]);
+  private readonly cartProducts = signal<CartProduct[]>([]);
   public favoriteProducts = signal<FavoriteProduct[]>([]);
+
+  public productsCard = computed<ProductCard[]>(() => {
+    return this.products().map(product => {
+      const cartItem = this.cartProducts().find(productCart => productCart.productId === product.id);
+
+      return { ...product, quantity: cartItem ? cartItem.quantity : 0 };
+    });
+  });
 
   ngOnInit() {
     this.subscription.add(
@@ -56,16 +66,35 @@ export class ProductsComponent implements OnInit {
   }
 
   openModal(product: Product) {
-    {
-      this.dialog.open(ProductDetailsComponent, {
-        width: '400px',
-        restoreFocus: true,
-        autoFocus: false,
-        data: {
-          product: product,
-          cartProducts: this.cartProducts(),
+    const productQuantity: number = this.getProductQuantity(product.id);
+
+    this.dialog.open<ProductDetailsComponent, ProductDialogData>(ProductDetailsComponent, {
+      width: '400px',
+      restoreFocus: true,
+      autoFocus: false,
+      data: {
+        product: product,
+        productQuantity: productQuantity,
+        updateProductQuantity: (newQuantity: number): void => {
+          this.updateProductQuantity(product.id, newQuantity);
         },
-      });
-    }
+      },
+    });
+  }
+
+  getProductQuantity(productId: number): number {
+    const item = this.cartProducts().find(item => item.productId === productId);
+
+    return item ? item.quantity : 0;
+  }
+
+  updateProductQuantity(productId: number, newQuantity: number) {
+    this.cartProducts.update(cartProducts =>
+      cartProducts.map(item => (item.productId === productId ? { ...item, quantity: newQuantity } : item))
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

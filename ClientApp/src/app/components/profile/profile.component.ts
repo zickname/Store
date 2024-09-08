@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ProfileInfo } from 'src/app/models/profile-info';
@@ -18,15 +18,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private readonly storageService = inject(StorageService);
   private readonly router = inject(Router);
 
-  public profileInfo: ProfileInfo | null = null;
+  public profileInfo = signal<ProfileInfo | null>(null);
 
   ngOnInit() {
-    this.subscription.add(this.authService.getProfileInfo().subscribe(data => (this.profileInfo = data)));
+    this.subscription.add(this.authService.getProfileInfo().subscribe(data => (this.profileInfo.set(data))));
   }
 
   logout() {
     this.storageService.logout();
-    this.router.navigate(['/login']).then(r => "");
+    this.router.navigate(['/login']).then(r => '');
   }
 
   ngOnDestroy(): void {

@@ -1,16 +1,1 @@
-.header {
-  background-color: var(--color-primary-light);
-}
-
-.company {
-  cursor: pointer;
-}
-
-.example-icon {
-  padding: 0 14px;
-  size: 5px;
-}
-
-.example-spacer {
-  flex: 1 1 auto;
-}
+@tailwind utilities;

@@ -13,13 +13,13 @@ export class CartService {
   private readonly cartProducts = new BehaviorSubject<CartProduct[]>([]);
   private readonly authService = inject(AuthService);
 
-  public readonly cartProductQuantity = new Subject<number>();
+  public readonly cartProductsQuantity = new Subject<number>();
 
   getCart(): Observable<CartProduct[]> {
     return this.httpClient.get<CartProduct[]>(`${environment.apiUrl}/cart`).pipe(
       tap((data: CartProduct[]) => {
         this.cartProducts.next(data);
-        this.cartProductQuantity.next(data.length);
+        this.cartProductsQuantity.next(data.length);
         return data;
       })
     );
@@ -33,7 +33,7 @@ export class CartService {
       })
       .pipe(
         map((response: { productId: number; quantity: number }[]): { productId: number; quantity: number }[] => {
-          this.cartProductQuantity.next(response.length);
+          this.cartProductsQuantity.next(response.length);
           return response;
         }),
         catchError((err: HttpErrorResponse) => {
@@ -47,6 +47,6 @@ export class CartService {
 
   clearCart() {
     this.cartProducts.next([]);
-    this.cartProductQuantity.next(0);
+    this.cartProductsQuantity.next(0);
   }
 }

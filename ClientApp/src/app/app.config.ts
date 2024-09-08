@@ -51,9 +51,5 @@ export const appConfig: ApplicationConfig = {
     provideNoopAnimations(),
     provideRouter(routes),
         NG_EVENT_PLUGINS,
-        NG_EVENT_PLUGINS,
-        NG_EVENT_PLUGINS,
-        NG_EVENT_PLUGINS,
-        NG_EVENT_PLUGINS
     ],
 }

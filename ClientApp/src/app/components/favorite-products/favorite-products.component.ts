@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CartProduct } from 'src/app/models/cart-products';
 import { FavoriteProduct } from '../../models/favorite-product';
@@ -10,6 +10,8 @@ import { ProductsService } from 'src/app/services/products.service';
 import { ProductDetailsComponent } from '../product-details/product-details.component';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { Subscription } from 'rxjs';
+import { ProductCard } from '../../models/product-card';
+import { ProductDialogData } from '../../models/product-dialog-data';
 
 @Component({
   selector: 'app-favorite-products',
@@ -22,22 +24,20 @@ export class FavoriteProductsComponent implements OnInit, OnDestroy {
   private readonly subscription = new Subscription();
   private readonly cartService = inject(CartService);
   private readonly favoritesService = inject(FavoritesService);
-  private readonly productService = inject(ProductsService);
   private readonly alertService = inject(AlertService);
   private readonly dialog = inject(MatDialog);
 
-  protected products = signal<Product[]>([]);
-  protected cartProducts = signal<CartProduct[]>([]);
-  protected favoriteProducts = signal<FavoriteProduct[]>([]);
+  private readonly cartProducts = signal<CartProduct[]>([]);
+  public favoriteProducts = signal<FavoriteProduct[]>([]);
+  public productsCard = computed<ProductCard[]>(() => {
+    return this.favoriteProducts().map(product => {
+      const cartItem = this.cartProducts().find(productCart => productCart.productId === product.id);
+
+      return { ...product, quantity: cartItem ? cartItem.quantity : 0 };
+    });
+  });
 
   ngOnInit() {
-    this.subscription.add(
-      this.productService.getProducts().subscribe((data: Product[]) => {
-        this.products.set(data);
-      }),
-
-    );
-
     this.subscription.add(
       this.cartService.getCart().subscribe({
         next: data => {
@@ -56,18 +56,33 @@ export class FavoriteProductsComponent implements OnInit, OnDestroy {
     );
   }
 
-  openModal(product: Product): void {
-    {
-      this.dialog.open(ProductDetailsComponent, {
-        width: '400px',
-        restoreFocus: true,
-        autoFocus: false,
-        data: {
-          product: product,
-          cartProducts: this.cartProducts(),
+  openModal(product: Product) {
+    const productQuantity: number = this.getProductQuantity(product.id);
+
+    this.dialog.open<ProductDetailsComponent, ProductDialogData>(ProductDetailsComponent, {
+      width: '400px',
+      restoreFocus: true,
+      autoFocus: false,
+      data: {
+        product: product,
+        productQuantity: productQuantity,
+        updateProductQuantity: (newQuantity: number): void => {
+          this.updateProductQuantity(product.id, newQuantity);
         },
-      });
-    }
+      },
+    });
+  }
+
+  getProductQuantity(productId: number): number {
+    const item = this.cartProducts().find(item => item.productId === productId);
+
+    return item ? item.quantity : 0;
+  }
+
+  updateProductQuantity(productId: number, newQuantity: number) {
+    this.cartProducts.update(cartProducts =>
+      cartProducts.map(item => (item.productId === productId ? { ...item, quantity: newQuantity } : item))
+    );
   }
 
   ngOnDestroy(): void {

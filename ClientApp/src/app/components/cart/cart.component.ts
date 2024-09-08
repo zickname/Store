@@ -33,14 +33,14 @@ export class CartComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription.add(
-      this.cartService.getCart().subscribe((items: CartProduct[]) : void => {
+      this.cartService.getCart().subscribe((items: CartProduct[]): void => {
         this.cartProducts.set(items);
         this.isLoading.set(true);
       })
     );
   }
 
-  getTotalAmount() : number {
+  getTotalAmount(): number {
     return this.cartProducts().reduce((acc, item) => {
       return acc + item.quantity * item.price;
     }, 0);
@@ -50,7 +50,7 @@ export class CartComponent implements OnInit, OnDestroy {
     if (quantity < 0) return;
 
     this.subscription.add(
-      this.cartService.changeQuantity(item.productId, quantity).subscribe(() : void => {
+      this.cartService.changeQuantity(item.productId, quantity).subscribe((): void => {
         if (quantity === 0) {
           ArrayHelper.remove(this.cartProducts(), item);
         } else {
@@ -64,7 +64,7 @@ export class CartComponent implements OnInit, OnDestroy {
     this.showAddress.set(true);
   }
 
-  createOrder() : void {
+  createOrder(): void {
     if (this.form.valid) {
       const order: OrderRequestDto = {
         address: this.form.controls.address.value,
@@ -76,7 +76,7 @@ export class CartComponent implements OnInit, OnDestroy {
       };
 
       this.subscription.add(
-        this.orderService.createOrder(order).subscribe(() : void => {
+        this.orderService.createOrder(order).subscribe((): void => {
           this.cartService.clearCart();
           this.cartProducts.set([]);
         })
