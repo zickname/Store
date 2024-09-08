@@ -65,33 +65,15 @@ export class ProductsComponent implements OnInit, OnDestroy {
     );
   }
 
-  openModal(product: Product) {
-    const productQuantity: number = this.getProductQuantity(product.id);
-
+  openModal(product: ProductCard) {
     this.dialog.open<ProductDetailsComponent, ProductDialogData>(ProductDetailsComponent, {
       width: '400px',
       restoreFocus: true,
       autoFocus: false,
       data: {
         product: product,
-        productQuantity: productQuantity,
-        updateProductQuantity: (newQuantity: number): void => {
-          this.updateProductQuantity(product.id, newQuantity);
-        },
       },
     });
-  }
-
-  getProductQuantity(productId: number): number {
-    const item = this.cartProducts().find(item => item.productId === productId);
-
-    return item ? item.quantity : 0;
-  }
-
-  updateProductQuantity(productId: number, newQuantity: number) {
-    this.cartProducts.update(cartProducts =>
-      cartProducts.map(item => (item.productId === productId ? { ...item, quantity: newQuantity } : item))
-    );
   }
 
   ngOnDestroy() {

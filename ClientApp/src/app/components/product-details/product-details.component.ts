@@ -6,6 +6,7 @@ import { CartService } from 'src/app/services/cart.service';
 import { environment } from 'src/environments/environment.development';
 import { CurrencyPipe } from '@angular/common';
 import { ProductDialogData } from '../../models/product-dialog-data';
+import {ProductCard} from "../../models/product-card";
 
 @Component({
   selector: 'app-product-details',
@@ -20,12 +21,10 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   private readonly dataDialog: ProductDialogData = inject(MAT_DIALOG_DATA);
   public readonly apiUrl = environment.apiHost;
 
-  public product = signal<Product | null>(null);
-  public productQuantity = signal<number>(0);
+  public product = signal<ProductCard | null>(null);
 
   ngOnInit() {
     this.product.set(this.dataDialog.product);
-    this.productQuantity.set(this.dataDialog.productQuantity);
   }
 
   changeQuantity(quantity: number) {
@@ -35,8 +34,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
     this.subscription.add(
       this.cartService.changeQuantity(product.id, quantity).subscribe(() => {
-        this.productQuantity.set(quantity);
-        this.dataDialog.updateProductQuantity(quantity);
+        product.quantity = quantity;
       })
     );
   }
