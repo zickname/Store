@@ -7,6 +7,7 @@ import { AuthDialogComponent } from '../layouts/auth-layout/auth-dialog.componen
 import { Login } from '../models/login';
 import { ProfileInfo } from '../models/profile-info';
 import { RegistrationRequest } from '../models/registrationRequest';
+import {AlertService} from "./alert.service";
 
 @Injectable({
   providedIn: 'root',

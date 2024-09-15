@@ -8,7 +8,7 @@ import { AsyncPipe } from '@angular/common';
 @Component({
   selector: 'app-order-details',
   templateUrl: './order-details.component.html',
-  styleUrls: ['./order-details.component.css'],
+  styles: '@tailwind utilities',
   standalone: true,
   imports: [AsyncPipe],
 })

@@ -3,8 +3,7 @@ import {ProductsComponent} from '../products/products.component';
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  template: '<app-products></app-products>',
   standalone: true,
   imports: [ProductsComponent],
 })

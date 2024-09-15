@@ -1,4 +1,9 @@
-<div class="product-list">
+<div class="
+grid grid-cols-6 gap-4 p-4
+max-xl:grid-cols-4
+max-lg:grid-cols-3
+max-md:grid-cols-2
+">
   @for (product of productsCard(); track $index) {
     <app-product-card
       [product]="product"
@@ -7,4 +12,3 @@
     </app-product-card>
   }
 </div>
-

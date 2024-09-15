@@ -13,7 +13,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css'],
   standalone: true,
   imports: [MatToolbar, MatToolbarRow, MatIcon, RouterLink, MatBadge, AsyncPipe, NgClass],
 })

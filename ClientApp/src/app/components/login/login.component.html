@@ -1,32 +1,38 @@
-<div class="container">
-  <form class="login-form" [formGroup]="form" (ngSubmit)="onSubmit()">
-    <h2 class="login-form__title">Вход</h2>
-    <div class="login-form__field">
-      <label for="phoneNumber" class="login-form__label">
+<div class="flex flex-col justify-center items-center">
+  <form class="bg-white rounded-lg p-5 w-72 text-center shadow-2xl"
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()">
+    <h2 class="mb-5 text-2xl text-gray-800 font-bold">Вход</h2>
+    <div class="mb-4">
+      <label for="phoneNumber" class="block mb-1 text-left font-bold text-gray-700">
         Номер телефона
         <input
           id="phoneNumber"
           formControlName="phoneNumber"
           mask="+0(000)-000-00-00"
-          class="login-form__input"
+          class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:shadow-[0_0_5px_rgba(0,123,255,0.5)] text-base"
           type="tel"
           placeholder="Введите номер телефона"/>
       </label>
     </div>
-    <div class="login-form__field">
-      <label for="password" class="login-form__label">
+    <div class="mb-4">
+      <label for="password" class="block mb-1 text-left font-bold text-gray-700">
         Пароль
         <input
           id="password"
-          class="login-form__input"
+          class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:shadow-[0_0_5px_rgba(0,123,255,0.5)] text-base"
           formControlName="password"
           type="password"
           placeholder="Введите пароль"/>
       </label>
     </div>
-    <div class="login-form__actions">
-      <button class="login-form__button" type="submit">Войти</button>
-      <button class="login-form__button" type="button" (click)="switchToRegister.emit()">Регистрация</button>
+    <div class="flex flex-col gap-2">
+      <button class="w-full p-2 bg-primary-light rounded-lg text-white text-base hover:bg-primary transition-colors"
+              type="submit">Войти
+      </button>
+      <button class="w-full p-2 bg-primary-light rounded-lg text-white text-base hover:bg-primary transition-colors"
+              type="button" (click)="switchToRegister.emit()">Регистрация
+      </button>
     </div>
   </form>
 </div>

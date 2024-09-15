@@ -1,24 +1,25 @@
 @if (orderSig(); as order) {
-  <div class="order-container">
-    <div class="order__content">
-      <div class="order__content-info">
-        <p>Заказ №{{ order.id }}</p>
-        <p>Дата заказа: {{ order.createDate }}</p>
-        <p>Адрес доставки: {{ order.address }}</p>
-        <p>Сумма заказа: {{ order.totalAmount }}</p>
+  <div class="order-container w-full max-w-4xl mx-auto p-5">
+    <div class="order__content border border-gray-300 p-5 rounded-lg bg-gray-100">
+      <div class="order__content-info mb-5">
+        <p class="text-lg text-gray-600">Заказ №{{ order.id }}</p>
+        <p class="text-lg text-gray-600">Дата заказа: {{ order.createDate }}</p>
+        <p class="text-lg text-gray-600">Адрес доставки: {{ order.address }}</p>
+        <p class="text-lg text-gray-600">Сумма заказа: {{ order.totalAmount }}</p>
       </div>
 
-      <h3>Товары</h3>
+      <h3 class="mt-5 text-xl text-gray-800">Товары</h3>
 
-      <div class="order__products-content">
+      <div class="order__products-content flex flex-col gap-2 mt-3">
         @for (product of order.products; track $index) {
-          <div class="order__product">
-            <img src="{{ apiHost + product.imageUrl }}" alt=""/>
-            <div class="order__product-value">
-              <span>{{ product.name }}</span>
-              <span>Кол-во: {{ product.quantity }}</span>
-              <span>Цена: {{ product.price }}</span>
-              <span>Сумма: {{ product.quantity * product.price }}</span>
+          <div class="order__product flex items-center border border-gray-300 p-3 rounded-md bg-white">
+            <img src="{{ apiHost + product.imageUrl }}" alt=""
+                 class="w-20 h-20 mr-5 rounded-md" />
+            <div class="order__product-value flex flex-col">
+              <span class="text-base text-gray-600">{{ product.name }}</span>
+              <span class="text-base text-gray-600">Кол-во: {{ product.quantity }}</span>
+              <span class="text-base text-gray-600">Цена: {{ product.price }}</span>
+              <span class="text-base text-gray-600">Сумма: {{ product.quantity * product.price }}</span>
             </div>
           </div>
         }

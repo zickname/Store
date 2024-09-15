@@ -7,7 +7,6 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
-  styleUrls: ['./orders.component.css'],
   standalone: true,
   imports: [RouterLink],
 })

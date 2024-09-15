@@ -18,7 +18,6 @@ import { ProductCard } from '../../models/product-card';
   imports: [ProductCardComponent],
   selector: 'app-products',
   templateUrl: './products.component.html',
-  styleUrls: ['./products.component.css'],
 })
 export class ProductsComponent implements OnInit, OnDestroy {
   private readonly subscription = new Subscription();

@@ -1,7 +1,6 @@
-import { Component, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { Product } from 'src/app/models/products';
 import { CartService } from 'src/app/services/cart.service';
 import { environment } from 'src/environments/environment.development';
 import { CurrencyPipe } from '@angular/common';
@@ -11,7 +10,6 @@ import {ProductCard} from "../../models/product-card";
 @Component({
   selector: 'app-product-details',
   templateUrl: './product-details.component.html',
-  styleUrls: ['./product-details.component.css'],
   standalone: true,
   imports: [MatDialogClose, CurrencyPipe],
 })

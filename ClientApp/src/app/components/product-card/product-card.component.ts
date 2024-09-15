@@ -1,5 +1,5 @@
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { Component, computed, effect, inject, input, model, OnDestroy, signal } from '@angular/core';
+import { Component, computed, inject, input, model, OnDestroy, signal } from '@angular/core';
 import {
   MatCard,
   MatCardActions,
@@ -10,14 +10,13 @@ import {
   MatCardTitle,
 } from '@angular/material/card';
 import { Subscription } from 'rxjs';
-import { CartProduct } from 'src/app/models/cart-products';
 import { Product } from 'src/app/models/products';
 import { CartService } from 'src/app/services/cart.service';
 import { FavoritesService } from 'src/app/services/favorites.service';
 import { environment } from 'src/environments/environment.development';
 import { FavoriteProduct } from '../../models/favorite-product';
 import { DigitsCurrencyPipe } from '../../pipes/digitsCurrency.pipe';
-import {ProductCard} from "../../models/product-card";
+import { ProductCard } from '../../models/product-card';
 
 @Component({
   standalone: true,
@@ -58,7 +57,7 @@ export class ProductCardComponent implements OnDestroy {
 
     this.subscription.add(
       this.cartService.changeQuantity(product.id, quantity).subscribe(() => {
-        this.product().quantity = quantity
+        this.product().quantity = quantity;
       })
     );
   }

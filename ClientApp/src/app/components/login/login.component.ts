@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, output } from '@angular/core';
+import {Component, inject, OnDestroy, output} from '@angular/core';
 import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AuthDialogComponent } from 'src/app/layouts/auth-layout/auth-dialog.component';
@@ -6,17 +6,20 @@ import { AuthService } from 'src/app/services/auth.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { NgxMaskDirective } from 'ngx-mask';
 import { Subscription } from 'rxjs';
+import { AlertService } from '../../services/alert.service';
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styles: '@tailwind utilities;',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, NgxMaskDirective],
 })
 export class LoginComponent implements OnDestroy {
   private readonly subscription = new Subscription();
   private readonly authService = inject(AuthService);
+  private readonly alertService = inject(AlertService);
   private readonly storageService = inject(StorageService);
   private readonly dialogRef = inject(MatDialogRef<AuthDialogComponent>);
 
@@ -36,10 +39,15 @@ export class LoginComponent implements OnDestroy {
       };
 
       this.subscription.add(
-        this.authService.login(login).subscribe(data => {
-          this.storageService.saveUser(data.token);
-          this.isLoginFailed = false;
-          this.dialogRef.close();
+        this.authService.login(login).subscribe({
+          next: data => {
+            this.storageService.saveUser(data.token);
+            this.isLoginFailed = false;
+            this.dialogRef.close();
+          },
+          error: (e: HttpErrorResponse) => {
+            this.alertService.error(e.error, { autoClose: true });
+          },
         })
       );
     }

@@ -8,7 +8,6 @@ import {NgxMaskDirective} from 'ngx-mask';
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.css'],
   standalone: true,
   imports: [
     FormsModule,

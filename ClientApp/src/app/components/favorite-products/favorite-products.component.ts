@@ -2,11 +2,9 @@ import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular
 import { MatDialog } from '@angular/material/dialog';
 import { CartProduct } from 'src/app/models/cart-products';
 import { FavoriteProduct } from '../../models/favorite-product';
-import { Product } from 'src/app/models/products';
 import { AlertService } from 'src/app/services/alert.service';
 import { CartService } from 'src/app/services/cart.service';
 import { FavoritesService } from 'src/app/services/favorites.service';
-import { ProductsService } from 'src/app/services/products.service';
 import { ProductDetailsComponent } from '../product-details/product-details.component';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { Subscription } from 'rxjs';
@@ -17,7 +15,6 @@ import { ProductDialogData } from '../../models/product-dialog-data';
   selector: 'app-favorite-products',
   imports: [ProductCardComponent],
   templateUrl: './favorite-products.component.html',
-  styleUrls: ['./favorite-products.component.css'],
   standalone: true,
 })
 export class FavoriteProductsComponent implements OnInit, OnDestroy {

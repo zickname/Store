@@ -8,7 +8,6 @@ import { StorageService } from 'src/app/services/storage.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css'],
   standalone: true,
   imports: [RouterLink],
 })
@@ -26,7 +25,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   logout() {
     this.storageService.logout();
-    this.router.navigate(['/login']).then(r => '');
+    this.router.navigate(['']).then(() => '');
   }
 
   ngOnDestroy(): void {

@@ -4,6 +4,13 @@ module.exports = {
   content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {
+      colors: {
+        'primary': '#6c6cef',
+        'primary-dark': '#3e3eea',
+        'primary-light': '#9a9af4',
+        'primary-content': '#ffffff',
+        'alert-error': '#aa77f1',
+      },
       backgroundColor: {
         'primary': '#6c6cef',
         'primary-dark': '#3e3eea',
@@ -13,6 +20,9 @@ module.exports = {
         /* ErrorColor */
         'alert-error': '#aa77f1',
       },
+      screens: {
+        sm: '480px',
+      }
     },
   },
   plugins: [
@@ -30,7 +40,7 @@ module.exports = {
             '@apply bg-primary-content cursor-default': {},
           },
         },
-        '.cart-item__btn-change, .product-card__increement-btn': {
+        '.cart-item__btn-change, .product-card__increment-btn': {
           '@apply w-8 h-8 p-2': {},
         }
       })

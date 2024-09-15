@@ -73,12 +73,12 @@
               }
             ],
             "styles": [
-              "src/styles.css",
               "node_modules/@taiga-ui/core/styles/taiga-ui-theme.less",
               "node_modules/@taiga-ui/core/styles/taiga-ui-fonts.less",
               "node_modules/@taiga-ui/styles/taiga-ui-global.less",
               "@angular/material/prebuilt-themes/azure-blue.css",
-              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "src/styles.css"
             ],
             "scripts": []
           },
@@ -146,8 +146,8 @@
               }
             ],
             "styles": [
-              "src/styles.css",
               "@angular/material/prebuilt-themes/azure-blue.css",
+              "src/styles.css"
             ],
             "scripts": []
           }

@@ -30,7 +30,7 @@
   width: 100%;
   height: auto;
   aspect-ratio: 1/1;
-  background-color: var(--color-primary-content);
+  @apply bg-primary-content;
 }
 
 .product-card__image-container {
@@ -42,11 +42,11 @@
   top: 8px;
   right: 8px;
   padding: 0;
-  color: var(--color-primary);
   background: no-repeat;
   border: none;
   user-select: none;
   cursor: pointer;
+  @apply text-primary
 }
 
 @keyframes heartbeat {

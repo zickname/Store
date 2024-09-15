@@ -5,7 +5,7 @@ import {DialogConfig} from "../../feature/dialog/dialog-config";
 @Component({
   selector: 'app-not-found-page',
   templateUrl: './not-found-page.component.html',
-  styleUrls: ['./not-found-page.component.css'],
+  styles: ':host{height: 100%}',
   standalone: true,
 })
 export class NotFoundPageComponent implements OnInit {
