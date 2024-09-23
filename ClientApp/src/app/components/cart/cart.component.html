@@ -1,37 +1,38 @@
 @if (isLoading()) {
   @if (cartProducts().length === 0) {
-    <p>Ваша корзина пуста</p>
+    <p class="text-center">Ваша корзина пуста</p>
   }
 
-  <div class="container flex mx-auto px-6 py-8 max-w-[1504] ">
+  <div class="flex mx-auto px-6 py-8 max-lg:block max-lg:max-w-[1504] max-lg:mx-auto max-lg:p-2.5">
     @if (cartProducts().length > 0) {
-      <div class="cart-list flex flex-col w-[85%] p-6 mr-10 bg-white rounded-lg shadow-md">
+      <div class="flex flex-col bg-white rounded-lg shadow-2xl p-6 mr-10 max-lg:mr-2">
 
         <h1 class="text-2xl font-black">Корзина</h1>
 
         @for (product of cartProducts(); track product.productId) {
-          <div class="cart-item__block border-b">
+          <div class="border-b">
 
-            <div class="cart-item flex items-center w-full border-gray-300 max-md:flex-col md:items-start">
+            <div class="flex items-center w-full border-gray-300 max-md:flex-col max-md:items-start">
 
-              <div class="cart-item__title flex flex-grow pr-2">
+              <div class="flex flex-grow pr-2">
 
                 <img class="cart-item__image object-contain p-1.5 aspect-[1/1] rounded-lg"
-                  [width]="100"
-                  [height]="100"
-                  [ngSrc]="apiUrl + product.images[0].imagePath" priority
-                  [alt]="product.name"/>
-
-                <span>{{ product.name }}</span>
+                     [width]="100"
+                     [height]="100"
+                     [ngSrc]="apiUrl + product.images[0].imagePath" priority
+                     [alt]="product.name"/>
+                <span>
+                  {{ product.name }}
+                </span>
 
               </div>
 
-              <div class="cart-item__quantity flex items-center">
+              <div class="flex items-center max-md:w-full max-md:p-1.5 max-md:border-t-gray-300">
 
-                <div class="cart-item__quantity-btn flex flex-nowrap items-center">
+                <div class="flex flex-nowrap items-center">
 
                   <button class="shp-button cart-item__btn-change w-10 h-10"
-                    (click)="changeQuantity(product, product.quantity - 1)">
+                          (click)="changeQuantity(product, product.quantity - 1)">
                     <i class="fa-solid fa-minus"></i>
                   </button>
 
@@ -45,7 +46,10 @@
 
                 </div>
 
-                <span class="cart-item__amount text-right min-w-[150px] mx-4">{{ product.price * product.quantity | digitsCurrency }}</span>
+                <span
+                  class="text-right min-w-[150px] mx-4">
+                  {{ product.price * product.quantity | digitsCurrency }}
+                </span>
 
               </div>
             </div>
@@ -54,7 +58,8 @@
       </div>
 
       <div class="cart-order__content">
-        <div class="cart-order__sticky-wrap">
+        <div class="sticky bg-white shadow-2xl rounded-lg top-2.5 w-[360px] p-6 max-md:relative
+max-md:w-full max-md:p-2.5 max-md:mb-2.5">
 
           @if (!showAddress()) {
             <div class="cart-order__actions">
@@ -63,11 +68,13 @@
                 <span>Товары ({{ cartProducts().length }})</span>
               </p>
 
-              <p class="cart-order__totalSum">
+              <p class="font-bold max-md:flex-grow max-md:m-auto">
                 <span>Итого: </span><span>{{ getTotalAmount() | digitsCurrency }}</span>
               </p>
 
-              <button class="cart-order__submit-btn shp-button" (click)="showInputAddress()">Оформить заказ</button>
+              <button class="cart-order__submit-btn shp-button" (click)="showInputAddress()">
+                Оформить заказ
+              </button>
 
             </div>
           } @else {
