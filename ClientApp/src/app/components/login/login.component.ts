@@ -10,11 +10,10 @@ import { AlertService } from '../../services/alert.service';
 import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styles: '@tailwind utilities;',
-  standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, NgxMaskDirective],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styles: '@tailwind utilities;',
+    imports: [FormsModule, ReactiveFormsModule, NgxMaskDirective]
 })
 export class LoginComponent implements OnDestroy {
   private readonly subscription = new Subscription();

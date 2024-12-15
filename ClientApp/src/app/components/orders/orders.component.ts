@@ -5,10 +5,9 @@ import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-orders',
-  templateUrl: './orders.component.html',
-  standalone: true,
-  imports: [RouterLink],
+    selector: 'app-orders',
+    templateUrl: './orders.component.html',
+    imports: [RouterLink]
 })
 export class OrdersComponent implements OnDestroy {
   private readonly subscription = new Subscription();

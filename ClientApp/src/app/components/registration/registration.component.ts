@@ -6,14 +6,13 @@ import {AuthService} from 'src/app/services/auth.service';
 import {NgxMaskDirective} from 'ngx-mask';
 
 @Component({
-  selector: 'app-registration',
-  templateUrl: './registration.component.html',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    NgxMaskDirective,
-  ],
+    selector: 'app-registration',
+    templateUrl: './registration.component.html',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgxMaskDirective,
+    ]
 })
 export class RegistrationComponent {
   private readonly authService = inject(AuthService);

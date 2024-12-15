@@ -11,10 +11,9 @@ import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  standalone: true,
-  imports: [MatToolbar, MatToolbarRow, MatIcon, RouterLink, MatBadge, AsyncPipe, NgClass],
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    imports: [MatToolbar, MatToolbarRow, MatIcon, RouterLink, MatBadge, AsyncPipe, NgClass]
 })
 export class HeaderComponent {
   private readonly cartService = inject(CartService);

@@ -3,11 +3,10 @@ import {RegistrationComponent} from '../../components/registration/registration.
 import {LoginComponent} from '../../components/login/login.component';
 
 @Component({
-  selector: 'app-auth-dialog',
-  templateUrl: './auth-dialog.component.html',
-  styleUrls: ['./auth-dialog.component.css'],
-  standalone: true,
-  imports: [LoginComponent, RegistrationComponent],
+    selector: 'app-auth-dialog',
+    templateUrl: './auth-dialog.component.html',
+    styleUrls: ['./auth-dialog.component.css'],
+    imports: [LoginComponent, RegistrationComponent]
 })
 export class AuthDialogComponent {
   public state: 'login' | 'register' = 'login';

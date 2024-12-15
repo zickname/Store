@@ -11,10 +11,9 @@ import { NgOptimizedImage } from '@angular/common';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-cart',
-  templateUrl: './cart.component.html',
-  standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, DigitsCurrencyPipe, NgOptimizedImage],
+    selector: 'app-cart',
+    templateUrl: './cart.component.html',
+    imports: [FormsModule, ReactiveFormsModule, DigitsCurrencyPipe, NgOptimizedImage]
 })
 export class CartComponent implements OnInit, OnDestroy {
   private readonly subscription = new Subscription();

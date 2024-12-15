@@ -6,10 +6,9 @@ import { AuthService } from 'src/app/services/auth.service';
 import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  standalone: true,
-  imports: [RouterLink],
+    selector: 'app-profile',
+    templateUrl: './profile.component.html',
+    imports: [RouterLink]
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   private readonly subscription = new Subscription();

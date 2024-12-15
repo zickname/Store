@@ -14,10 +14,9 @@ import { ProductDialogData } from '../../models/product-dialog-data';
 import { ProductCard } from '../../models/product-card';
 
 @Component({
-  standalone: true,
-  imports: [ProductCardComponent],
-  selector: 'app-products',
-  templateUrl: './products.component.html',
+    imports: [ProductCardComponent],
+    selector: 'app-products',
+    templateUrl: './products.component.html'
 })
 export class ProductsComponent implements OnInit, OnDestroy {
   private readonly subscription = new Subscription();

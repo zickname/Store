@@ -13,10 +13,9 @@ import { DialogRef } from '../../dialog-ref';
 import { DialogConfig } from '../../dialog-config';
 
 @Component({
-  templateUrl: './dialog.component.html',
-  styleUrl: './dialog.component.css',
-  standalone: true,
-  imports: [DialogDirective],
+    templateUrl: './dialog.component.html',
+    styleUrl: './dialog.component.css',
+    imports: [DialogDirective]
 })
 export class DialogComponent implements AfterViewInit, OnDestroy {
   private readonly cd = inject(ChangeDetectorRef);

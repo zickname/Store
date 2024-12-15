@@ -6,11 +6,10 @@ import { environment } from 'src/environments/environment.development';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-order-details',
-  templateUrl: './order-details.component.html',
-  styles: '@tailwind utilities',
-  standalone: true,
-  imports: [AsyncPipe],
+    selector: 'app-order-details',
+    templateUrl: './order-details.component.html',
+    styles: '@tailwind utilities',
+    imports: [AsyncPipe]
 })
 export class OrderDetailsComponent implements OnDestroy {
   private readonly subscription = new Subscription();

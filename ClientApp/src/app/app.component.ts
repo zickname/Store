@@ -6,11 +6,10 @@ import { FooterComponent } from './components/UI/footer/footer.component';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
-  standalone: true,
-  imports: [HeaderComponent, AlertComponent, RouterOutlet, FooterComponent, TuiRoot, TuiRoot, TuiRoot, TuiRoot, TuiRoot],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css',
+    imports: [HeaderComponent, AlertComponent, RouterOutlet, FooterComponent, TuiRoot, TuiRoot, TuiRoot, TuiRoot, TuiRoot]
 })
 export class AppComponent {
   title = 'ClientApp';

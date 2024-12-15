@@ -12,10 +12,9 @@ import { ProductCard } from '../../models/product-card';
 import { ProductDialogData } from '../../models/product-dialog-data';
 
 @Component({
-  selector: 'app-favorite-products',
-  imports: [ProductCardComponent],
-  templateUrl: './favorite-products.component.html',
-  standalone: true,
+    selector: 'app-favorite-products',
+    imports: [ProductCardComponent],
+    templateUrl: './favorite-products.component.html'
 })
 export class FavoriteProductsComponent implements OnInit, OnDestroy {
   private readonly subscription = new Subscription();

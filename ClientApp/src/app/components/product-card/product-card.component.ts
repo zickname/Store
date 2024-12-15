@@ -19,22 +19,21 @@ import { DigitsCurrencyPipe } from '../../pipes/digitsCurrency.pipe';
 import { ProductCard } from '../../models/product-card';
 
 @Component({
-  standalone: true,
-  selector: 'app-product-card',
-  templateUrl: './product-card.component.html',
-  styleUrl: './product-card.component.css',
-  imports: [
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardImage,
-    NgClass,
-    MatCardContent,
-    MatCardSubtitle,
-    MatCardActions,
-    DigitsCurrencyPipe,
-    NgOptimizedImage,
-  ],
+    selector: 'app-product-card',
+    templateUrl: './product-card.component.html',
+    styleUrl: './product-card.component.css',
+    imports: [
+        MatCard,
+        MatCardHeader,
+        MatCardTitle,
+        MatCardImage,
+        NgClass,
+        MatCardContent,
+        MatCardSubtitle,
+        MatCardActions,
+        DigitsCurrencyPipe,
+        NgOptimizedImage,
+    ]
 })
 export class ProductCardComponent implements OnDestroy {
   private readonly subscription = new Subscription();

@@ -8,10 +8,9 @@ import { ProductDialogData } from '../../models/product-dialog-data';
 import {ProductCard} from "../../models/product-card";
 
 @Component({
-  selector: 'app-product-details',
-  templateUrl: './product-details.component.html',
-  standalone: true,
-  imports: [MatDialogClose, CurrencyPipe],
+    selector: 'app-product-details',
+    templateUrl: './product-details.component.html',
+    imports: [MatDialogClose, CurrencyPipe]
 })
 export class ProductDetailsComponent implements OnInit, OnDestroy {
   private readonly subscription = new Subscription();
